@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BraceletScanServices</key>
+	<array>
+		<string>0xCC01</string>
+		<string>0000FEE9-0000-1000-8000-00805F9B34FB</string>
+		<string>00001802-0000-1000-8000-00805f9b34fb</string>
+	</array>
+	<key>BraceletDiscoveredServices</key>
+	<array>
+		<string>0xCC01</string>
+		<string>000056ef-0000-1000-8000-00805f9b34fb</string>
+		<string>0000FEE9-0000-1000-8000-00805F9B34FB</string>
+	</array>
+	<key>BraceletWriteCBCharacteristics</key>
+	<array>
+		<string>0xCD20</string>
+		<string>000034e1-0000-1000-8000-00805f9b34fb</string>
+		<string>D44BC439-ABFD-45A2-B575-925416129600</string>
+	</array>
+	<key>BraceletReadCBCharacteristics</key>
+	<array>
+		<string>0xCD01</string>
+		<string>000034e2-0000-1000-8000-00805f9b34fb</string>
+		<string>D44BC439-ABFD-45A2-B575-925416129601</string>
+	</array>
+</dict>
+</plist>
