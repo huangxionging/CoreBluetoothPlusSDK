@@ -7,7 +7,6 @@
 //
 
 #import "CBPWKLController.h"
-#import "CBPWKLSearchDeviceAction.h"
 #import "CBPWKLBindDeviceAction.h"
 #import "CBPBaseWorkingManager.h"
 #import "CBPBaseCharacteristicModel.h"
@@ -87,6 +86,7 @@
         self->_scanServiceUUIDs = dictionary[@"BraceletScanServices"];
         self->_discoverSeriveUUIDs = dictionary[@"BraceletDiscoveredServices"];
         self->_readChracteristicUUIDs = dictionary[@"BraceletReadCBCharacteristics"];
+        
         self->_writeChracteristicUUIDs = dictionary[@"BraceletWriteCBCharacteristics"];
         self->_isReadCharacterstic = NO;
         self->_isWriteCharacteristic = NO;
@@ -152,7 +152,7 @@
     weakSelf.baseClient = [CBPBaseClient shareBaseClient];
     
     for (NSString *UUIDString in self->_scanServiceUUIDs) {
-        [weakSelf.baseClient addPeripheralScanService: [CBUUID UUIDWithString: UUIDString.lowercaseString]];
+        [weakSelf.baseClient addPeripheralScanService: [CBUUID UUIDWithString: UUIDString.uppercaseString]];
     }
     
     // 设置扫描超时时间
@@ -178,6 +178,8 @@
     
     // 已找到
     [weakSelf.baseClient setSearchedPeripheralBlock:^(CBPBasePeripheralModel *peripheral) {
+        
+        
         
         if (peripheral != nil) {
             [weakSelf.baseClient stopScan];
@@ -228,17 +230,17 @@
     
     // 添加发现服务
     for (NSString *UUIDString in self->_discoverSeriveUUIDs) {
-        [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString lowercaseString]];
+        [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString uppercaseString]];
     }
     
     // 添加读特征
     for (NSString *UUIDString in self->_readChracteristicUUIDs) {
-        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString lowercaseString]];
+        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
     }
     
     // 添加写特征
     for (NSString *UUIDString in self->_writeChracteristicUUIDs) {
-        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString lowercaseString]];
+        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
     }
     // 开始工作
     [self.baseDevice startWorkWith: peripheralModel];
@@ -255,9 +257,9 @@
     
     __weak typeof(self) weakSelf = self;
     
-    __weak NSArray *readArray = self->_readChracteristicUUIDs;
+    NSArray *readArray = [self->_readChracteristicUUIDs valueForKeyPath:@"uppercaseString"];
     
-    __weak NSArray *writeArray = self->_writeChracteristicUUIDs;
+    NSArray *writeArray = [self->_writeChracteristicUUIDs valueForKeyPath: @"uppercaseString"];
     
     __weak CBPBaseDevice *device = self.baseDevice;
     
@@ -269,9 +271,8 @@
             
             NSLog(@"%@", characteristic);
             
-            
             // 读特征
-            if ([readArray containsObject: [characteristic.UUID.UUIDString lowercaseString]]) {
+            if ([readArray containsObject: [characteristic.UUID.UUIDString uppercaseString]]) {
                 
                 // 预定特征
                 [peripheralModel.peripheral setNotifyValue: YES forCharacteristic: characteristic];
@@ -289,7 +290,7 @@
             }
             
             // 写特征
-            if ([writeArray containsObject: [characteristic.UUID.UUIDString lowercaseString]]) {
+            if ([writeArray containsObject: [characteristic.UUID.UUIDString uppercaseString]]) {
                 
                 _isWriteCharacteristic = YES;
                 weakSelf.writeCharacteristicUUIDString = [characteristic.UUID.UUIDString lowercaseString];
@@ -324,6 +325,11 @@
     __weak CBPBaseController *weakSelf = self;
     // 更新数据回调
     [weakSelf.baseDevice setUpdateDataBlock:^(CBPBaseActionDataModel *actionDataModel) {
+        
+        // 空数据丢弃
+        if (!actionDataModel.actionData) {
+            return;
+        }
         
         Byte *bytes = (Byte *)actionDataModel.actionData.bytes;
         

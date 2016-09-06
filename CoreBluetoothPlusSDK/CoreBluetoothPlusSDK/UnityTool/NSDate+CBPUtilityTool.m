@@ -9,7 +9,6 @@
 #import "NSDate+CBPUtilityTool.h"
 
 @implementation NSDate (CBPUtilityTool)
-
 #pragma mark---计算当前日期是周几
 - (NSInteger) dayOfWeek {
     // 获取公历
@@ -86,6 +85,7 @@
     // 转换一下
     return componets.year;
 }
+
 
 #pragma mark---计算当前日期在本年度第多少天
 - (NSInteger) dayOfYear {
@@ -184,6 +184,24 @@
     NSTimeInterval time = numberDay * 24 * 60 * 60;
     // 计算时间
     return [NSDate dateWithTimeInterval: time sinceDate: self];
+}
+
+#pragma mark- 时
+- (NSInteger)hour {
+    NSString *hourString = [self stringForCurrentDateWithFormatString: @"hh"];
+    return hourString.integerValue;
+}
+
+#pragma mark- 分
+- (NSInteger)minute {
+    NSString *minuteString = [self stringForCurrentDateWithFormatString: @"mm"];
+    return minuteString.integerValue;
+}
+
+#pragma mark- 秒
+- (NSInteger)second {
+    NSString *secondString = [self stringForCurrentDateWithFormatString: @"ss"];
+    return secondString.integerValue;
 }
 
 #pragma mark---将当前日期转换为字符串

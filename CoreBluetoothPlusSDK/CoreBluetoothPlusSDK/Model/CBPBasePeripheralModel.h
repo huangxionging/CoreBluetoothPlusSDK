@@ -15,6 +15,7 @@
 typedef NS_ENUM(NSUInteger, BasePeripheralState) {
     kBasePeripheralStateConnected = 0,
     kBasePeripheralStateError,
+    kBasePeripheralStateDisconnected
 };
 
 

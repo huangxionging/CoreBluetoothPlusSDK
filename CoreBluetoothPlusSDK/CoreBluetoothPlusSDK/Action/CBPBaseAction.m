@@ -53,9 +53,6 @@
         action->_acionName = [NSString stringWithUTF8String: object_getClassName(self)];
         // 默认命令长度
         action->_actionLength = 20;
-        
-        // 监听完成对象
-    //    [action addObserver: action forKeyPath: @"finished" options:NSKeyValueObservingOptionNew context: nil];
     }
     
     return action;
@@ -67,20 +64,11 @@
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     
-    
 }
 
 - (void)setAnswerActionDataBlock:(void (^)(CBPBaseActionDataModel *))answerActionBlock {
     self->_answerBlock = answerActionBlock;
     
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString: @"finished"]) {
-#pragma clang diagnostic ignored "-Wunused-access-result"
-#pragma clang diagnostic pop
-        self.finished;
-    }
 }
 
 - (instancetype)initWithParameter:(id)parameter answer:(void (^)(CBPBaseActionDataModel *))answerBlock finished:(void (^)(id))finished {
@@ -90,6 +78,24 @@
         _finishedBlock = finished;
     }
     return self;
+}
+
+- (void) callBackResult: (id) result {
+    NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
+    [blockDiction setObject: result forKey: @"result"];
+    [blockDiction setObject: self forKey: @"action"];
+    
+    // 回调
+    if (_finishedBlock) {
+        _finishedBlock(blockDiction);
+    }
+}
+
+// 回复结果
+- (void) callAnswerResult: (id) result {
+    if (_answerBlock) {
+        _answerBlock(result);
+    }
 }
 
 @end

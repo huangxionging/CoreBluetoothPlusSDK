@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>同步参数</string>
+	<string>申请绑定</string>
+	<string>确认绑定</string>
+	<string>解除绑定</string>
+	<string>设置计步数据保存时间间隔</string>
+	<string>同步计步数据</string>
+	<string>同步睡眠数据</string>
+</array>
+</plist>

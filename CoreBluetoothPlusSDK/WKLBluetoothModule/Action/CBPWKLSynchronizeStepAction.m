@@ -1,25 +1,33 @@
 //
-//  CBPWKLStepAction.m
+//  CBPWKLSynchronizeStepAction.m
 //  CoreBluetoothPlusSDK
 //
-//  Created by huangxiong on 15/11/14.
-//  Copyright © 2015年 huangxiong. All rights reserved.
+//  Created by huangxiong on 16/9/1.
+//  Copyright © 2016年 huangxiong. All rights reserved.
 //
 
-#import "CBPWKLStepAction.h"
+#import "CBPWKLSynchronizeStepAction.h"
+#import <objc/message.h>
+#import <objc/runtime.h>
+#import "CBPHexStringManager.h"
+#import "NSDate+CBPUtilityTool.h"
 
-
-@interface CBPWKLStepAction () {
+@interface CBPWKLSynchronizeStepAction () {
     /**
      *  位域控制表
      */
-
+    
     Byte _bitControlTable[15];
     
     /**
      *  短包数
      */
     Byte _shortPackage[120][17];
+    
+    // 一天的数据
+    NSMutableDictionary *_oneDayDataDict;
+    //一天的分时计步数据
+    NSMutableArray *_oneDayStepDataArray;
 }
 
 /**
@@ -28,9 +36,19 @@
 @property (nonatomic, assign) NSInteger dayCount;
 
 /**
+ *  计步数据
+ */
+@property (nonatomic, strong) NSMutableDictionary *stepDataDiction;
+
+/**
+ *  单个长包数据
+ */
+@property (nonatomic, strong) NSMutableData *longPackageData;
+
+/**
  *  长包计数, 也即长包序号
  */
-@property (nonatomic, assign) NSInteger longPackageNumber;
+@property (nonatomic, assign) NSInteger longPackageSerialNumber;
 
 /**
  *  一个长包有效数据个数
@@ -38,20 +56,15 @@
 @property (nonatomic, assign) NSInteger effectiveDataCount;
 
 /**
- *  短包个数
+ *  一个长包包装成短包个数
  */
-@property (nonatomic, assign) NSInteger shortPackageCount;
+@property (nonatomic, assign) NSInteger shortPackageTotalCount;
 
 /**
  * 短包序号计数
  */
-@property (nonatomic, assign) NSInteger shortPackageNumber;
+@property (nonatomic, assign) NSInteger shortPackageSerialNumber;
 
-
-/**
- *  单个长包数据
- */
-@property (nonatomic, strong) NSMutableData *longPackageData;
 
 /**
  *  指示日期
@@ -64,45 +77,48 @@
 @property (nonatomic, copy) NSString *oneDayTotalSteps;
 
 /**
- *  每天的数据步数信息
- */
-@property (nonatomic, strong) NSMutableDictionary *stepInfo;
-
-/**
  * 包含所有长包数据
  */
-@property (nonatomic, strong) NSMutableArray *allStepData;
-
-
-
+@property (nonatomic, strong) NSMutableArray *allDayStepData;
 
 @end
 
-@implementation CBPWKLStepAction
+@implementation CBPWKLSynchronizeStepAction
 
-- (instancetype)init {
++ (void)load {
     
-    if (self = [super init]) {
-        self.saveInterval = 30.0;
-        memset(_bitControlTable, 0xff, sizeof(Byte) * 15);
-    }
-    return self;
+    // 选取 方法
+    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
+    // 发送消息
+    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    
 }
 
+// 指令标识集合
++ (NSSet *)keySetForAction {
+    return [NSSet setWithObjects:@"0x03", @"0x05", nil];
+}
+
+// 接口数组
++ (NSArray *)actionInterfaces {
+    // 对应的 keys 同步计步
+    NSArray *interfaces = @[@"synchronize_step_data"];
+    // 返回接口
+    return interfaces;
+}
+
+
 - (NSData *)actionData {
+    NSDictionary *dict = [self valueForKey: @"parameter"];
     
+    NSString *startDate = dict[@"start_date"];
+    
+    NSString *endDate = dict[@"end_date"];
     Byte bytes[20] = {0};
     bytes[0] = 0x5a;
-    bytes[1] = 0x02;
+    bytes[1] = 0x03;
     
-    // 间隔时间
-    bytes[3] = self.saveInterval;
-    
-    if (self.stepActionType == kWKLStepActionTypeSynchronizeStepData) {
-        bytes[1] = 0x03;
-        if ([self.endDate isEqualToString: @"0"]) {
-            
-            
+    if ([endDate isEqualToString: @"0"]) {
             // 算法问题, 年份 - 2000, 表示两千年以后的年份
             // 开始日期
             bytes[3] = 0;
@@ -114,35 +130,44 @@
             bytes[8] = 0;
         }
         else {
-            NSArray *startDateArray = [self.startDate componentsSeparatedByString: @"/"];
-            NSArray *endDataArray = [self.endDate componentsSeparatedByString: @"/"];
+           
+            NSDate *start = [NSDate dateWithFormatString: @"yyyyMMdd" andWithDateString: startDate];
             
-            if (startDateArray.count != 3 || endDataArray.count != 3) {
-//                CBPDEBUG;
-                NSLog(@"日期不正确");
-                exit(0);
-            }
+            NSDate *end = [NSDate dateWithFormatString: @"yyyyMMdd" andWithDateString: endDate];
             
             // 算法问题, 年份 - 2000, 表示两千年以后的年份
             // 开始日期
-            bytes[3] = [startDateArray[0] integerValue] - 2000;
-            bytes[4] = [startDateArray[1] integerValue];
-            bytes[5] = [startDateArray[2] integerValue];
+            bytes[3] = [start yearOfGregorian]  - 2000;
+            bytes[4] = [start monthOfYear];
+            bytes[5] = [start dayOfMonth];
+            
             // 结束日期
-            bytes[6] = [endDataArray[0] integerValue] - 2000;
-            bytes[7] = [endDataArray[1] integerValue];
-            bytes[8] = [endDataArray[2] integerValue];
+            bytes[6] = [end yearOfGregorian]  - 2000 ;
+            bytes[7] = [end monthOfYear];
+            bytes[8] = [end dayOfMonth];
         }
-        
-       
-    }
     
-    NSData *actionData = [NSData dataWithBytes: bytes length: self.actionLength];
+    NSData *actionData = [NSData dataWithBytes: bytes length: 20];
     
     NSLog(@"%@", actionData);
     return actionData;
+
 }
 
+
+- (NSMutableArray *)allDayStepData {
+    if (_allDayStepData == nil) {
+        _allDayStepData = [NSMutableArray arrayWithCapacity: 10];
+    }
+    return _allDayStepData;
+}
+
+- (NSMutableDictionary *)stepDataDiction {
+    if (_stepDataDiction == nil) {
+        _stepDataDiction = [NSMutableDictionary dictionaryWithCapacity: 10];
+    }
+    return _stepDataDiction;
+}
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     
     NSLog(@"%@", updateDataModel.actionData);
@@ -150,21 +175,17 @@
         
         Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
         
-        // 同步命令回复
+        // 第一步处理 指令的第一个回复数据
         if (bytes[0] == 0x5b && bytes[1] == 0x03) {
-            
-            // 处理回复的第一个数据
             [self handleFirstAnswer: (Byte *) bytes];
-            
             return;
         }
         
-        // 设备开始主动发数据
+        // 第二步, 设备开始主动发长包数据
         if (bytes[0] == 0x5a && bytes[1] == 0x05) {
             
             if (bytes[2] == 0x01) {
-                
-                // 处理短包 操作信息
+                // 处理每个长包的第一条数据
                 [self handleShortPackageActionAnswer: bytes];
             } else if (bytes[2] >= 0x02 && bytes[2] < 0xfe) {
                 
@@ -184,74 +205,84 @@
                 [self handleNextDayDataPackage];
             }
         }
-       
+
+        
     }
+    
+
 }
 
-#pragma mark---处理第一个数据
+#pragma mark--- 处理第一个数据
 - (void) handleFirstAnswer: (Byte *) bytes {
-    
     // 总长包的个数
     self.dayCount = bytes[3] * 256 + bytes[4];
     
     NSLog(@"总天数%@", @(self.dayCount));
+    NSString *totalCount = [NSString stringWithFormat: @"%ld", (long)self.dayCount];
+    
+    // 清空数据
+    [self.stepDataDiction removeAllObjects];
+    [self.allDayStepData removeAllObjects];
+    
+    [self.stepDataDiction setObject: totalCount forKey: @"total_count"];
     
     if (bytes[5] == 0x00) {
-       
-    } else if (bytes[5] == 0x01) {
+        NSLog(@"后续字段无效");
+    } else if ((bytes[5] & 0x01)  == 0x01) {
         NSLog(@"数据有效");
         // 总步数
         NSInteger steps = bytes[6] * 256 + bytes[7];
         
         NSLog(@"最后一天总步数%@", @(steps));
     }
-    
-    if (_stepInfo == nil) {
-        _stepInfo = [NSMutableDictionary dictionaryWithCapacity: _dayCount];
-    }
-    
-    // 清空所有数据
-    [_stepInfo removeAllObjects];
 }
 
 #pragma mark--- 处理每个长包的第一个短包数据
 - (void) handleShortPackageActionAnswer: (Byte *) bytes {
     
-    // 有效数据个数
+    _oneDayDataDict = [NSMutableDictionary dictionaryWithCapacity: 10];
+    _oneDayStepDataArray = [NSMutableArray arrayWithCapacity: 10];
+    
+    // cmd 控制位 必须是计步指令
+    if (!(bytes[9] == 0x03)) {
+        return;
+    }
+    // 有效数据个数, 包长度
     self.effectiveDataCount = bytes[3] * 256 + bytes[4];
     
     // 记录长包数据
     if (_longPackageData == nil) {
         _longPackageData = [NSMutableData data];
     }
-        
+    
     // 清空
     _longPackageData.length = 0;
     
-    _shortPackageNumber = bytes[2];
+    // 短包计数
+    _shortPackageSerialNumber = bytes[2];
     
-    // 短包个数,
-    _shortPackageCount = self.effectiveDataCount / 17 + ((self.effectiveDataCount % 17)?1:0);
+    // 短包个数
+    _shortPackageTotalCount = self.effectiveDataCount / 17 + ((self.effectiveDataCount % 17) ? 1 : 0);
     
     // 记录长包序号
-    _longPackageNumber = bytes[5] * 256 + bytes[6];
+    _longPackageSerialNumber = bytes[5] * 256 + bytes[6];
     
     // 第一个分包位域控制, 以下三种算法都 ok, 采用取反的方法 ! 不行
-    //_bitControlTable[(_shortPackageNumber - 1) / 8] &= 0xff - (1<< ((_shortPackageNumber - 1) % 8));
+    //_bitControlTable[(_shortPackageSerialNumber - 1) / 8] &= 0xff - (1<< ((_shortPackageSerialNumber - 1) % 8));
     
     // 采用平移异或再相与
-    _bitControlTable[(_shortPackageNumber - 1) / 8] &= 0xff^(1<<(_shortPackageNumber - 1) % 8);
+    _bitControlTable[(_shortPackageSerialNumber - 1) / 8] &= 0xff^(1<<(_shortPackageSerialNumber - 1) % 8);
     
     // 最后一包所在位域
-    NSInteger bitIndex = _shortPackageCount % 8 + 1;
+    NSInteger bitIndex = _shortPackageTotalCount % 8 + 1;
     for (NSInteger index = bitIndex; index < 8; ++index) {
-        _bitControlTable[(_shortPackageCount) / 8] &= 0xff^(1<<index);
+        _bitControlTable[(_shortPackageTotalCount) / 8] &= 0xff^(1<<index);
     }
     
-    // 0xff - pow(2, (_shortPackageNumber - 1) / 8))
+    // 0xff - pow(2, (_shortPackageSerialNumber - 1) / 8))
     
     // 位域控制
-    for (NSInteger index = (_shortPackageCount) / 8 + 1; index < 15; ++index) {
+    for (NSInteger index = (_shortPackageTotalCount) / 8 + 1; index < 15; ++index) {
         _bitControlTable[index] = 0x00;
     }
     
@@ -261,11 +292,24 @@
     NSInteger day = bytes[12];
     
     // 当前指示日期
-    _indicatorDate = [NSString stringWithFormat:@"%@/%@/%@", @(year), @(month), @(day)];
+    _indicatorDate = [NSString stringWithFormat:@"%04ld%02ld%02ld", (long)year, (long)month, (long)day];
     
+    // 日期
+    [_oneDayDataDict setObject: _indicatorDate forKey: @"date"];
     memset(_shortPackage, '\0', sizeof(_shortPackage));
+    
+    // 间隔时间
+    NSInteger time = bytes[13];
+    
+    // 时间间隔
+    NSString *timeInterval = [NSString stringWithFormat: @"%ld", (long) time];
+    [_oneDayDataDict setObject: timeInterval forKey: @"time_interval"];
+    
+    // 有效内容的条数
+    NSInteger count = bytes[14];
 }
 
+#pragma mark- 处理有效短包
 - (void) handleShortPackageEffectiveAnswer: (Byte *) bytes {
     
     // 屏蔽掉不合理数据
@@ -275,19 +319,20 @@
     
     
     // 获取短包序号 是从 0x02 开始
-    _shortPackageNumber = bytes[2];
+    _shortPackageSerialNumber = bytes[2];
     
     // 修改位域信息
     // 采用平移异或再相与
-    _bitControlTable[(_shortPackageNumber - 1) / 8] &= 0xff^(1<<((_shortPackageNumber - 1) % 8));
+    _bitControlTable[(_shortPackageSerialNumber - 1) / 8] &= 0xff^(1<<((_shortPackageSerialNumber - 1) % 8));
     
     // 拼接有效数据数据
     Byte *effectiveByte = &bytes[3];
     
-     // 获取短包序号 是从 0x02 开始, 所以要减去 2
-    memcpy(_shortPackage[_shortPackageNumber - 2], effectiveByte, sizeof(Byte) * 17);
+    // 获取短包序号 是从 0x02 开始, 所以要减去 2
+    memcpy(_shortPackage[_shortPackageSerialNumber - 2], effectiveByte, sizeof(Byte) * 17);
 }
 
+#pragma mark- 处理非最后长包的长包的最后一个短包
 - (void) handleShortPackageLastAnswer: (Byte *) bytes {
     
     // 过滤数据
@@ -295,11 +340,11 @@
         return;
     }
     
-    _shortPackageNumber = _shortPackageCount;
+    _shortPackageSerialNumber = _shortPackageTotalCount;
     
     // 修改位域信息
     // 采用平移异或再相与
-    _bitControlTable[_shortPackageNumber / 8] &= 0xff^(1<< (_shortPackageNumber % 8));
+    _bitControlTable[_shortPackageSerialNumber / 8] &= 0xff^(1<< (_shortPackageSerialNumber % 8));
     
     // 拼接有效数据数据
     Byte *effectiveByte = &bytes[3];
@@ -308,8 +353,8 @@
     NSInteger effectiveLength = _effectiveDataCount % 17;
     
     // 最后一个数据位
-    memcpy(_shortPackage[_shortPackageNumber - 1], effectiveByte, sizeof(Byte) * effectiveLength);
-   
+    memcpy(_shortPackage[_shortPackageSerialNumber - 1], effectiveByte, sizeof(Byte) * effectiveLength);
+    
     
     if ([self shortPackageFinished]) {
         // 处理这一天的数据
@@ -328,7 +373,7 @@
     for (NSInteger index = 0; index < 15; ++index) {
         
         if (_bitControlTable[index] != 0x00) {
-
+            
             return NO;
         }
     }
@@ -336,11 +381,12 @@
     return YES;
 }
 
+#pragma mark- 处理一天的数据
 - (void) handleOneDaySteps {
     
-    for (NSInteger index = 0; index < _shortPackageCount; ++index) {
+    for (NSInteger index = 0; index < _shortPackageTotalCount; ++index) {
         
-        if (index == _shortPackageCount - 1) {
+        if (index == _shortPackageTotalCount - 1) {
             // 最后一个有效数据的长度
             NSInteger effectiveLength = _effectiveDataCount % 17;
             
@@ -351,7 +397,7 @@
             
             // 最后一个短包
             [_longPackageData appendBytes: _shortPackage[index] length: effectiveLength];
-          
+            
         } else {
             [_longPackageData appendBytes: &_shortPackage[index] length: 17];
         }
@@ -360,45 +406,52 @@
     NSLog(@"%@: 所有数据:%@ ====> %@", _indicatorDate, _longPackageData, @(_longPackageData.length));
     
     if (_longPackageData.length % 2 != 0) {
-//        CBPDEBUG;
+        //        CBPDEBUG;
         exit(0);
     }
     
     // 获得数据
     Byte *bytes = (Byte *)[_longPackageData bytes];
     
-    NSMutableArray *sportDataArray = [NSMutableArray array];
+    NSString *timeInterval = _oneDayDataDict[@"time_interval"];
     
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    
-    
+    NSInteger sumStep = 0;
+    NSInteger time = timeInterval.integerValue;
     for (NSInteger index = 0; index < _longPackageData.length; index += 2) {
         
-        NSString *timeSection = [NSString stringWithFormat:@"%02ld:%02ld~%02ld:%02ld", (long)(index/2 * 30/ 60), (long)(index/2 * 30 % 60), (long)(long)((index/2 + 1)*30/60), (long)((index/2 + 1)*30%60)];
+        // 时间段
+        NSString *timeSection = [NSString stringWithFormat:@"%02ld:%02ld~%02ld:%02ld", (long)(index/2 * time/ 60), (long)(index/2 * time % 60), (long)(long)((index/2 + 1)*time/60), (long)((index/2 + 1)*time%60)];
         
         NSInteger stepData = bytes[index] * 256 + bytes[index + 1];
         
+        NSMutableDictionary *diction = [NSMutableDictionary dictionaryWithCapacity: 2];
+        
         if (stepData >= 0x000 && stepData <= 0xfeff) {
-            NSDictionary *dictInfo = @{@"time" : timeSection, @"steps" : @(stepData)};
-            [sportDataArray addObject: dictInfo];
-        } else if (stepData == 0xffff) {
-            NSDictionary *dictInfo = @{@"time" : timeSection, @"steps" : @"未佩戴设备"};
-            [sportDataArray addObject: dictInfo];
+            NSString *steps = [NSString stringWithFormat: @"%ld", (long)stepData];
+            
+            sumStep += stepData;
+            // 步数
+            [diction setObject: steps forKey: @"steps"];
+            // 时间段
+            [diction setObject: timeSection forKey: @"time"];
         } else {
-            NSDictionary *dictInfo = @{@"time" : timeSection, @"steps" : @"未知状态"};
-            [sportDataArray addObject: dictInfo];
+            // 步数
+            [diction setObject: @"0" forKey: @"steps"];
+            // 时间段
+            [diction setObject: timeSection forKey: @"time"];
         }
+        
+        // 添加一条数据
+        [_oneDayStepDataArray addObject: diction];
     }
     
-    [dictionary setObject: sportDataArray forKey: @"sportData"];
-    [dictionary setObject: _indicatorDate forKey: @"date"];
+    // 当天总步数
+    NSString *stepCount = [NSString stringWithFormat: @"%ld", (long) sumStep];
+    [_oneDayDataDict setObject: stepCount forKey: @"step_count"];
+    [_oneDayDataDict setObject: _oneDayStepDataArray forKey: @"step_data"];
     
-    if (_allStepData == nil) {
-        _allStepData = [NSMutableArray array];
-    }
-    // 将一天的长包数据组装回数组
-    [_allStepData addObject: dictionary];
-    
+    // 添加一天的数据
+    [self.allDayStepData addObject: _oneDayDataDict];
 }
 
 #pragma mark---发送位域控制表
@@ -410,12 +463,12 @@
     // 确认位域表
     bytes[0] = 0x5b;
     bytes[1] = 0x05;
-    bytes[3] = _longPackageNumber / 256;
-    bytes[4] = _longPackageNumber % 256;
+    bytes[3] = _longPackageSerialNumber / 256;
+    bytes[4] = _longPackageSerialNumber % 256;
     
     Byte *bitControlTable = &bytes[5];
     memcpy(bitControlTable, _bitControlTable, sizeof(_bitControlTable) / sizeof(Byte));
-
+    
     NSData *bitControlTableData = [NSData dataWithBytes: bytes length: 20];
     
     model.actionData = bitControlTableData;
@@ -423,24 +476,26 @@
     model.writeType = CBCharacteristicWriteWithResponse;
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
     
-    // 回传位域表
-//    self->_answerBlock(model);
+    // 回复数据
+    id result = model;
+    SEL selector = NSSelectorFromString(@"callAnswerResult:");
+    // 发送消息
+    objc_msgSend(self, selector, result);
 }
 
 #pragma mark---处理请求下一天的数据
 - (void) handleNextDayDataPackage {
     
-    if (_longPackageNumber == _dayCount || _dayCount == 1) {
+    if (_longPackageSerialNumber == _dayCount || _dayCount == 1) {
         // 表示所有数据发送完成
+        // 计步数据
+        [self.stepDataDiction setObject: self.allDayStepData forKey: @"all_day_step_data"];
         
-        if (_stepInfo == nil) {
-            _stepInfo = [NSMutableDictionary dictionary];
-        }
-        [_stepInfo setObject: @"YES" forKey: @"state"];
-        [_stepInfo setObject: @"1000" forKey: @"code"];
-        [_stepInfo setObject: _allStepData forKey: @"data"];
-//        self->_finishedBlock(_stepInfo);
-        
+        // 回复数据
+        //  完成
+        SEL selector = NSSelectorFromString(@"callBackResult:");
+        // 发送消息
+        objc_msgSend(self, selector, self.stepDataDiction);
         return;
     }
     
@@ -454,14 +509,14 @@
     // 确认长包
     bytes[0] = 0x5a;
     bytes[1] = 0x06;
-    bytes[3] = _longPackageNumber / 256;
-    bytes[4] = _longPackageNumber % 256;
+    bytes[3] = _longPackageSerialNumber / 256;
+    bytes[4] = _longPackageSerialNumber % 256;
     
-    if (_longPackageNumber == _dayCount || _dayCount == 1) {
+    if (_longPackageSerialNumber == _dayCount || _dayCount == 1) {
         bytes[3] = 0xff;
         bytes[4] = 0xff;
     }
-   
+    
     // 下一个长包数据, 若无则无返回数据
     NSData *nextData = [NSData dataWithBytes: bytes length: 20];
     model.actionData = nextData;
@@ -469,23 +524,25 @@
     model.writeType = CBCharacteristicWriteWithResponse;
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
     
-    // 回传信息
-//    self->_answerBlock(model);
-
+    // 回复数据
+    id result = model;
+    SEL selector = NSSelectorFromString(@"callAnswerResult:");
+    // 发送消息
+    objc_msgSend(self, selector, result);
 }
 
-#pragma mark---每个长包最后一包数据
+#pragma mark---最后一个长包的最后一包数据
 - (void) handleLastDayPackage: (Byte *)bytes {
     
     // 有效数据放行
     if (bytes[2] != 0xff) {
         return;
     }
-    _shortPackageNumber = _shortPackageCount;
+    _shortPackageSerialNumber = _shortPackageTotalCount;
     
     // 修改位域信息
     // 采用平移异或再相与
-    _bitControlTable[_shortPackageNumber / 8] &= 0xff^(1<< (_shortPackageNumber % 8));
+    _bitControlTable[_shortPackageSerialNumber / 8] &= 0xff^(1<< (_shortPackageSerialNumber % 8));
     
     // 拼接有效数据数据
     Byte *effectiveByte = &bytes[3];
@@ -494,7 +551,7 @@
     NSInteger effectiveLength = _effectiveDataCount % 17;
     
     // 每天最后一包数据
-    memcpy(_shortPackage[_shortPackageNumber - 1], effectiveByte, sizeof(Byte) * effectiveLength);
+    memcpy(_shortPackage[_shortPackageSerialNumber - 1], effectiveByte, sizeof(Byte) * effectiveLength);
     
     if ([self shortPackageFinished]) {
         // 处理这一天的数据
@@ -503,5 +560,7 @@
     
     [self sendBitControllTable];
 }
+
+
 
 @end

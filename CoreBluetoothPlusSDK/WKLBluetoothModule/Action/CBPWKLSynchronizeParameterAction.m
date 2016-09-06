@@ -8,6 +8,8 @@
 
 #import "CBPWKLSynchronizeParameterAction.h"
 #import "NSDate+CBPUtilityTool.h"
+#import <objc/message.h>
+#import "CBPHexStringManager.h"
 
 @interface CBPWKLSynchronizeParameterAction ()
 
@@ -15,7 +17,33 @@
 
 @implementation CBPWKLSynchronizeParameterAction
 
++ (void)load {
+    
+    // 选取 方法
+    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
+    // 发送消息
+    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    
+}
+
+// 指令标识集合
++ (NSSet *)keySetForAction {
+    return [NSSet setWithObjects:@"0x01", nil];
+}
+
+// 接口数组
++ (NSArray *)actionInterfaces {
+    // 对应的 keys
+    NSArray *interfaces = @[// 同步参数,
+                            @"synchronize_parameter"];
+    // 返回接口
+    return interfaces;
+}
+
+
 - (NSData *)actionData {
+    
+    NSDictionary *parameter = [self valueForKey: @"parameter"];
     
     Byte bytes[20] = {0};
     
@@ -24,47 +52,78 @@
     
     
     NSDate *date = [NSDate date];
-    date.yearOfGregorian
-    // 时间
-    NSArray *dateTimes = [self.time componentsSeparatedByString: @" "];
     
-    // 分割时间
-    if (dateTimes.count == 2) {
-        NSArray *dates = [dateTimes[0] componentsSeparatedByString: @"/"];
-        NSArray *times = [dateTimes[1] componentsSeparatedByString: @":"];
+    NSInteger year = [date yearOfGregorian];
+    NSInteger month = [date monthOfYear];
+    NSInteger day = [date dayOfMonth];
+    NSInteger hour = [date hour];
+    NSInteger minute = [date minute];
+    NSInteger second = [date second];
+    
+    // 年
+    bytes[3] = year - 2000;
+    bytes[4] = month;
+    bytes[5] = day;
+    bytes[6] = hour;
+    bytes[7] = minute;
+    bytes[8] = second;
+    
+    if (parameter) {
         
-        if (dates.count == 3 && times.count == 3) {
-            bytes[3] = [dates[0] integerValue] - 2000;
-            bytes[4] = [dates[1] integerValue];
-            bytes[5] = [dates[2] integerValue];
-            
-            bytes[6] = [times[0] integerValue];
-            bytes[7] = [times[1] integerValue];
-            bytes[8] = [times[2] integerValue];
+        // 运动目标
+        NSString *stepGoal = parameter[@"step_goal"]?parameter[@"step_goal"]:@"100";
+        bytes[9] = stepGoal.integerValue / 256;
+        bytes[10] = stepGoal.integerValue % 256;
+        
+        // 佩戴位置
+        NSString *wearType = parameter[@"wear_ype"]?parameter[@"wear_ype"]:@"1";
+        bytes[11] = wearType.integerValue;
+        
+        // 运动类型
+        NSString *sportType = parameter[@"sport_type"]?parameter[@"sport_type"]:@"1";
+        bytes[12] = sportType.integerValue;
+        
+        // 标识
+        NSString *synchronizeFlag = parameter[@"synchronize_flag"]?parameter[@"synchronize_flag"]:@"0";
+        NSInteger flag = synchronizeFlag.integerValue;
+        // 第一次同步
+        if (flag == 0) {
+            bytes[13] = 0x78; // 字符 'x'
+        } else {
+            bytes[13] = 0x00;
         }
     }
     
-    bytes[9] = self.steps / 256;
-    bytes[10] = self.steps % 256;
-    bytes[11] = self.wearType;
-    bytes[12] = self.sportType;
+    // 性别和年龄
+    NSString *genderType = parameter[@"gender_type"]?parameter[@"gender_type"]:@"0";
+    NSString *age = parameter[@"age"]?parameter[@"age"]:@"25";
+    bytes[16] = genderType.integerValue * 128 + age.integerValue;
     
-    if (self.isFirstSynchronize) {
-        bytes[13] = 'x'; // 或者写 0x78
+    // 体重
+    NSString *weight = parameter[@"weight"]?parameter[@"weight"]:@"60";
+    bytes[17] = weight.integerValue;
+    
+    // 身高
+    NSString *height = parameter[@"height"]?parameter[@"height"]:@"170";
+    bytes[18] = height.integerValue;
+    
+    // 度量
+    NSString *measure = parameter[@"measure"];
+    // 断连提醒
+    NSString *disconnectRemind = parameter[@"disconnect_remind"];
+    
+    // 只要任何一个存在, 则修改参数
+    if (measure || disconnectRemind) {
+        
+        measure = measure?measure:@"0";
+        disconnectRemind = disconnectRemind?disconnectRemind:@"0";
+        bytes[19] = 128 + measure.integerValue * 64 + disconnectRemind.integerValue * 32;
     }
     
-    bytes[16] = self.genderType * 128 + self.age;
-    bytes[17] = self.weight;
-    bytes[18] = self.bodyHeight;
-    bytes[19] = 0xa0;
     NSData *data = [NSData dataWithBytes: bytes length: 20];
+    NSLog(@"同步参数:%@", data);
 //    CBPDEBUG;
     return data;
-}
-
-#pragma mark- 指令标识符
-+ (NSSet *)keySetForAction {
-    return [NSSet setWithObjects:@"0x01", nil];
 }
 
 #pragma mark- 重写接受数据方法
@@ -72,21 +131,39 @@
     
     NSLog(@"%@", updateDataModel.actionData);
     
-    if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
+    if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser && updateDataModel.actionData) {
         
         Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
         
         // 表示同步参数的返回数据
         if (bytes[0] == 0x5b && bytes[1] == 0x01) {
-            self.deviceNumber = [NSString stringWithFormat: @"%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x", bytes[3], bytes[4], bytes[5], bytes[6], bytes[7], bytes[8], bytes[9], bytes[10]];
             
-            // 设备编号
-            NSLog(@"设备编号: %@", [self.deviceNumber lowercaseString]);
+            NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity: 5];
+            
+            // 设备编码
+            NSString *deviceID = [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[5] length: 5];
+        
+            NSLog(@"设备编号: %@", [deviceID lowercaseString]);
+            if (deviceID) {
+                [result setObject: [deviceID lowercaseString] forKey: @"device_id"];
+            }
             
             // 协议版本
-            self.protocolEditionNumber = bytes[11] * 256 + bytes[12];
+            NSString *protocolVersion = [NSString stringWithFormat: @"%ld", (long) bytes[12]];
+            NSLog(@"协议版本: %@", [protocolVersion lowercaseString]);
+            if (protocolVersion) {
+                [result setObject: protocolVersion forKey: @"protocol_version"];
+            }
+            
+            NSString *upgradedType = [NSString stringWithFormat: @"%ld", (long)bytes[11]];
+            
+            // 升级方式
+            if (upgradedType) {
+                [result setObject:[upgradedType lowercaseString] forKey: @"upgraded_type"];
+            }
             
             if (bytes[11] == 0x01) {
+                
                 NSLog(@"昆天科升级");
             }
             else if (bytes[11] == 0x02) {
@@ -96,11 +173,25 @@
                 NSLog(@"普通升级");
             }
             // 固件版本
-            NSInteger gujian = bytes[13] * 256 + bytes[14];
+            NSInteger firmware = bytes[13] * 256 + bytes[14];
+            NSString *firmwareVersion = [NSString stringWithFormat: @"%ld", (long)firmware];
+            NSLog(@"固件版本: %@", [firmwareVersion lowercaseString]);
+            if (firmwareVersion) {
+                [result setObject: firmwareVersion forKey: @"firmware_version"];
+            }
             
-            NSString *string = [NSString stringWithFormat: @"%c%c%c%c%c", bytes[15], bytes[16], bytes[17], bytes[18], bytes[19]];
-            NSLog(@"设备型号:%@ ==== 固件版本: %@", string, @(gujian));
+            // 设备类型 要大写
+            NSString *deviceType = [NSString stringWithFormat: @"%c%c%c%c%c", bytes[15], bytes[16], bytes[17], bytes[18], bytes[19]];
+            if (deviceType) {
+                [result setObject: [deviceType uppercaseString] forKey: @"device_type"];
+            }
+            NSLog(@"设备类型: %@", [deviceType uppercaseString]);
             
+            // 
+            // 选取 方法
+            SEL selector = NSSelectorFromString(@"callBackResult:");
+            // 发送消息
+            objc_msgSend(self, selector, result);
         }
     }
     

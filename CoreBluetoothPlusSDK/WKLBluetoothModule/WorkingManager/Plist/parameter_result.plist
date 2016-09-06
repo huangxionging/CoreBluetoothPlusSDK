@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>total_count</key>
+	<string>天数</string>
+	<key>all_day_step_data</key>
+	<array>
+		<dict>
+			<key>date</key>
+			<string>20160905 日期</string>
+			<key>time_interval</key>
+			<string>30 间隔</string>
+			<key>step_count</key>
+			<string>12000 一天的总步数</string>
+			<key>step_info</key>
+			<array>
+				<dict>
+					<key>time</key>
+					<string>00:00~00:30</string>
+					<key>step</key>
+					<string>123</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>date</key>
+			<string>20160904</string>
+			<key>time_interval</key>
+			<string>30</string>
+			<key>step_info</key>
+			<array>
+				<dict>
+					<key>time</key>
+					<string>00:00~00:30</string>
+					<key>step</key>
+					<string>156</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

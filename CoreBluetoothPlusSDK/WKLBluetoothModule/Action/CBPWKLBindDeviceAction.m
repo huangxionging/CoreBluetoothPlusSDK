@@ -12,36 +12,10 @@
 #import <objc/runtime.h>
 #import "CBPHexStringManager.h"
 
-typedef NS_ENUM(NSUInteger, WKLBindDeviceState) {
-    /**
-     *  查询绑定状态
-     */
-    kWKLBindDeviceStateQuery = 10001,
-    /**
-     *  申请绑定
-     */
-    kWKLBindDeviceStateApply,
-    
-    /**
-     *  确认绑定
-     */
-    kWKLBindDeviceStateConfirm,
-    
-    /**
-     * 解除绑定
-     */
-    kWKLBindDeviceStateCancel
-};
-
 @interface CBPWKLBindDeviceAction ()
 
 
 @property (nonatomic, assign) NSInteger wklActionLength;
-
-/**
- *  绑定状态
- */
-@property (nonatomic, assign) WKLBindDeviceState bindDeviceState;
 
 @end
 
@@ -92,17 +66,6 @@ typedef NS_ENUM(NSUInteger, WKLBindDeviceState) {
 }
 
 
-- (instancetype)initWithParameter:(id)parameter answer:(void (^)(CBPBaseActionDataModel *))answerBlock finished:(void (^)(id))finished {
-    if (self = [super initWithParameter:parameter answer:answerBlock finished:finished]) {
-        id param = nil;
-        
-        param = [self valueForKey: @"parameter"];
-        
-        NSLog(@"%@", param);
-    }
-    return self;
-}
-
 
 #pragma mark---命令数据
 - (NSData *)actionData {
@@ -113,23 +76,26 @@ typedef NS_ENUM(NSUInteger, WKLBindDeviceState) {
     // 类型
     NSUInteger index = [[CBPWKLBindDeviceAction actionInterfaces] indexOfObject: interface];
     
+    // 当 interface 为 confirm_bind_device, 不发送数据
+    if (index == 2) {
+        return nil;
+    }
+    
     Byte bytes[20] = {0};
     
     bytes[0] = 0x5a;
     bytes[1] = 0x0b;
     bytes[3] = index;
     
-    // 回复确认绑定
-    if (self->_bindDeviceState == kWKLBindDeviceStateConfirm) {
-        bytes[0] = 0x5a;
-    }
-    
     // 解除绑定
-    if (self->_bindDeviceState == kWKLBindDeviceStateCancel) {
-        
+    if (index == 3) {
+        NSString *actionType = dict[@"action_type"]?dict[@"action_type"]:@"0";
+        bytes[12] = actionType.integerValue;
     }
     
-    return [NSData dataWithBytes: bytes length: 20];
+    NSData *data = [NSData dataWithBytes: bytes length: 20];
+//    NSLog(@"绑定指令: %@", data);
+    return data;
 }
 
 #pragma mark--- 接收数据的方法
@@ -148,6 +114,7 @@ typedef NS_ENUM(NSUInteger, WKLBindDeviceState) {
             
             switch (bytes[3]) {
                 case 0x00: {
+                    
                     break;
                 }
                 case 0x01: {
@@ -170,25 +137,50 @@ typedef NS_ENUM(NSUInteger, WKLBindDeviceState) {
                             // 设置时延参数
                             [result setObject: time forKey: @"time"];
                         }
-                        
-                        
-                        // 16 位编码
-                        NSString *hexCode =  [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[7] length: 8];
-                        
-                        if (hexCode) {
-                            [result setObject: hexCode forKey: @"device_id"];
-                        }
                     }
                     break;
                 }
-                case 0x02: {
-                    break;
-                }
                 case 0x03: {
+                    if (bytes[4] == 0x00) {
+                        [result setObject: @"0" forKey: @"code"];
+                    } else {
+                        [result setObject: @"1" forKey: @"code"];
+                    }
                     break;
                 }
                 default:
                     break;
+            }
+            
+            //  完成
+            SEL selector = NSSelectorFromString(@"callBackResult:");
+            // 发送消息
+            objc_msgSend(self, selector, result);
+            
+        } else if (bytes[0] == 0x5a && bytes[1] == 0x0b) {
+            // 设备被绑定, 表示设备确认与APP绑定是否成功;
+            if (bytes[3] == 0x02 && bytes[4] == 0x00) {
+                
+                // 准备回复绑定数据
+                bytes[0] = 0x5b;
+                //
+                NSData *actionData = [NSData dataWithBytes: bytes length: 5];
+                
+                CBPBaseActionDataModel *actionDataModel = [CBPBaseActionDataModel modelWithAction: self];
+                actionDataModel.actionData = actionData;
+                id result = actionDataModel;
+                // 回复数据
+                SEL selector = NSSelectorFromString(@"callAnswerResult:");
+                // 发送消息
+                objc_msgSend(self, selector, result);
+                
+                // 回复指令完成
+                
+                NSDictionary *finishDict = @{@"code":@"0"};
+                //  选取 方法
+                SEL finishSelector = NSSelectorFromString(@"callBackResult:");
+                // 发送消息
+                objc_msgSend(self, finishSelector, finishDict);
             }
         }
         

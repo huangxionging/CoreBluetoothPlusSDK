@@ -75,6 +75,33 @@
 - (NSInteger) yearOfGregorian;
 
 /**
+ *  @author huangxiong
+ *
+ *  @brief 24 小时制, 时
+ *
+ *  @return
+ */
+- (NSInteger) hour;
+
+/**
+ *  @author huangxiong
+ *
+ *  @brief 分钟
+ *
+ *  @return 分钟
+ */
+- (NSInteger) minute;
+
+/**
+ *  @author huangxiong
+ *
+ *  @brief 秒
+ *
+ *  @return 秒
+ */
+- (NSInteger) second;
+
+/**
  *  @brief: 获取本月的最后一天
  *  @param: 无
  *  @return: NSDate 类型

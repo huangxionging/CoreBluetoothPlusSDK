@@ -169,16 +169,24 @@
 }
 
 - (void)sendAction:(NSString *)actionName parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+    
     __weak CBPBaseController *weakSelf = self;
     
     CBPBaseAction *action = [[NSClassFromString(actionName) alloc] initWithParameter: parameters answer:^(CBPBaseActionDataModel *answerDataModel) {
+        
         // 发送回复数据
         [weakSelf.baseDevice sendActionWithModel: answerDataModel];
     } finished:^(id result) {
+        
+        // 获得 action
+        CBPBaseAction *action = [result objectForKey: @"action"];
+        
+        // 删除 action
         BOOL state = [weakSelf removeAction: action];
+        
         if (state == YES) {
             // 成功回调
-            success(action, result);
+            success(action, [result objectForKey: @"result"]);
         } else {
             CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeUnknown info: @"未知错误"];
             failure(action, error);
@@ -186,12 +194,18 @@
     }];
     
     action.characteristicUUIDString = self.writeCharacteristicUUIDString;
-    
+
     // 获取注册状态
     BOOL state = [weakSelf registerAction: action];
     if (state == YES) {
-        // 发送数据
-        [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: action]];
+        
+        // 如果数据为空, 表示不发送, 等待设备主动发数据
+        if (action.actionData == nil) {
+            return;
+        } else {
+            // 发送数据
+            [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: action]];
+        }
     } else {
         CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeChannelUsed info: @"通道已被占用"];
         failure(action, error);
@@ -224,8 +238,17 @@
     // 获取 指令标识集合
     NSSet *keySet = objc_msgSend([action class], selector);
     
-    // 如果存在交集, 表明通道被占用, 返回 NO
-    if ([self.actionKeywordSet intersectsSet: keySet]) {
+    // 子集 表明有这个指令存在
+    if ([keySet isSubsetOfSet: self.actionKeywordSet]) {
+        [keySet enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+            // 先删除原来的指令
+            [self.actionSheet removeObjectForKey: obj];
+            // 重新设置指令
+            [self.actionSheet setObject: action forKey: obj];
+        }];
+        return YES;
+    } else if ([self.actionKeywordSet intersectsSet: keySet]) {
+        // 存在交集且不是子集, 表明通道正在被占用
         return NO;
     } else {
         // 通道存在, 则占用
@@ -238,9 +261,8 @@
     }
 }
 
-#pragma mark- 注册 action
+#pragma mark- 删除 action
 - (BOOL) removeAction: (CBPBaseAction *) action  {
-    
     // 释放通道
     // 得到 action 的 key
     SEL selector = NSSelectorFromString(@"keySetForAction");
@@ -259,8 +281,6 @@
     } else {
         return NO;
     }
-    
-    
 }
 
 
