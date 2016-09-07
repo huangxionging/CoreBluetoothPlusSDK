@@ -63,8 +63,7 @@
 	调用方式: "ble://接口?参数=值&参数=值"
 	接口必须有, 参数看具体的接口
 ***
-
-*	4.1 <a name="check_bind_state"> _查询绑定状态_<br>
+* 4.1 <a name="check_bind_state"> _查询绑定状态_<br>
 
 		接口名称: check_bind_state
 		
