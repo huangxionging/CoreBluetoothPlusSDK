@@ -340,8 +340,8 @@
             hex = [@"0x" stringByAppendingString: hex];
         }
         
-        // 添加表示关键字
-        actionDataModel.keyword = hex;
+        // 添加表示关键字, 小写
+        actionDataModel.keyword = [hex lowercaseString];
         
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
@@ -365,7 +365,10 @@
         if (![hex hasPrefix: @"0x"]) {
             hex = [hex stringByAppendingString: @"0x"];
         }
-
+        
+        // 添加关键字
+        actionDataModel.keyword = [hex lowercaseString];
+        
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         

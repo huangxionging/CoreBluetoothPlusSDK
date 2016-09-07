@@ -16,6 +16,8 @@
 		F26153901D7E9771008230B4 /* CBPSleepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F261538E1D7E9771008230B4 /* CBPSleepTableViewCell.m */; };
 		F26153911D7E9771008230B4 /* CBPSleepTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F261538F1D7E9771008230B4 /* CBPSleepTableViewCell.xib */; };
 		F26153941D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153931D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m */; };
+		F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */; };
+		F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */; };
 		F26DD4B91D75731E0043FED4 /* NSDate+CBPUtilityTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */; };
 		F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */ = {isa = PBXBuildFile; fileRef = F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */; };
 		F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4BD1D7810320043FED4 /* CBPShowResultTableViewController.m */; };
@@ -67,6 +69,10 @@
 		F261538F1D7E9771008230B4 /* CBPSleepTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CBPSleepTableViewCell.xib; sourceTree = "<group>"; };
 		F26153921D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLQueryDeviceVersionAction.h; sourceTree = "<group>"; };
 		F26153931D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLQueryDeviceVersionAction.m; sourceTree = "<group>"; };
+		F26153951D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLFirmwareUpgradeAction.h; sourceTree = "<group>"; };
+		F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLFirmwareUpgradeAction.m; sourceTree = "<group>"; };
+		F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLRestartAction.h; sourceTree = "<group>"; };
+		F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLRestartAction.m; sourceTree = "<group>"; };
 		F26DD4B71D75731E0043FED4 /* NSDate+CBPUtilityTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CBPUtilityTool.h"; sourceTree = "<group>"; };
 		F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CBPUtilityTool.m"; sourceTree = "<group>"; };
 		F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPInterface.plist; sourceTree = "<group>"; };
@@ -323,6 +329,10 @@
 				F26153881D7E6D0F008230B4 /* CBPWKLSynchronizeSleepAction.m */,
 				F26153921D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.h */,
 				F26153931D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m */,
+				F26153951D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.h */,
+				F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */,
+				F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */,
+				F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */,
 				F2C548F81D644DEC00A665F3 /* CBPWKLSimpleControlAction.h */,
 				F2C548F91D644DEC00A665F3 /* CBPWKLSimpleControlAction.m */,
 				F2C548FE1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.h */,
@@ -476,6 +486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */,
 				F2C549021D644DEC00A665F3 /* CBPWKLBindDeviceAction.m in Sources */,
 				F2C548EA1D6309F200A665F3 /* CBPHexStringManager.mm in Sources */,
 				F2C549051D644DEC00A665F3 /* CBPWKLSimpleControlAction.m in Sources */,
@@ -506,6 +517,7 @@
 				F2C548C51D62FC4000A665F3 /* CBPBasePeripheralModel.m in Sources */,
 				F276371B1D61A45F006597AC /* AppDelegate.m in Sources */,
 				F27637181D61A45F006597AC /* main.m in Sources */,
+				F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */,
 				F2C548C41D62FC4000A665F3 /* CBPBaseCharacteristicModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,5 +9,40 @@
 	<string>设置计步数据保存时间间隔</string>
 	<string>同步计步数据</string>
 	<string>同步睡眠数据</string>
+	<string>查询设备版本</string>
+	<string>固件升级</string>
+	<string>重启设备</string>
+	<string>设置水杯参数</string>
+	<string>查询水杯状态</string>
+	<string>同步饮水数据</string>
+	<string>设置饮水计划</string>
+	<string>查询饮水计划</string>
+	<string>点亮指定 LED</string>
+	<string>控制蜂鸣器响</string>
+	<string>防丢</string>
+	<string>按键锁定</string>
+	<string>更换三基色灯</string>
+	<string>查找设备</string>
+	<string>ANCS 功能开关</string>
+	<string>查询设备工作状态</string>
+	<string>设置定时提醒参数</string>
+	<string>查询定时提醒参数</string>
+	<string>查询定时提醒开关状态</string>
+	<string>APP 向设备发送的简短提醒信息</string>
+	<string>APP 向设备发送的长提醒信息</string>
+	<string>来电提醒格式</string>
+	<string>设备发送的控制和状态指令</string>
+	<string>设备参数校准</string>
+	<string>校准过程控制</string>
+	<string>查询校准参数</string>
+	<string>设置校准参数</string>
+	<string>查询电池电量</string>
+	<string>查询设备序号</string>
+	<string>设置设备序号</string>
+	<string>来电提醒姓名</string>
+	<string>心率功能设置</string>
+	<string>心率数据</string>
+	<string>透传指令</string>
+	<string>开始同步宠物 动数</string>
 </array>
 </plist>

@@ -98,6 +98,20 @@
             [self synchronizeSleep];
             break;
         }
+        case 7: {
+            [self queryDeviceVersion];
+            break;
+        }
+        case 8: {
+            break;
+        }
+        case 9: {
+            [self restartDevice];
+            break;
+        }
+        case 10: {
+            break;
+        }
         default:
             break;
     }
@@ -262,6 +276,40 @@
         NSLog(@"睡眠数据: %@", responseObject);
         NSLog(@"睡眠参数%@", parameter);
         SynchronizeSleepTableViewController *vc = [[SynchronizeSleepTableViewController alloc] init];
+        vc.parameter = parameter;
+        vc.result = responseObject;
+        [self.navigationController pushViewController: vc animated: YES];
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+}
+
+- (void) queryDeviceVersion {
+    
+    [self.manager post: @"ble://query_device_version" parameters: nil success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+        CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
+        vc.parameter = @{@"无":@"无"};
+        vc.result = responseObject;
+        [self.navigationController pushViewController: vc animated: YES];
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+
+}
+
+- (void)restartDevice {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
+    // 重启设备
+    [parameter setObject: @"1" forKey: @"content_type"];
+    
+    [parameter setObject: @"1" forKey: @"response"];
+    
+    [self.manager post: @"ble://restart_device" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+        CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
         vc.parameter = parameter;
         vc.result = responseObject;
         [self.navigationController pushViewController: vc animated: YES];

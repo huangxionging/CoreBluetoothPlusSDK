@@ -141,7 +141,7 @@
             NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity: 5];
             
             // 设备编码
-            NSString *deviceID = [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[5] length: 5];
+            NSString *deviceID = [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[5] length: 6];
         
             NSLog(@"设备编号: %@", [deviceID lowercaseString]);
             if (deviceID) {

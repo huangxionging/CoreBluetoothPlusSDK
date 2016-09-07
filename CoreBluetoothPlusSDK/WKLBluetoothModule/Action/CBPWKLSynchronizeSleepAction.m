@@ -96,7 +96,7 @@
 
 // 指令标识集合
 + (NSSet *)keySetForAction {
-    return [NSSet setWithObjects:@"0x07", @"0x05", nil];
+    return [NSSet setWithObjects:@"0x07", @"0x05", @"0x06", nil];
 }
 
 // 接口数组
