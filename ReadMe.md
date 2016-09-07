@@ -42,7 +42,7 @@
 	*	4.7 [同步计步数据](#synchronize_step_data)
 	*	4.8 [同步睡眠数据](#synchronize_sleep_data)
 	*	4.9 [查询设备版本](#query_device_version)
-	*	4.10[固件升级](#firmware_upgrade)
+	*	4.10 [固件升级](#firmware_upgrade)
 	*	4.11[重启设备](#restart_device)
 	*	4.12[设置水杯参数](#setting_cups_parameter)
 	*	4.13[查询水杯状态](#check_cups_state)
@@ -63,6 +63,7 @@
 	调用方式: "ble://接口?参数=值&参数=值"
 	接口必须有, 参数看具体的接口
 ***
+
 *	4.1 <a name="check_bind_state"> _查询绑定状态_<br>
 
 		接口名称: check_bind_state
