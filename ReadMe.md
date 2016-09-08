@@ -76,8 +76,8 @@
 		接口名称: check_bind_state
 		
 		参数: 无
+		
 ***
-
 *	4.2 <a name="apply_bind_device"> _申请绑定设备_
 	
 		接口名称: apply_bind_device.
@@ -93,7 +93,6 @@
 
 			
 ***
-
 *	4.3 <a name="confirm_bind_device"> _确认绑定设备_
 	
 		接口名称: confirm_bind_device.
@@ -103,8 +102,8 @@
 		返回值:
 			code:	0 表示完成绑定;
 					1 表示绑定失败.
+					
 ***
-
 *	4.4 <a name="cancel_bind_device"> _删除绑定设备_
 	
 		接口名称: cancel_bind_device.
@@ -114,6 +113,7 @@
 			
 		返回值:
 			code: 0 表示解除绑定成功; 1表示解除绑定失败.
+			
 ***
 *	4.5 <a name="synchronize_parameter"> _同步参数_<br>
 		
@@ -139,7 +139,6 @@
 			device_type: 设备类型, ascii 字符.
 			
 ***
-
 *	4.6 <a name="set_pedometer_data_save_time_interval"> _设置计步数据保存时间间隔_
 
 		接口名称: set_pedometer_data_save_time_interval.
@@ -288,8 +287,8 @@
 		参数:
 			serial_count: 需要同步的条数
 		
-		返回值:***	
-*	4.16 <a name="light_led">_点亮 led 灯_
+		返回值:
+		***	*	4.16 <a name="light_led">_点亮 led 灯_
 		接口名称: light_led.
 		
 		参数:
@@ -302,21 +301,42 @@
 		返回值:
 			led_state: 指LED开关对应位的LED是否已按参数开始工作。0:表示未受控制,1:表示已受控制。
 ***	
-
 *	4.17 <a name="buzzer_sound">_蜂鸣器响_
 
 		接口名称: buzzer_sound.
 		
 		参数:
-			buzzer_switch: 蜂鸣器开关, 0 表示关闭蜂鸣器, 1 表示打开蜂鸣器响;
-			sound_time: 持续时间, 单位为1ms,关闭蜂鸣器时,本字段无效;
+			switch: 蜂鸣器开关, 0 表示关闭蜂鸣器, 1 表示打开蜂鸣器响;
+			duration_time: 持续时间, 单位为1ms,关闭蜂鸣器时,本字段无效;
 			frequency: 蜂鸣器鸣叫音的频率, 单位为Hz. 若设备不支持调整频率, 则本字段无效. 若超出蜂鸣器的工作频率范围,则使用默认频率. 关闭蜂鸣器时, 本字段无效.
 		
 		返回值:
-			buzzer_state: 表示蜂鸣器工作状态, 0 表示不叫, 1 表示正在叫.
+			state: 表示蜂鸣器工作状态, 0 表示不叫, 1 表示正在叫.
+			
 ***
-	*	4.18[防丢](#anti_lost)
-	*	4.19[按键锁](#key_lock)
+*	4.18 <a name="anti_lost">_防丢_
+
+		接口名称: anti_lost.
+		
+		参数:
+			switch: 0 表示关闭防丢提示, 1 表示打开防丢提醒, 设备根据预设参数发出提醒 (蜂鸣器鸣叫, LED闪烁等);
+			duration_time: 提醒持续的时间长度, 单位为 1 ms. 关闭防丢提醒时, 本字段无效.
+
+		返回值:
+			state: 表示防丢提醒状态, 0 表示已停止提醒, 1 表示正常提醒, 2 表示出错.
+***
+*	4.19 <a name="key_lock">_按键锁_	
+	
+		接口名称: key_lock. 在指定的时间内, 按下按键后将向手机发送控制指令; 达到指令时间后, 自动退出锁定模式.
+		
+		参数:
+			switch: 0 表示退出按键锁定模式, 1 表示进入按键锁定模式;
+			duration_time: 提醒持续的时间长度, 单位为秒. 取值为5~600,超出此范围时, 取最接的最大或最小值, 退出锁定模式时, 本字段无效.
+
+		返回值:
+			state: 表示防丢提醒状态, 0 表示已停止提醒, 1 表示正常提醒, 2 表示出错.
+***
+	
 	*	4.20[改变颜色](#change_color)
 	*	4.21[查找设备](#search_device)
 	*	4.22[ANCS 功能开关](#ancs_switch)

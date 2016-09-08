@@ -73,10 +73,10 @@
     bytes[3] = index + 1;
     
     // 处理其它参数
-    switch (index) {
+    switch (index + 1) {
         
         // LED 灯
-        case  0: {
+        case  1: {
             
             NSString *led = parameter[@"led"];
             
@@ -111,65 +111,57 @@
         }
             
         // 蜂鸣器
-        case 1: {
+        case 2: {
         
+            // 开关
+            NSString *buzzerSwitch = parameter[@"switch"];
+            bytes[4] = buzzerSwitch.integerValue;
             
-            // 字节指针, 开关
-            Byte *locationPointer = &bytes[4];
-            // 复制数据
-            memcpy(locationPointer, _switchValue, 1);
+            // 持续时长
+            NSString *durationTime = parameter[@"duration_time"];
+            bytes[5] = durationTime.integerValue / 256;
+            bytes[6] = durationTime.integerValue % 256;
             
-            // 持续时长高字节
-            bytes[5] = _lastLength / 256;
-            // 持续时长低字节
-            bytes[6] = _lastLength % 256;
-            
+            NSString *frequency = parameter[@"frequency"];
             // 频率高字节
-            bytes[7] = _frequency / 256;
+            bytes[7] = frequency.integerValue / 256;
             // 频率低字节
-            bytes[8] = _frequency % 256;
+            bytes[8] = frequency.absolutePath % 256;
             
             break;
         }
         
         // 防丢和按键锁的其他参数一样
-        case 2:
-        case 3: {
-            NSParameterAssert(_switchValue);
-            // 字节指针, 开关
-            Byte *locationPointer = &bytes[4];
-            // 复制数据
-            memcpy(locationPointer, _switchValue, 1);
+        case 3:
+        case 4: {
             
-            // 持续时长高字节
-            bytes[5] = _lastLength / 256;
-            // 持续时长低字节
-            bytes[6] = _lastLength % 256;
+            // 开关
+            NSString *deviceSwitch = parameter[@"switch"];
+            bytes[4] = deviceSwitch.integerValue;
             
+            // 持续时长
+            NSString *durationTime = parameter[@"duration_time"];
+            bytes[5] = durationTime.integerValue / 256;
+            bytes[6] = durationTime.integerValue % 256;
             break;
         }
             
         // 更换三基色
-        case 4: {
-            bytes[4] = _colorValue;
+        case 5: {
+           // bytes[4] = _colorValue;
             break;
         }
         
         // 查找设备
-        case 5: {
+        case 6: {
             
             // 查找设备无其他参数需要配置了
             break;
         }
             
         // ANCS 功能, 打开开关就行
-        case 6: {
+        case 7: {
             
-            NSParameterAssert(_switchValue);
-            // 字节指针, 开关
-            Byte *locationPointer = &bytes[4];
-            // 复制数据
-            memcpy(locationPointer, _switchValue, 1);
             break;
         }
         default:
@@ -178,7 +170,7 @@
     return [NSData dataWithBytes: bytes length: 20];
 }
 
-- (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
+- (void) receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     
     NSLog(@"%@", updateDataModel.actionData);
     Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
@@ -191,7 +183,7 @@
         if (bytes[0] == 0x5b && bytes[1] == 0x0c) {
             
             switch (bytes[3]) {
-                case 0: {
+                case 1: { // led 灯亮灭
                     
                     NSString *ledState = [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[4] length: 4];
                     ledState = [ledState stringByAppendingString: @"0x"];
@@ -200,15 +192,28 @@
                     [result setObject: ledState forKey: @"led_state"];
                     break;
                 }
+                case 2:
+                case 3:
+                case 4:
+                case 5: {
+                    NSInteger state = bytes[4];
+                    
+                    NSString *stateString = [NSString stringWithFormat: @"%ld", (long) state];
+                    
+                    // 结果
+                    [result setObject: stateString forKey: @"state"];
+                    break;
+                }
+                case 8: {
+                    break;
+                }
                 default:
                     break;
             }
         }
     }
-    if (bytes ) {
-        
-    }
 }
+   
 
 
 
