@@ -68,8 +68,24 @@
 
 ##<a name="protocol"/> 四. 纬科联蓝牙模块通讯接口
 
-	调用方式: "ble://接口?参数=值&参数=值"
-	接口必须有, 参数看具体的接口
+```Objective-c
+	// 调用方式: "ble://接口?参数=值&参数=值"
+	// 接口必须有, 参数看具体的接口
+	
+NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
+    // 操作类型
+[parameter setObject: @"2016-08-01" forKey: @"start_date"];
+    
+[parameter setObject: @"2016-09-05" forKey: @"end_date"];
+
+// 参数可直接拼在接口后面, 也可传参
+[self.manager post: @"ble://接口?参数=值&参数=值" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+	NSLog(@"%@", responseObject);
+    NSLog(@"%@", parameter);
+} failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+}];
+```
 ***
 * 4.1 <a name="check_bind_state"> _查询绑定状态_<br>
 
