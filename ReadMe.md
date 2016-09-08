@@ -74,9 +74,10 @@
 	
 NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
     // 操作类型
-[parameter setObject: @"2016-08-01" forKey: @"start_date"];
+[parameter setObject: @"parameterValue1" forKey: @"parameterKey1"];
     
-[parameter setObject: @"2016-09-05" forKey: @"end_date"];
+[parameter setObject: @"parameterValue2" forKey: @"parameterKey2"];
+...
 
 // 参数可直接拼在接口后面, 也可传参
 [self.manager post: @"ble://接口?参数=值&参数=值" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
