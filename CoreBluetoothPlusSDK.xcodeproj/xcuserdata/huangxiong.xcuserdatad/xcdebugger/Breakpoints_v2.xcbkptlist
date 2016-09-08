@@ -179,77 +179,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLRestartAction.m"
-            timestampString = "494913068.195683"
+            filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Controller/CBPWKLController.m"
+            timestampString = "494933155.258714"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "-receiveUpdateData:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CoreBluetoothPlusSDK/ViewController.m"
-            timestampString = "494913077.366571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "-restartDevice"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ViewController restartDevice]"
-                  moduleName = "CoreBluetoothPlusSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "494913631.773257"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "310"
-                  endingLineNumber = "310"
-                  offsetFromSymbolStart = "230">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[ViewController restartDevice]_block_invoke"
-                  moduleName = "CoreBluetoothPlusSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "494913631.77339"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "310"
-                  endingLineNumber = "310"
-                  offsetFromSymbolStart = "14">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLRestartAction.m"
-            timestampString = "494913579.854564"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "-actionData"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "-deviceDeliverData"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

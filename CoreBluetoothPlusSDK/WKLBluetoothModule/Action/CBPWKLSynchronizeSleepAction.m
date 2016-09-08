@@ -101,7 +101,7 @@
 
 // 接口数组
 + (NSArray *)actionInterfaces {
-    // 对应的 keys 同步计步
+    // 对应的 keys 同步睡眠
     NSArray *interfaces = @[@"synchronize_sleep_data"];
     // 返回接口
     return interfaces;
@@ -292,7 +292,7 @@
     NSInteger day = bytes[12];
     
     // 当前指示日期
-    _indicatorDate = [NSString stringWithFormat:@"%04ld%02ld%02ld", (long)year, (long)month, (long)day];
+    _indicatorDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld", (long)year, (long)month, (long)day];
     
     // 日期
     [_oneDayDataDict setObject: _indicatorDate forKey: @"date"];

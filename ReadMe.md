@@ -48,6 +48,14 @@
 	*	4.13[查询水杯状态](#check_cups_state)
 	*	4.14[同步饮水数据](#synchronize_drink_water_data)
 	*	4.15[同步饮水计划](#synchronize_drink_water_plan)
+	*	4.16[点亮 led 灯](#light_led)
+	*	4.17[蜂鸣器响](#buzzer_sound)
+	*	4.18[防丢](#anti_lost)
+	*	4.19[按键锁](#key_lock)
+	*	4.20[改变颜色](#change_color)
+	*	4.21[查找设备](#search_device)
+	*	4.22[ANCS 功能开关](#ancs_switch)
+	*	4.23[查询设备工作状态](#check_device_working_state)
 
 
 ##<a name="structure"/> SDK 架构
@@ -148,8 +156,8 @@
 		接口名称: synchronize_step_data.
 		
 		参数:
-			start_date: 起始日期, 例子: 20160901;(必须)
-			end_date: 结束日期, 例子: 20160901.(必须)
+			start_date: 起始日期, 例子: 2016-09-01;(必须)
+			end_date: 结束日期, 例子: 2016-09-01.(必须)
 		
 		返回值:
 			{
@@ -175,8 +183,8 @@
 		接口名称: synchronize_sleep_data.
 		
 		参数:
-			start_date: 起始日期, 例子: 20160901;(必须)
-			end_date: 结束日期, 例子: 20160901.(必须)
+			start_date: 起始日期, 例子: 2016-09-01;(必须)
+			end_date: 结束日期, 例子: 2016-09-01.(必须)
 		
 		返回值:
 			{
@@ -243,9 +251,74 @@
 			cup_of_water: 杯内水量, 单位 ml;
 			final_water_intake: 最后饮水量, 单位 ml, 0 表示没有饮水;
 			final_water_time: 最后饮水时间, 单位为分钟, 若当天没有饮水, 则为0.
+			state: 0 表示未重新上电, 1 表示重新上电. 重新上电标志表示水杯刚更换过电池,或者因电量不足、接触不良等原因导致电路重启,APP 在收到此标志后应弹出提示,并启动一次校准流程。设备收到校准指令后清除本标志
 ***
 *	4.14 <a name="synchronize_drink_water_data">_同步饮水数据_
+	
+	接口名称: synchronize_drink_water_data.
+		
+		参数:
+			start_date: 起始日期, 例子: 2016-09-01 16:33;(必须)
+			end_date: 结束日期, 例子: 2016-09-01 16:34.(必须)
+		
+		返回值:
+			{
+				total_count: 有效天数;
+				all_day_drink_water_data: [ // 所有有记录的天数的运动数据
+					{
+						date: 日期;
+						drink_water_count: 条数;
+						drink_water_total_intake: 该天总饮水量;
+						drink_water_data: [
+							start_minute: 喝水起始时间, 单位分钟 从00:00开始算, 取值 0~1439;
+							drink_water_intake: 饮水量, 从起始时刻开始,10 分钟内饮水的总量为一条数据.
+						];
+						...
+					};
+					...
+				];
+			}	
+
 
 ***
-*	4.15 <a name="synchronize_drink_water_plan">_同步饮水计划_***	
+*	4.15 <a name="synchronize_drink_water_plan">_同步饮水计划_
+
+		接口名称: synchronize_drink_water_plan.
+		
+		参数:
+			serial_count: 需要同步的条数
+		
+		返回值:***	
+*	4.16 <a name="light_led">_点亮 led 灯_
+		接口名称: light_led.
+		
+		参数:
+			led: 4字节16进制构成的字符串, 表示32个开关, 例子 @"0xffff02fe", 每一位开关 0 表示开, 1表示灭;
+			light_on_time: 亮时长, 10 ms 为最小单位;
+			light_off_time: 灭时长, 10 ms 为最小单位;
+			repeat_count: 重复次数;
+			
+		
+		返回值:
+			led_state: 指LED开关对应位的LED是否已按参数开始工作。0:表示未受控制,1:表示已受控制。
+***	
+
+*	4.17 <a name="buzzer_sound">_蜂鸣器响_
+
+		接口名称: buzzer_sound.
+		
+		参数:
+			buzzer_switch: 蜂鸣器开关, 0 表示关闭蜂鸣器, 1 表示打开蜂鸣器响;
+			sound_time: 持续时间, 单位为1ms,关闭蜂鸣器时,本字段无效;
+			frequency: 蜂鸣器鸣叫音的频率, 单位为Hz. 若设备不支持调整频率, 则本字段无效. 若超出蜂鸣器的工作频率范围,则使用默认频率. 关闭蜂鸣器时, 本字段无效.
+		
+		返回值:
+			buzzer_state: 表示蜂鸣器工作状态, 0 表示不叫, 1 表示正在叫.
+***
+	*	4.18[防丢](#anti_lost)
+	*	4.19[按键锁](#key_lock)
+	*	4.20[改变颜色](#change_color)
+	*	4.21[查找设备](#search_device)
+	*	4.22[ANCS 功能开关](#ancs_switch)
+	*	4.23[查询设备工作状态](#check_device_working_state)
 [架构导图]:HXBluetooth.png "架构导图"

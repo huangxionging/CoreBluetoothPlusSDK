@@ -292,7 +292,7 @@
     NSInteger day = bytes[12];
     
     // 当前指示日期
-    _indicatorDate = [NSString stringWithFormat:@"%04ld%02ld%02ld", (long)year, (long)month, (long)day];
+    _indicatorDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld", (long)year, (long)month, (long)day];
     
     // 日期
     [_oneDayDataDict setObject: _indicatorDate forKey: @"date"];

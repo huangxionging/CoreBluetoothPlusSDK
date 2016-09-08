@@ -8,7 +8,7 @@
 
 #import "CBPWKLSimpleControlAction.h"
 #import <objc/message.h>
-
+#import "CBPHexStringManager.h"
 
 /**
  *  @author huangxiong
@@ -31,11 +31,11 @@
     NSArray *interfaces = @[// 点亮 led,
                       @"light_led",
                       // // 控制蜂鸣器响
-                      @"control_buzzer_sound",
+                      @"buzzer_sound",
                       // 防止丢失
-                      @"prevent_lost",
+                      @"anti_lost",
                       // 按键锁
-                      @"keyboars_lock",
+                      @"key_lock",
                       // 改变三基色颜色
                       @"change_color",
                       // 查找设备
@@ -49,10 +49,17 @@
 
 // 指令标识集合
 + (NSSet *)keySetForAction {
-    return [NSSet setWithObjects:@"0x0b", nil];
+    return [NSSet setWithObjects:@"0x0c", nil];
 }
 
 - (NSData *)actionData {
+    
+    NSDictionary *parameter = [self valueForKey: @"parameter"];
+    
+    NSString *interface = parameter[@"interface"];
+    
+    // 指示接口
+    NSInteger index = [[CBPWKLSimpleControlAction actionInterfaces] indexOfObject: interface];
     
     Byte bytes[20] = {0};
     
@@ -63,43 +70,49 @@
     bytes[1] = 0x0c;
     
     // _type 就是相应的控制值
-    bytes[3] = _type;
+    bytes[3] = index + 1;
     
     // 处理其它参数
-    switch (_type) {
+    switch (index) {
         
         // LED 灯
-        case  kCBPWKLSimpleControlTypeLED: {
+        case  0: {
             
-            // 参数判断
-            NSParameterAssert(_switchValue);
+            NSString *led = parameter[@"led"];
             
-            // 字节指针
-            Byte *locationPointer = &bytes[4];
-            // 复制数据
-            memcpy(locationPointer, _switchValue, 4);
+            Byte *ledBytes = [[CBPHexStringManager shareManager] bytesForString: led];
+            bytes[4] = ledBytes[0];
+            bytes[5] = ledBytes[1];
+            bytes[6] = ledBytes[2];
+            bytes[7] = ledBytes[3];
+            
+            NSString *lightOnTime = parameter[@"light_on_time"];
             
             // 亮时长高字节
-            bytes[8] = _lightLength / 256;
+            bytes[8] = lightOnTime.integerValue / 256;
             // 亮时长低字节
-            bytes[9] = _lightLength % 256;
+            bytes[9] = lightOnTime.integerValue % 256;
+            
+            NSString *lightOffTime = parameter[@"light_off_time"];
             
             // 灭时长高字节
-            bytes[10] = _extinguishLength / 256;
+            bytes[10] = lightOffTime.integerValue / 256;
             // 灭时长低字节
-            bytes[11] = _extinguishLength % 256;
+            bytes[11] = lightOffTime.integerValue % 256;
+            
+            NSString *repeatCount = parameter[@"repeatCount"];
             
             // 重复次数高字节
-            bytes[12] = _recurNumbers / 256;
+            bytes[12] = repeatCount.integerValue / 256;
             // 重复次数低字节
-            bytes[13] = _recurNumbers % 256;
+            bytes[13] = repeatCount.integerValue % 256;
             
             break;
         }
             
         // 蜂鸣器
-        case kCBPWKLSimpleControlTypeBuzzer: {
-            NSParameterAssert(_switchValue);
+        case 1: {
+        
             
             // 字节指针, 开关
             Byte *locationPointer = &bytes[4];
@@ -120,8 +133,8 @@
         }
         
         // 防丢和按键锁的其他参数一样
-        case kCBPWKLSimpleControlTypeLostSwitch:
-        case kCBPWKLSimpleControlTypeKeyboardLock: {
+        case 2:
+        case 3: {
             NSParameterAssert(_switchValue);
             // 字节指针, 开关
             Byte *locationPointer = &bytes[4];
@@ -137,20 +150,20 @@
         }
             
         // 更换三基色
-        case kCBPWKLSimpleControlTypeChangeColor: {
+        case 4: {
             bytes[4] = _colorValue;
             break;
         }
         
         // 查找设备
-        case kCBPWKLSimpleControlTypeSearchDevice: {
+        case 5: {
             
             // 查找设备无其他参数需要配置了
             break;
         }
             
         // ANCS 功能, 打开开关就行
-        case kCBPWKLSimpleControlTypeANCS: {
+        case 6: {
             
             NSParameterAssert(_switchValue);
             // 字节指针, 开关
@@ -167,10 +180,30 @@
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     
+    NSLog(@"%@", updateDataModel.actionData);
     Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
     
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
         
+        // 待回传的结果
+        NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity: 5];
+        
+        if (bytes[0] == 0x5b && bytes[1] == 0x0c) {
+            
+            switch (bytes[3]) {
+                case 0: {
+                    
+                    NSString *ledState = [[CBPHexStringManager shareManager] hexStringForBytes: &bytes[4] length: 4];
+                    ledState = [ledState stringByAppendingString: @"0x"];
+                    
+                    // led 结果
+                    [result setObject: ledState forKey: @"led_state"];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
     }
     if (bytes ) {
         

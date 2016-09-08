@@ -246,9 +246,9 @@
 - (void) synchronizeStep {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
     // 操作类型
-    [parameter setObject: @"20160801" forKey: @"start_date"];
+    [parameter setObject: @"2016-08-01" forKey: @"start_date"];
     
-    [parameter setObject: @"20160905" forKey: @"end_date"];
+    [parameter setObject: @"2016-09-05" forKey: @"end_date"];
     
     [self.manager post: @"ble://synchronize_step_data" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
         
@@ -267,9 +267,9 @@
 - (void) synchronizeSleep {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
     // 操作类型
-    [parameter setObject: @"20160801" forKey: @"start_date"];
+    [parameter setObject: @"2016-08-01" forKey: @"start_date"];
     
-    [parameter setObject: @"20160905" forKey: @"end_date"];
+    [parameter setObject: @"2016-09-05" forKey: @"end_date"];
     
     [self.manager post: @"ble://synchronize_sleep_data" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
         

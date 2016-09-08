@@ -12,11 +12,6 @@
 	<string>查询设备版本</string>
 	<string>固件升级</string>
 	<string>重启设备</string>
-	<string>设置水杯参数</string>
-	<string>查询水杯状态</string>
-	<string>同步饮水数据</string>
-	<string>设置饮水计划</string>
-	<string>查询饮水计划</string>
 	<string>点亮指定 LED</string>
 	<string>控制蜂鸣器响</string>
 	<string>防丢</string>

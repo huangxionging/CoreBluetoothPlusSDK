@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */; };
 		F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */; };
 		F261537E1D7D259E008230B4 /* parameter_result.plist in Resources */ = {isa = PBXBuildFile; fileRef = F261537D1D7D259E008230B4 /* parameter_result.plist */; };
 		F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153831D7E66D8008230B4 /* CBPStepTableViewCell.m */; };
@@ -54,6 +55,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F22228E11D810C7A00167379 /* CBPWKLWaterCupsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLWaterCupsAction.h; sourceTree = "<group>"; };
+		F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLWaterCupsAction.m; sourceTree = "<group>"; };
 		F261537A1D797F05008230B4 /* SynchronizeStepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizeStepTableViewController.h; sourceTree = "<group>"; };
 		F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizeStepTableViewController.m; sourceTree = "<group>"; };
 		F261537D1D7D259E008230B4 /* parameter_result.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parameter_result.plist; sourceTree = "<group>"; };
@@ -333,6 +336,8 @@
 				F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */,
 				F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */,
 				F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */,
+				F22228E11D810C7A00167379 /* CBPWKLWaterCupsAction.h */,
+				F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */,
 				F2C548F81D644DEC00A665F3 /* CBPWKLSimpleControlAction.h */,
 				F2C548F91D644DEC00A665F3 /* CBPWKLSimpleControlAction.m */,
 				F2C548FE1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.h */,
@@ -491,6 +496,7 @@
 				F2C548EA1D6309F200A665F3 /* CBPHexStringManager.mm in Sources */,
 				F2C549051D644DEC00A665F3 /* CBPWKLSimpleControlAction.m in Sources */,
 				F2C548D21D62FCBE00A665F3 /* CBPBaseDevice.m in Sources */,
+				F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */,
 				F2C549081D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m in Sources */,
 				F276371E1D61A45F006597AC /* ViewController.m in Sources */,
 				F2C548EB1D6309F200A665F3 /* CBPStringToHex.mm in Sources */,

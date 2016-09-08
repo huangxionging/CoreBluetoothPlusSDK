@@ -1,17 +1,18 @@
 //
-//  CBPWKLRestartAction.m
+//  CBPWKLWaterCupsAction.m
 //  CoreBluetoothPlusSDK
 //
-//  Created by huangxiong on 16/9/6.
+//  Created by huangxiong on 16/9/8.
 //  Copyright © 2016年 huangxiong. All rights reserved.
 //
 
-#import "CBPWKLRestartAction.h"
+#import "CBPWKLWaterCupsAction.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
 #import "CBPHexStringManager.h"
+#import "NSDate+CBPUtilityTool.h"
 
-@implementation CBPWKLRestartAction
+@implementation CBPWKLWaterCupsAction
 
 
 + (void)load {
@@ -25,14 +26,15 @@
 
 // 指令标识集合
 + (NSSet *)keySetForAction {
-    return [NSSet setWithObjects:@"0x0f", nil];
+    return [NSSet setWithObjects:@"0x08", nil];
 }
 
 // 接口数组
 + (NSArray *)actionInterfaces {
     // 对应的 keys
-    NSArray *interfaces = @[// 重启设备,
-                            @"restart_device"];
+    NSArray *interfaces = @[// 查询设备版本
+                            @"setting_cups_parameter",
+                            @"check_cups_state"];
     // 返回接口
     return interfaces;
 }
@@ -40,18 +42,53 @@
 - (NSData *)actionData {
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     
+    NSString *interface = parameter[@"interface"];
+    
+    // 指示接口
+    NSInteger index = [[CBPWKLWaterCupsAction actionInterfaces] indexOfObject: interface];
     Byte bytes[20] = {0};
     
     bytes[0] = 0x5a;
-    bytes[1] = 0x0f;
+    bytes[1] = 0x08;
     
-    // 内容
-    NSString *contentType = parameter[@"content_type"];
-    bytes[3] = contentType.integerValue;
+    // 接口
+    bytes[3] = index;
     
-    // 是否需要回复
-    NSString *response = parameter[@"response"];
-    bytes[4] = response.integerValue;
+    // 表明设置水杯参数
+    if (index == 0) {
+        
+        // 时间
+        NSString *time = parameter[@"time"];
+        
+        // 日期格式
+        NSDate *date = [NSDate dateWithFormatString: @"yyyy-MM-dd hh:mm" andWithDateString: time];
+        NSInteger year = date.yearOfGregorian - 2000;
+        NSInteger month = date.monthOfYear;
+        NSInteger day = date.dayOfMonth;
+        NSInteger hour = date.hour;
+        NSInteger minute = date.minute;
+        NSInteger second = date.second;
+        
+        bytes[4] = year;
+        bytes[5] = month;
+        bytes[6] = day;
+        bytes[7] = hour;
+        bytes[8] = minute;
+        bytes[9] = second;
+        
+        // led 提醒
+        NSString *ledRemind = parameter[@"led_remind"];
+        
+        // 蜂鸣器提醒
+        NSString *buzzerRemind = parameter[@"buzzer_remind"];
+        
+        // 是否有效
+        NSString *valid = parameter[@"valid"];
+        
+        bytes[11] = ledRemind.integerValue * 4 + buzzerRemind.integerValue * 2 + valid.integerValue;
+        
+    }
+    
     
     NSData *data = [NSData dataWithBytes: bytes length: 20];
     //    NSLog(@"绑定指令: %@", data);
