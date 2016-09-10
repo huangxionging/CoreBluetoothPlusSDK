@@ -43,7 +43,7 @@
                       // ANCS 功能开关
                       @"ancs_switch",
                       // 查询设备工作状态
-                      @"check_device_state"];
+                      @"check_device_working_state"];
     return interfaces;
 }
 
@@ -72,6 +72,7 @@
     // _type 就是相应的控制值
     bytes[3] = index + 1;
     
+    // 6和8无特别参数
     // 处理其它参数
     switch (index + 1) {
         
@@ -148,20 +149,16 @@
             
         // 更换三基色
         case 5: {
-           // bytes[4] = _colorValue;
-            break;
-        }
-        
-        // 查找设备
-        case 6: {
-            
-            // 查找设备无其他参数需要配置了
+            // 颜色
+            NSString *colorValue = parameter[@"color_value"];
+            bytes[4] = colorValue.integerValue;
             break;
         }
             
         // ANCS 功能, 打开开关就行
         case 7: {
-            
+            NSString *switchValue = parameter[@"switch"];
+            bytes[4] = switchValue.integerValue;
             break;
         }
         default:
@@ -205,6 +202,11 @@
                     break;
                 }
                 case 8: {
+                    
+                    // 蓝牙状态
+                    Byte ble = (bytes[4] & 0xc0) > 6;
+                    
+                    [[CBPHexStringManager shareManager] hexStringForBytes: &ble length: 1];
                     break;
                 }
                 default:

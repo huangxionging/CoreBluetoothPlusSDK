@@ -69,13 +69,12 @@
 ##<a name="protocol"/> 四. 纬科联蓝牙模块通讯接口
 
 ```Objective-c
-	// 调用方式: "ble://接口?参数=值&参数=值"
-	// 接口必须有, 参数看具体的接口
-	
+// 调用方式: "ble://接口?参数=值&参数=值"
+// 接口必须有, 参数看具体的接口
+
+// 设置参数
 NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
-    // 操作类型
 [parameter setObject: @"parameterValue1" forKey: @"parameterKey1"];
-    
 [parameter setObject: @"parameterValue2" forKey: @"parameterKey2"];
 ...
 
@@ -352,10 +351,51 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 
 		返回值:
 			state: 表示防丢提醒状态, 0 表示已停止提醒, 1 表示正常提醒, 2 表示出错.
+			
+***
+*	4.20 <a name="change_color">_改变颜色_	
+	
+		接口名称: change_color. 
+		
+		参数:
+			color_value: 0-蓝, 1-橙, 2-绿, 3-红;
+
+		返回值:
+			state: 更换三基色灯操作结果, 0-成功, 1-出错.
+***
+*	4.21 <a name="search_device">_查找设备_	
+	
+		接口名称: search_device.
+				
+		参数: 无
+		
+		返回值: 无
+***
+*	4.22 <a name="ancs_switch">_ANCS 功能开关_	
+	
+		接口名称: ancs_switch.
+				
+		参数:
+			switch: 1 表示打开(使能)ANCS功能, 0 表示关闭.
+		
+		返回值: 无
+***
+*	4.23 <a name="check_device_working_state">_查询设备工作状态_	
+	
+		接口名称: check_device_working_state.
+				
+		参数: 无
+		
+		返回值:
+			bluetooth_state: 蓝牙状态, 0 表示正在通讯, 1 表示工作异常, 2, 表示无此功能, 3 表示;
+			gravity_sensor_percussion_interrupt : 重力传感器敲击中断, 0 表示正在检测中, 1 表示工作异常, 2, 表示无此功能;
+			gravity_sensor_motion_interrupt: 重力传感器运动中断, 0 表示正在检测中, 1 表示工作异常, 2, 表示无此功能;
+			gravity_sensor_communication_state: 重力传感器通讯状态, 0 表示正在通讯中, 1 表示工作异常, 2, 表示无此功能;
+			supply_voltage_detection: 供电电压检测, 0 表示正在检测中, 1 表示电压不在预定范围内, 2, 表示无此功能;
+			charge_detection: 充电检测: 01 表示正在检测中, 1 表示超时未检测到开始充电(可选), 2, 表示无此功能;
+			gravity_sensor_triaxial_data_change: 重力传感器三轴数据变化, 0001 表示正在检测中, 1xyz: XYZ 轴数据在检测过程中是否曾经有变 化:有变化的位为 1,无变化为 0,全为 1 表示 数据变化正常。
+			external_flash_rw_operation: 001 表示正在检测中 1rw 表示读写操作的结果, 1 表示操作 成功,0 表示失败. (r:读, w:写).
+			
 ***
 	
-	*	4.20[改变颜色](#change_color)
-	*	4.21[查找设备](#search_device)
-	*	4.22[ANCS 功能开关](#ancs_switch)
-	*	4.23[查询设备工作状态](#check_device_working_state)
 [架构导图]:HXBluetooth.png "架构导图"

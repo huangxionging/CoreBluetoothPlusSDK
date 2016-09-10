@@ -112,6 +112,14 @@
         case 10: {
             break;
         }
+        case 15: {
+            [self searchDevice];
+            break;
+        }
+        case 17: {
+            [self checkDeviceWorkingState];
+            break;
+        }
         default:
             break;
     }
@@ -313,6 +321,35 @@
         vc.parameter = parameter;
         vc.result = responseObject;
         [self.navigationController pushViewController: vc animated: YES];
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+}
+
+- (void) searchDevice {
+    [self.manager post: @"ble://search_device" parameters:  nil success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+        //        CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
+        //        vc.parameter = parameter;
+        //        vc.result = responseObject;
+        //        [self.navigationController pushViewController: vc animated: YES];
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+
+}
+
+- (void) checkDeviceWorkingState {
+   
+    
+    [self.manager post: @"ble://check_device_working_state" parameters:  nil success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+//        CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
+//        vc.parameter = parameter;
+//        vc.result = responseObject;
+//        [self.navigationController pushViewController: vc animated: YES];
         
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
         
