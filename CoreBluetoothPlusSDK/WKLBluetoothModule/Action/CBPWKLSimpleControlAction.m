@@ -202,20 +202,29 @@
                     break;
                 }
                 case 8: {
-                    
                     // 蓝牙状态
-                    Byte ble = (bytes[4] & 0xc0) > 6;
+                    Byte ble = (bytes[4] & 0xc0) >> 6;
                     
-                    [[CBPHexStringManager shareManager] hexStringForBytes: &ble length: 1];
+                    NSString *hex = [[CBPHexStringManager shareManager] hexStringForBytes: &ble length: 1];
+                    
+                    NSLog(@"%@", hex);
+                    
+                    [hex substringToIndex: 2];
                     break;
                 }
                 default:
                     break;
             }
         }
+        
+        //
+        // 选取 方法
+        SEL selector = NSSelectorFromString(@"callBackResult:");
+        // 发送消息
+        objc_msgSend(self, selector, result);
     }
 }
-   
+
 
 
 

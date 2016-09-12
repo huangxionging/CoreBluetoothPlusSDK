@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */; };
+		F24E97BE1D86B178001AB1FB /* CBPBinStringManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */; };
 		F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */; };
 		F261537E1D7D259E008230B4 /* parameter_result.plist in Resources */ = {isa = PBXBuildFile; fileRef = F261537D1D7D259E008230B4 /* parameter_result.plist */; };
 		F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153831D7E66D8008230B4 /* CBPStepTableViewCell.m */; };
@@ -57,6 +58,8 @@
 /* Begin PBXFileReference section */
 		F22228E11D810C7A00167379 /* CBPWKLWaterCupsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLWaterCupsAction.h; sourceTree = "<group>"; };
 		F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLWaterCupsAction.m; sourceTree = "<group>"; };
+		F24E97BC1D86B178001AB1FB /* CBPBinStringManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPBinStringManager.h; sourceTree = "<group>"; };
+		F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CBPBinStringManager.mm; sourceTree = "<group>"; };
 		F261537A1D797F05008230B4 /* SynchronizeStepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizeStepTableViewController.h; sourceTree = "<group>"; };
 		F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizeStepTableViewController.m; sourceTree = "<group>"; };
 		F261537D1D7D259E008230B4 /* parameter_result.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parameter_result.plist; sourceTree = "<group>"; };
@@ -284,6 +287,8 @@
 				F2C548DC1D6300ED00A665F3 /* CoreBluetoothPlus.h */,
 				F2C548E61D6309F200A665F3 /* CBPHexStringManager.h */,
 				F2C548E71D6309F200A665F3 /* CBPHexStringManager.mm */,
+				F24E97BC1D86B178001AB1FB /* CBPBinStringManager.h */,
+				F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */,
 				F2C548E81D6309F200A665F3 /* CBPStringToHex.h */,
 				F2C548E91D6309F200A665F3 /* CBPStringToHex.mm */,
 				F26DD4B71D75731E0043FED4 /* NSDate+CBPUtilityTool.h */,
@@ -510,6 +515,7 @@
 				F26153901D7E9771008230B4 /* CBPSleepTableViewCell.m in Sources */,
 				F26153891D7E6D0F008230B4 /* CBPWKLSynchronizeSleepAction.m in Sources */,
 				F26DD4CA1D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m in Sources */,
+				F24E97BE1D86B178001AB1FB /* CBPBinStringManager.mm in Sources */,
 				F261538C1D7E9476008230B4 /* SynchronizeSleepTableViewController.m in Sources */,
 				F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */,
 				F26DD4CD1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m in Sources */,

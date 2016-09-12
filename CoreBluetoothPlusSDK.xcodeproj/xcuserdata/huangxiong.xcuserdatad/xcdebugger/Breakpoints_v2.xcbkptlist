@@ -196,7 +196,7 @@
                   moduleName = "CoreBluetoothPlusSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "495101412.464444"
+                  timestampString = "495352970.999855"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "347"
@@ -211,7 +211,7 @@
                   moduleName = "CoreBluetoothPlusSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "495101412.465209"
+                  timestampString = "495352971.000002"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "348"
@@ -233,6 +233,38 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "172"
             endingLineNumber = "172"
+            landmarkName = "-receiveUpdateData:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLSimpleControlAction.m"
+            timestampString = "495352970.958807"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "-receiveUpdateData:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLSimpleControlAction.m"
+            timestampString = "495352970.958807"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "-receiveUpdateData:"
             landmarkType = "5">
          </BreakpointContent>
