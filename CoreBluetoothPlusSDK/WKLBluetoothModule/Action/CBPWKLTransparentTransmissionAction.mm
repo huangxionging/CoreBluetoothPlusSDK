@@ -149,11 +149,11 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 超过16 就要分包了.
     if (_actionLength <= 16) {
         // 记录关键字
-        _byteKeyWord = *_hexString->bytesForString(_keyWord);
+        _byteKeyWord = *_hexString->bytesForHexString(_keyWord);
         bytes[3] = _byteKeyWord;
         
         // 拷贝数据
-        memcpy(&bytes[4], _hexString->bytesForString(_content), _actionLength);
+        memcpy(&bytes[4], _hexString->bytesForHexString(_content), _actionLength);
         _isLongAction = NO;
     } else {
         _isLongAction = YES;
@@ -176,7 +176,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         
         bytes[3] = 0x11;
         // 拷贝数据
-        memcpy(&bytes[4], _hexString->bytesForString([self.longActionArray firstObject]), 16);
+        memcpy(&bytes[4], _hexString->bytesForHexString([self.longActionArray firstObject]), 16);
     }
     
     _actionKeyWord = 0x19;
@@ -222,7 +222,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 拷贝数据
     NSString *lastAction = self.longActionArray[_indexOfAction];
     
-    memcpy(&bytes[4], _hexString->bytesForString(lastAction), lastAction.length / 2);
+    memcpy(&bytes[4], _hexString->bytesForHexString(lastAction), lastAction.length / 2);
     
     NSData *data = [NSData dataWithBytes: bytes length: lastAction.length / 2 + 4];
     NSLog(@"普通包 == %@", data);
@@ -258,7 +258,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 拷贝数据
     NSString *lastAction = [self.longActionArray lastObject];
     
-    memcpy(&bytes[4], _hexString->bytesForString(lastAction), lastAction.length / 2);
+    memcpy(&bytes[4], _hexString->bytesForHexString(lastAction), lastAction.length / 2);
     
     NSData *data = [NSData dataWithBytes: bytes length: lastAction.length / 2 + 4];
     NSLog(@"最后一包指令 == %@", data);

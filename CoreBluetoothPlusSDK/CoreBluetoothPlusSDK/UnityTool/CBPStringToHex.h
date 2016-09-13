@@ -31,16 +31,16 @@ public:
     static CBPStringToHex * getInstance();
     
     // 将 oc 字符串转换成字节
-    Byte * bytesForString(NSString *strings);
+    Byte * bytesForHexString(NSString *hexString);
     
     // 转换成 data
-    NSData * dataForString(NSString *strings);
+    NSData * dataForHexString(NSString *hexString);
     
     // 将 16 进制数据转换成字符串, 不以 @"0x" 开头
     NSString *hexStringForData(NSData *data);
     
     // 将16进制字符串转换成整数, 适用于小数据量
-    NSInteger demicalIntegerForHexString(NSString *strings);
+    NSInteger demicalIntegerForHexString(NSString *hexString);
     
     // 将指定16字节转换为对应的字符串
     NSString *hexStringForBytes(Byte *bytes, NSUInteger length);

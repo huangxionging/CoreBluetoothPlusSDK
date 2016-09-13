@@ -45,7 +45,7 @@ CBPStringToHex * CBPStringToHex::getInstance() {
 }
 
 #pragma mark- 将16进制字符串转换成字节数组
-Byte *CBPStringToHex::bytesForString(NSString *strings) {
+Byte *CBPStringToHex::bytesForHexString(NSString *strings) {
     
     if (![strings hasPrefix: @"0x"]) {
         strings = [NSString stringWithFormat: @"0x%@", strings];
@@ -85,7 +85,7 @@ Byte *CBPStringToHex::bytesForString(NSString *strings) {
 }
 
 #pragma mark- 将16进制字符串转换为二进制 Data
-NSData *CBPStringToHex::dataForString (NSString *strings) {
+NSData *CBPStringToHex::dataForHexString (NSString *strings) {
     
     if (![strings hasPrefix: @"0x"]) {
         strings = [NSString stringWithFormat: @"0x%@", strings];
@@ -93,7 +93,7 @@ NSData *CBPStringToHex::dataForString (NSString *strings) {
     NSInteger leng = strings.length / 2 - 1;
     
     // 通过之前 API 来转换
-    Byte *bytes = this->bytesForString(strings);
+    Byte *bytes = this->bytesForHexString(strings);
     
     return [NSData dataWithBytes: bytes length: leng];
     
@@ -125,7 +125,7 @@ NSInteger CBPStringToHex::demicalIntegerForHexString(NSString *strings) {
     NSInteger leng = strings.length / 2 - 1;
     
     // 获得字节
-    Byte *bytes = this->bytesForString(strings);
+    Byte *bytes = this->bytesForHexString(strings);
     
     // 获取结果
     NSInteger sum = 0;

@@ -9,6 +9,7 @@
 #import "CBPWKLSimpleControlAction.h"
 #import <objc/message.h>
 #import "CBPHexStringManager.h"
+#import "CBPBinStringManager.h"
 
 /**
  *  @author huangxiong
@@ -203,13 +204,28 @@
                 }
                 case 8: {
                     // 蓝牙状态
-                    Byte ble = (bytes[4] & 0xc0) >> 6;
+                    Byte ble = bytes[4];
                     
-                    NSString *hex = [[CBPHexStringManager shareManager] hexStringForBytes: &ble length: 1];
+                    NSString *bin = [[CBPBinStringManager shareManager] binStringForBytes: &ble length: 1];
                     
-                    NSLog(@"%@", hex);
+                    // 蓝牙状态
+                    NSString *bleState = [bin substringToIndex: 2];
+                    NSLog(@"%@", bleState);
+                    [result setObject: bleState forKey: @"bluetooth_state"];
                     
-                    [hex substringToIndex: 2];
+                    // 敲击中断
+                    NSString *percussionInterrupt = [bin substringWithRange: NSMakeRange(2, 2)];
+                    [result setObject: percussionInterrupt forKey: @"gravity_sensor_percussion_interrupt"];
+                    // 运动中断
+                    NSString *motionInterrupt = [bin substringWithRange: NSMakeRange(4, 2)];
+                    [result setObject: motionInterrupt forKey: @"gravity_sensor_motion_interrupt"];
+                    
+                    // 通讯状态
+                    NSString *communicationState = [bin substringWithRange: NSMakeRange(6, 2)];
+                    [result setObject: communicationState forKey: @"gravity_sensor_communication_state"];
+                    
+                    
+                    
                     break;
                 }
                 default:

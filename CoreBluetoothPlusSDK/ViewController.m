@@ -12,6 +12,7 @@
 #import "CBPShowResultTableViewController.h"
 #import "SynchronizeStepTableViewController.h"
 #import "SynchronizeSleepTableViewController.h"
+#import "CBPBinStringManager.h"
 @interface ViewController ()
 
 @property (nonatomic, strong) CBPBaseWorkingManager *manager;
@@ -165,6 +166,8 @@
 }
 
 - (void)synchronizeParameter {
+
+//    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
     // 设置运动目标
     [parameter setObject: @"100" forKey: @"step_goal"];
@@ -215,6 +218,7 @@
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
         
     }];
+    
 }
 
 

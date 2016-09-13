@@ -35,11 +35,11 @@
 }
 
 - (Byte *) bytesForString:(NSString *)hexString {
-    return _hexString->bytesForString(hexString);
+    return _hexString->bytesForHexString(hexString);
 }
 
 - (NSData *)dataForString:(NSString *)hexString {
-    return _hexString->dataForString(hexString);
+    return _hexString->dataForHexString(hexString);
 }
 
 - (NSString *)hexStringForData:(NSData *)data {
