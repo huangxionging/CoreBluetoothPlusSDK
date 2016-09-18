@@ -180,13 +180,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoreBluetoothPlusSDK/ViewController.m"
-            timestampString = "495441828.619495"
+            timestampString = "495444259.172463"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "354"
+            endingLineNumber = "354"
             landmarkName = "-checkDeviceWorkingState"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
@@ -196,11 +196,11 @@
                   moduleName = "CoreBluetoothPlusSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "495442431.010134"
+                  timestampString = "495540500.885303"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "354"
-                  endingLineNumber = "354"
+                  startingLineNumber = "356"
+                  endingLineNumber = "356"
                   offsetFromSymbolStart = "16">
                </Location>
                <Location
@@ -211,11 +211,11 @@
                   moduleName = "CoreBluetoothPlusSDK"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangxiong/huangxiong/UI4/CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/ViewController.m"
-                  timestampString = "495442431.010553"
+                  timestampString = "495540500.885479"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "355"
-                  endingLineNumber = "355"
+                  startingLineNumber = "357"
+                  endingLineNumber = "357"
                   offsetFromSymbolStart = "76">
                </Location>
             </Locations>
@@ -244,11 +244,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLSimpleControlAction.m"
-            timestampString = "495441828.619495"
+            timestampString = "495444259.172463"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "-receiveUpdateData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -260,11 +260,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoreBluetoothPlusSDK/WKLBluetoothModule/Action/CBPWKLSimpleControlAction.m"
-            timestampString = "495441828.619495"
+            timestampString = "495444259.172463"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "-receiveUpdateData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -292,13 +292,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoreBluetoothPlusSDK/ViewController.m"
-            timestampString = "495441828.619495"
+            timestampString = "495444259.172463"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "-synchronizeParameter"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

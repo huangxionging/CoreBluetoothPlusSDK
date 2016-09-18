@@ -19,7 +19,6 @@
 @implementation CBPWKLSimpleControlAction
 
 + (void)load {
-    
     // 选取方法
     SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
     // 发送消息
@@ -50,7 +49,7 @@
 
 // 指令标识集合
 + (NSSet *)keySetForAction {
-    return [NSSet setWithObjects:@"0x0c", nil];
+    return [NSSet setWithObjects:@"0x0D", nil];
 }
 
 - (NSData *)actionData {
@@ -224,8 +223,36 @@
                     NSString *communicationState = [bin substringWithRange: NSMakeRange(6, 2)];
                     [result setObject: communicationState forKey: @"gravity_sensor_communication_state"];
                     
+                    if (updateDataModel.actionData.length > 5) {
+                        ble = bytes[5];
+                    } else {
+                        ble = 0x00;
+                    }
+                    
+                    bin = [[CBPBinStringManager shareManager] binStringForBytes: &ble length: 1];
+                    // 供电电压检测
+                    NSString *voltageDetection = [bin substringToIndex: 2];
+                    NSLog(@"%@", bleState);
+                    [result setObject: voltageDetection forKey: @"supply_voltage_detection"];
+                    
+                    // 充电检测
+                    NSString *chargeDetection = [bin substringWithRange: NSMakeRange(2, 2)];
+                    [result setObject: chargeDetection forKey: @"charge_detection"];
+                    // 三维坐标数据改变
+                    NSString *triaxialDataChange = [bin substringWithRange: NSMakeRange(4, 4)];
+                    [result setObject: motionInterrupt forKey: @"gravity_sensor_triaxial_data_change"];
                     
                     
+                    if (updateDataModel.actionData.length > 6) {
+                        ble = bytes[6];
+                    } else {
+                        ble = 0x00;
+                    }
+                    
+                    bin = [[CBPBinStringManager shareManager] binStringForBytes: &ble length: 1];
+                    // 外部 flash 读写操作
+                    NSString *rwOperation = [bin substringWithRange: NSMakeRange(5, 3)];
+                    [result setObject: rwOperation forKey: @"external_flash_rw_operation"];
                     break;
                 }
                 default:

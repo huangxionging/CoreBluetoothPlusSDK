@@ -36,11 +36,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     // 开始工作
-    [self.manager.baseController startWorkWithBlock:^(id result) {
-        // 同步参数
-        NSLog(@"连接成功");
-        self.navigationItem.title = [NSString stringWithFormat: @"蓝牙连接成功"];
-    }];
+//    [self.manager.baseController startWorkWithBlock:^(id result) {
+//        // 同步参数
+//        NSLog(@"连接成功");
+//        self.navigationItem.title = [NSString stringWithFormat: @"蓝牙连接成功"];
+//    }];
     
     
     NSString *path = [[NSBundle mainBundle] pathForResource: @"CBPInterface" ofType: @"plist"];
@@ -166,10 +166,15 @@
 }
 
 - (void)synchronizeParameter {
-
+    
+    Byte bytes[5] = {0};
+    
+    Byte byte = bytes[4];
+    NSString *bin = [[CBPBinStringManager shareManager] binStringForBytes: &byte length:1];
+    NSString *sub = [bin substringToIndex: 2];
 //    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
-    // 设置运动目标
+    // \\设置运动目标
     [parameter setObject: @"100" forKey: @"step_goal"];
     
     // 佩戴目标

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */; };
 		F24E97BE1D86B178001AB1FB /* CBPBinStringManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */; };
+		F24E97C11D87E8A5001AB1FB /* CBPWKLSimpleDataAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F24E97C01D87E8A5001AB1FB /* CBPWKLSimpleDataAction.m */; };
 		F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */; };
 		F261537E1D7D259E008230B4 /* parameter_result.plist in Resources */ = {isa = PBXBuildFile; fileRef = F261537D1D7D259E008230B4 /* parameter_result.plist */; };
 		F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153831D7E66D8008230B4 /* CBPStepTableViewCell.m */; };
@@ -60,6 +61,8 @@
 		F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLWaterCupsAction.m; sourceTree = "<group>"; };
 		F24E97BC1D86B178001AB1FB /* CBPBinStringManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPBinStringManager.h; sourceTree = "<group>"; };
 		F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CBPBinStringManager.mm; sourceTree = "<group>"; };
+		F24E97BF1D87E8A5001AB1FB /* CBPWKLSimpleDataAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSimpleDataAction.h; sourceTree = "<group>"; };
+		F24E97C01D87E8A5001AB1FB /* CBPWKLSimpleDataAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLSimpleDataAction.m; sourceTree = "<group>"; };
 		F261537A1D797F05008230B4 /* SynchronizeStepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizeStepTableViewController.h; sourceTree = "<group>"; };
 		F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizeStepTableViewController.m; sourceTree = "<group>"; };
 		F261537D1D7D259E008230B4 /* parameter_result.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parameter_result.plist; sourceTree = "<group>"; };
@@ -345,6 +348,8 @@
 				F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */,
 				F2C548F81D644DEC00A665F3 /* CBPWKLSimpleControlAction.h */,
 				F2C548F91D644DEC00A665F3 /* CBPWKLSimpleControlAction.m */,
+				F24E97BF1D87E8A5001AB1FB /* CBPWKLSimpleDataAction.h */,
+				F24E97C01D87E8A5001AB1FB /* CBPWKLSimpleDataAction.m */,
 				F2C548FE1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.h */,
 				F2C548FF1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m */,
 				F2C549001D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.h */,
@@ -496,6 +501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F24E97C11D87E8A5001AB1FB /* CBPWKLSimpleDataAction.m in Sources */,
 				F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */,
 				F2C549021D644DEC00A665F3 /* CBPWKLBindDeviceAction.m in Sources */,
 				F2C548EA1D6309F200A665F3 /* CBPHexStringManager.mm in Sources */,

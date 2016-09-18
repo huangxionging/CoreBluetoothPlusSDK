@@ -42,7 +42,7 @@
 	*	4.7 [同步计步数据](#synchronize_step_data)
 	*	4.8 [同步睡眠数据](#synchronize_sleep_data)
 	*	4.9 [查询设备版本](#query_device_version)
-	*	4.10 [固件升级](#firmware_upgrade)
+	*	4.10[固件升级](#firmware_upgrade)
 	*	4.11[重启设备](#restart_device)
 	*	4.12[设置水杯参数](#setting_cups_parameter)
 	*	4.13[查询水杯状态](#check_cups_state)
@@ -56,6 +56,19 @@
 	*	4.21[查找设备](#search_device)
 	*	4.22[ANCS 功能开关](#ancs_switch)
 	*	4.23[查询设备工作状态](#check_device_working_state)
+	*	4.24[查询电池电量](#check_battery_power)
+	*	4.25[查询设备序号](#check_device_serial)
+	*	4.26[设置设备序号](#set_device_serial)
+	*	4.27[调试信息](#debug_info)
+	*	4.28[来电提醒姓名](#call_remind_name)
+	*	4.29[心率功能设置](#heart_rate_feature)
+	*	4.30[宠物运动参数设置](#pet_motion_parameter)
+	*	4.31[查询一天的总步数](#check_one_day_total_steps)
+	*	4.32[查询设备当前时间](#check_device_current_time)
+	*	4.33[体温功能设置](#temperature_function)
+	*	4.44[APP 前后台状态](#app_front_and_back_state)
+	*	4.45[设备调试信息](#device_debug_info)
+	*	4.46[]
 
 
 ##<a name="structure"/> SDK 架构
