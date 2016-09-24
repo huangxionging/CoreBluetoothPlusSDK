@@ -9,6 +9,12 @@
 #ifndef CoreBluetoothPlus_h
 #define CoreBluetoothPlus_h
 
+#import <objc/message.h>
+
+
+
+
 #define CBPDEBUG (NSLog(@"文件:%s ====> 方法:%s ====> 行数:%d =====> 时间:%s %s", __FILE__, __FUNCTION__, __LINE__,__DATE__, __TIME__))
+
 
 #endif /* CoreBluetoothPlus_h */

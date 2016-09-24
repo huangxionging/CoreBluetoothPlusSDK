@@ -11,7 +11,7 @@
 | 作者:	   | huangxiong			|
 | 联系方式:	  | huangxionging@qq.com	|
 | 日期:	   |  2016.04.14			 |	
-|	===		 |	====					|
+
 ******
 ##<a name="index"/>目录
 * [一. SDK 架构](#structure)
@@ -66,9 +66,12 @@
 	*	4.31[查询一天的总步数](#check_one_day_total_steps)
 	*	4.32[查询设备当前时间](#check_device_current_time)
 	*	4.33[体温功能设置](#temperature_function)
-	*	4.44[APP 前后台状态](#app_front_and_back_state)
-	*	4.45[设备调试信息](#device_debug_info)
-	*	4.46[]
+	*	4.34[APP 前后台状态](#app_front_and_back_state)
+	*	4.35[设备调试信息](#device_debug_info)
+	*	4.36[设备当天总步数](#device_current_steps)
+	*	4.37[设备心率](#device_heart_rate)
+	*	4.38[设备电量](#device_battery_power)
+	*	4.39[设备体温](#device_temperature)
 
 
 ##<a name="structure"/> SDK 架构
@@ -100,14 +103,14 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 }];
 ```
 ***
-* 4.1 <a name="check_bind_state"> _查询绑定状态_<br>
+* 4.1 <a name="check_bind_state"> *查询绑定状态*<br>
 
 		接口名称: check_bind_state
 		
 		参数: 无
 		
 ***
-*	4.2 <a name="apply_bind_device"> _申请绑定设备_
+*	4.2 <a name="apply_bind_device"> *申请绑定设备*
 	
 		接口名称: apply_bind_device.
 	
@@ -122,7 +125,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 
 			
 ***
-*	4.3 <a name="confirm_bind_device"> _确认绑定设备_
+*	4.3 <a name="confirm_bind_device"> *确认绑定设备*
 	
 		接口名称: confirm_bind_device.
 		
@@ -410,5 +413,41 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 			external_flash_rw_operation: 001 表示正在检测中 1rw 表示读写操作的结果, 1 表示操作 成功,0 表示失败. (r:读, w:写).
 			
 ***
+
+*	4.24 <a name="check_battery_power"> _查询电池电量_
+	
+		接口名称: check_battery_power.
+		
+		参数: 无
+		
+		返回值: 
+			battery_power: 电量百分比 0~100;
+***
+
+*	4.25 <a name="check_device_serial"> _查询设备序号_
+	
+		接口名称: check_device_serial.
+		
+		参数: 无
+		
+		返回值: 
+			device_serial: 设备序号;
+***
+
+	*	4.26[设置设备序号](#set_device_serial)
+	*	4.27[调试信息](#debug_info)
+	*	4.28[来电提醒姓名](#call_remind_name)
+	*	4.29[心率功能设置](#heart_rate_feature)
+	*	4.30[宠物运动参数设置](#pet_motion_parameter)
+	*	4.31[查询一天的总步数](#check_one_day_total_steps)
+	*	4.32[查询设备当前时间](#check_device_current_time)
+	*	4.33[体温功能设置](#temperature_function)
+	*	4.34[APP 前后台状态](#app_front_and_back_state)
+	*	4.35[设备调试信息](#device_debug_info)
+	*	4.36[设备当天总步数](#device_current_steps)
+	*	4.37[设备心率](#device_heart_rate)
+	*	4.38[设备电量](#device_battery_power)
+	*	4.39[设备体温](#device_temperature)
+
 	
 [架构导图]:HXBluetooth.png "架构导图"

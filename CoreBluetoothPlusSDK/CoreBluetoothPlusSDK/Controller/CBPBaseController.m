@@ -28,8 +28,11 @@
 
 @implementation CBPBaseController
 
-+ (void) registerController:(id) baseController forKey: (NSString *) key{
-    
++ (NSString *)controllerKey {
+    return @"";
+}
+
++ (void) registerController:(id) baseController {
     
     // 获得类名
     NSString *classString = NSStringFromClass([baseController class]);
@@ -37,8 +40,11 @@
     
     CBPBaseWorkingManager *manager = [CBPBaseWorkingManager manager];
     
+    NSString *key = [[baseController class] controllerKey];
     // 设置 controller
-    [manager.controllerDict setObject: classString forKey: key];
+    if (key) {
+        [manager.controllerDict setObject: classString forKey: key];
+    }
 }
 
 - (instancetype)init {
@@ -68,7 +74,7 @@
     [weakSelf.baseClient setScanTimeOut: 15.0];
     
     // 设置扫描准备回调
-    [weakSelf.baseClient setScanReadyBlock:^(CBCentralManagerState ready) {
+    [weakSelf.baseClient setScanReadyBlock:^(CBManagerState ready) {
         
         // 根据状态做不同操作
         switch (ready) {
@@ -113,7 +119,7 @@
         
         if (peripheral != nil) {
             [weakSelf.baseClient stopScan];
-            [weakSelf.baseClient connectPeripheralWithOptions: nil];
+           // [weakSelf.baseClient connectPeripheralWithOptions: nil];
 #ifdef CBPLOG_FLAG
             CBPDEBUG;
             NSLog(@"发现外设: %@ ====>", peripheral);
@@ -132,7 +138,7 @@
         }
         else {
             NSLog(@"断开链接");
-            [weakSelf.baseClient connectPeripheralWithOptions: nil];
+           // [weakSelf.baseClient connectPeripheralWithOptions: nil];
         }
         
     }];
@@ -266,6 +272,8 @@
     // 释放通道
     // 得到 action 的 key
     SEL selector = NSSelectorFromString(@"keySetForAction");
+    
+    
     // 获取 指令标识集合
     NSSet *keySet = objc_msgSend([action class], selector);
     

@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "67F243F9B5E6BB590A14EC554CFD8532D8CE0261",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "67869d44-0647-49ce-b36c-980011c0aae9++2831" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "67F243F9B5E6BB590A14EC554CFD8532D8CE0261" : 9223372036854775807,
+    "67869d44-0647-49ce-b36c-980011c0aae9++2831" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "0A683F01-DD22-4404-BFD4-794EB6BA4CF8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "67F243F9B5E6BB590A14EC554CFD8532D8CE0261" : "CoreBluetoothPlusSDK\/",
+    "67869d44-0647-49ce-b36c-980011c0aae9++2831" : "CoreBluetoothPlusSDK\/CoreBluetoothPlusSDK\/MJRefresh\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CoreBluetoothPlusSDK",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CoreBluetoothPlusSDK.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/192.168.0.11\/product_movnow",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67869d44-0647-49ce-b36c-980011c0aae9++2831"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/huangxionging\/CoreBluetoothPlusSDK.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67F243F9B5E6BB590A14EC554CFD8532D8CE0261"
+    }
+  ]
+}

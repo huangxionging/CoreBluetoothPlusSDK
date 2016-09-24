@@ -8,9 +8,9 @@
 
 #import "CBPWKLBindDeviceAction.h"
 #import <UIKit/UIKit.h>
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "CBPHexStringManager.h"
+#import "CBPDispatchMessageManager.h"
+
 
 @interface CBPWKLBindDeviceAction ()
 
@@ -23,12 +23,11 @@
 
 + (void)load {
     
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
+
 
 // 指令标识集合
 + (NSSet *)keySetForAction {
@@ -152,10 +151,8 @@
                     break;
             }
             
-            //  完成
-            SEL selector = NSSelectorFromString(@"callBackResult:");
-            // 发送消息
-            objc_msgSend(self, selector, result);
+            // 回传结果
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", result, nil];
             
         } else if (bytes[0] == 0x5a && bytes[1] == 0x0b) {
             // 设备被绑定, 表示设备确认与APP绑定是否成功;
@@ -170,17 +167,11 @@
                 actionDataModel.actionData = actionData;
                 id result = actionDataModel;
                 // 回复数据
-                SEL selector = NSSelectorFromString(@"callAnswerResult:");
-                // 发送消息
-                objc_msgSend(self, selector, result);
-                
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
                 // 回复指令完成
                 
                 NSDictionary *finishDict = @{@"code":@"0"};
-                //  选取 方法
-                SEL finishSelector = NSSelectorFromString(@"callBackResult:");
-                // 发送消息
-                objc_msgSend(self, finishSelector, finishDict);
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", finishDict, nil];
             }
         }
         

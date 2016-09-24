@@ -7,10 +7,9 @@
 //
 
 #import "CBPWKLSynchronizeStepAction.h"
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "CBPHexStringManager.h"
 #import "NSDate+CBPUtilityTool.h"
+#import "CBPDispatchMessageManager.h"
 
 @interface CBPWKLSynchronizeStepAction () {
     /**
@@ -86,11 +85,8 @@
 @implementation CBPWKLSynchronizeStepAction
 
 + (void)load {
-    
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
 
@@ -131,9 +127,9 @@
         }
         else {
            
-            NSDate *start = [NSDate dateWithFormatString: @"yyyyMMdd" andWithDateString: startDate];
+            NSDate *start = [NSDate dateWithFormatString: @"yyyy-MM-dd" andWithDateString: startDate];
             
-            NSDate *end = [NSDate dateWithFormatString: @"yyyyMMdd" andWithDateString: endDate];
+            NSDate *end = [NSDate dateWithFormatString: @"yyyy-MM-dd" andWithDateString: endDate];
             
             // 算法问题, 年份 - 2000, 表示两千年以后的年份
             // 开始日期
@@ -478,9 +474,7 @@
     
     // 回复数据
     id result = model;
-    SEL selector = NSSelectorFromString(@"callAnswerResult:");
-    // 发送消息
-    objc_msgSend(self, selector, result);
+   [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
 }
 
 #pragma mark---处理请求下一天的数据
@@ -493,9 +487,7 @@
         
         // 回复数据
         //  完成
-        SEL selector = NSSelectorFromString(@"callBackResult:");
-        // 发送消息
-        objc_msgSend(self, selector, self.stepDataDiction);
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", self.stepDataDiction, nil];
         return;
     }
     
@@ -526,9 +518,7 @@
     
     // 回复数据
     id result = model;
-    SEL selector = NSSelectorFromString(@"callAnswerResult:");
-    // 发送消息
-    objc_msgSend(self, selector, result);
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
 }
 
 #pragma mark---最后一个长包的最后一包数据

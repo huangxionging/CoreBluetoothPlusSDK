@@ -7,19 +7,15 @@
 //
 
 #import "CBPWKLRestartAction.h"
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "CBPHexStringManager.h"
-
+#import "CBPDispatchMessageManager.h"
 @implementation CBPWKLRestartAction
 
 
 + (void)load {
     
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
 
@@ -80,11 +76,8 @@
             }
             
             [result setObject: resultString forKey: @"result"];
-            
-            //  完成
-            SEL selector = NSSelectorFromString(@"callBackResult:");
-            // 发送消息
-            objc_msgSend(self, selector, result);
+            // 回调
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", result, nil];
         }
     }
 }

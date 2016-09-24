@@ -7,17 +7,14 @@
 //
 
 #import "CBPWKLPedometerTimeIntervalAction.h"
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "CBPHexStringManager.h"
+#import "CBPDispatchMessageManager.h"
 
 @implementation CBPWKLPedometerTimeIntervalAction
 
 + (void)load {
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
 

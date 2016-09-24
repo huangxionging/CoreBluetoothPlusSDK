@@ -10,8 +10,8 @@
 #import "CBPWKLBindDeviceAction.h"
 #import "CBPBaseWorkingManager.h"
 #import "CBPBaseCharacteristicModel.h"
-#import <objc/message.h>
 #import "CBPHexStringManager.h"
+#import "CBPDispatchMessageManager.h"
 
 @interface CBPWKLController ()
 
@@ -60,10 +60,8 @@
 
 + (void)load {
     
-    SEL selector = NSSelectorFromString(@"registerController:forKey:");
-    
-    objc_msgSend([self superclass], selector, self, [self controllerKey]);
-
+    // 注册控制器
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method: @"registerController:", self, nil];
 }
 
 + (NSString *)controllerKey {
@@ -75,8 +73,6 @@
     self = [super init];
     
     if (self) {
-        
-        
         NSString *path = [[NSBundle mainBundle] pathForResource: @"CBPBluetooth" ofType: @"plist"];
         
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile: path];
@@ -104,7 +100,7 @@
         if (self.baseDevice.isChracteristicReady == YES) {
             
             if (_block) {
-                NSDictionary *dict = @{@"code" : @"1", @"type": @""};
+                NSDictionary *dict = @{@"code" : @"1", @"type": @"0"};
                 _block(dict);
             }
             NSLog(@"已链接");
@@ -156,12 +152,12 @@
     }
     
     // 设置扫描超时时间
-    [weakSelf.baseClient setScanTimeOut: 15.0];
+    [weakSelf.baseClient setScanTimeOut: 3.0];
     // 设置回调
     weakSelf.block = block;
     
     // 已经准备开始扫描回调
-    [weakSelf.baseClient setScanReadyBlock:^(CBCentralManagerState ready) {
+    [weakSelf.baseClient setScanReadyBlock:^(CBManagerState ready) {
         switch (ready) {
             case CBCentralManagerStatePoweredOn: {
                 
@@ -179,11 +175,11 @@
     // 已找到
     [weakSelf.baseClient setSearchedPeripheralBlock:^(CBPBasePeripheralModel *peripheral) {
         
-        
-        
+        _block(peripheral);
+        return ;
         if (peripheral != nil) {
             [weakSelf.baseClient stopScan];
-            [weakSelf.baseClient connectPeripheralWithOptions: nil];
+            [weakSelf.baseClient  connectPeripheral: peripheral options: nil];
 #ifdef CBPLOG_FLAG
             CBPDEBUG;
             NSLog(@"发现外设: %@ ====>", peripheral);
@@ -197,6 +193,7 @@
     }];
     
     [weakSelf.baseClient setConnectionPeripheralBlock:^(CBPBasePeripheralModel *peripheral) {
+        
         if (peripheral.error == nil) {
             [weakSelf deviceStartWorkWith: peripheral];
         }
@@ -217,7 +214,7 @@
     _isReadCharacterstic = NO;
     self.baseDevice.isChracteristicReady = NO;
     self.baseDevice = nil;
-    [self.baseClient connectPeripheralWithOptions: nil];
+    [self.baseClient connectPeripheral: nil options: nil];
 }
 
 #pragma mark---设备开始工作

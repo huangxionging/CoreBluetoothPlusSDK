@@ -7,17 +7,14 @@
 //
 
 #import "CBPWKLFirmwareUpgradeAction.h"
-#import <objc/runtime.h>
-#import <objc/message.h>
+#import "CBPDispatchMessageManager.h"
 
 @implementation CBPWKLFirmwareUpgradeAction
 
 + (void)load {
     
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
 

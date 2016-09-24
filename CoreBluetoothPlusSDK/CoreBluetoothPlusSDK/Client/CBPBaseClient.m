@@ -11,7 +11,7 @@
 /**
  *  扫描回调
  */
-typedef void(^scanReadyBlock)(CBCentralManagerState ready);
+typedef void(^scanReadyBlock)(CBManagerState ready);
 
 /**
  *  找到最佳外设回调
@@ -139,7 +139,7 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 }
 
 #pragma mark---设置可以扫描的回调
-- (void)setScanReadyBlock:(void (^)(CBCentralManagerState))scanReadyBlock {
+- (void)setScanReadyBlock:(void (^)(CBManagerState))scanReadyBlock {
     
     self->_scanReadyBlock = scanReadyBlock;
 #ifdef CBPLOG_FLAG
@@ -191,7 +191,7 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 //    CBPDEBUG;
     NSLog(@"回传外设");
 #endif
-    
+    return;
     if (self->_searchedPeripheralBlock) {
         CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
         model.peripheral = self.peripheral;
@@ -214,9 +214,12 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 }
 
 #pragma mark---连接外设
-- (void)connectPeripheralWithOptions:(NSDictionary<NSString *,id> *)options {
+- (void)connectPeripheral:(CBPBasePeripheralModel *)peripheralModel options:(nullable NSDictionary<NSString *, id> *)options {
+    
     // 连接外设
-    [self.centralManager connectPeripheral: self.peripheral options: options];
+    [self stopScan];
+    self.peripheral = peripheralModel.peripheral;
+    [self.centralManager connectPeripheral: peripheralModel.peripheral options: options];
 }
 
 #pragma mark--停止连接
@@ -265,17 +268,19 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
         return;
     }
     
-
 //    CBPDEBUG;
     //    peripheral.identifier.UUIDString
     NSLog(@"发现外设: %@ ====> 广播数据: %@ ====> 信号强度: %@", peripheral, advertisementData, RSSI);
 
-    
+    CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
+    model.peripheral = peripheral;
+    model.singalValue = RSSI.integerValue;
+    _searchedPeripheralBlock(model);
     // 取信号量最大的外设, 等待设备超时, 将外设回传给设备
-    if (RSSI.integerValue > self->_peripheralSingalValue) {
-        self->_peripheralSingalValue = RSSI.integerValue;
-        self.peripheral = peripheral;
-    }
+//    if (RSSI.integerValue > self->_peripheralSingalValue) {
+//        self->_peripheralSingalValue = RSSI.integerValue;
+//        self.peripheral = peripheral;
+//    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {

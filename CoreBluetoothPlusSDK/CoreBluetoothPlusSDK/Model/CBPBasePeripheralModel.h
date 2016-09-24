@@ -21,6 +21,9 @@ typedef NS_ENUM(NSUInteger, BasePeripheralState) {
 
 @interface CBPBasePeripheralModel : NSObject
 
+
+@property (nonatomic, assign) NSInteger singalValue;
+
 /**
  *  外设
  */

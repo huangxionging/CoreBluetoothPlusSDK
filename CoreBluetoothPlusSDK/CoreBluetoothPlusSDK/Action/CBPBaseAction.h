@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
 #import "CBPBaseActionDataModel.h"
-
+#import "CoreBluetoothPlus.h"
 
 /**
  *  操作完成的回调
@@ -50,7 +49,7 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
  */
 - (NSData *)actionData;
 
-
+  
 /**
  *  对于不需要回复数据的操作, 建议使用此方法创建操作过
  *  @brief  通过类方法创建以及完成操作的回调

@@ -7,19 +7,16 @@
 //
 
 #import "CBPWKLQueryDeviceVersionAction.h"
-#import <objc/message.h>
-#import <objc/runtime.h>
 #import "CBPHexStringManager.h"
+#import "CBPDispatchMessageManager.h"
 
 @implementation CBPWKLQueryDeviceVersionAction
 
 
 + (void)load {
     
-    // 选取 方法
-    SEL selector = NSSelectorFromString(@"registerAction:forKeys:");
-    // 发送消息
-    objc_msgSend([self superclass], selector, self, [self actionInterfaces]);
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
     
 }
 
@@ -39,6 +36,7 @@
 
 - (NSData *)actionData {
     Byte bytes[20] = {0};
+    
     
     bytes[0] = 0x5a;
     bytes[1] = 0x10;
@@ -109,10 +107,7 @@
             NSLog(@"设备类型: %@", [deviceType uppercaseString]);
             
             //
-            // 选取 方法
-            SEL selector = NSSelectorFromString(@"callBackResult:");
-            // 发送消息
-            objc_msgSend(self, selector, result);
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", result, nil];
 
         }
     }

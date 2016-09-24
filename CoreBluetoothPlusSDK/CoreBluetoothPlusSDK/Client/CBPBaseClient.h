@@ -53,7 +53,7 @@
  *  @param  scanReadyBlock 是可以开始扫描的回调, 回调会通知上层是否已经可以扫描
  *  @return void
  */
-- (void) setScanReadyBlock: (void(^)(CBCentralManagerState ready)) scanReadyBlock;
+- (void) setScanReadyBlock: (void(^)(CBManagerState ready)) scanReadyBlock;
 
 /**
  *  @brief  已找到外设的回调
@@ -81,8 +81,7 @@
  *  @param  options 是连接选项
  *  @return void
  */
-- (void) connectPeripheralWithOptions: (NSDictionary<NSString *,id> *) options;
-
+- (void)connectPeripheral:(CBPBasePeripheralModel *)peripheralModel options:(nullable NSDictionary<NSString *, id> *)options;
 /**
  *  @brief  取消连接外设
  *  @param  void

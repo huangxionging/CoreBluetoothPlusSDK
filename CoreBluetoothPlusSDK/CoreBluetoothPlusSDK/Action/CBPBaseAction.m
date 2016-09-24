@@ -27,13 +27,26 @@
 
 @implementation CBPBaseAction
 
-+ (void) registerAction: (id) acion forKeys: (NSArray *) keys {
+
+/**
+ 接口数组, 子类需重写
+
+ @return 返回数组
+ */
++ (NSArray *)actionInterfaces {
+    return @[@""];
+}
+
++ (void) registerAction: (id) action {
+    
+    NSLog(@"%@" ,[action actionInterfaces]);
     // 获得类名
-    NSString *classString = NSStringFromClass([acion class]);
+    NSString *classString = NSStringFromClass([action class]);
     // 取得单例
     CBPBaseWorkingManager *manager = [CBPBaseWorkingManager manager];
     
     // 枚举设置
+    NSArray *keys = [[action class] actionInterfaces];
     [keys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if (*stop == NO) {
@@ -97,5 +110,7 @@
         _answerBlock(result);
     }
 }
+
+
 
 @end
