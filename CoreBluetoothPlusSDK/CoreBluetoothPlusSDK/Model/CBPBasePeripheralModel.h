@@ -9,30 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-/**
- *  外设连接状态
- */
-typedef NS_ENUM(NSUInteger, BasePeripheralState) {
-    kBasePeripheralStateConnected = 0,
-    kBasePeripheralStateError,
-    kBasePeripheralStateDisconnected
-};
-
-
 @interface CBPBasePeripheralModel : NSObject
 
 
+/**
+ 信号量
+ */
 @property (nonatomic, assign) NSInteger singalValue;
 
 /**
  *  外设
  */
 @property (nonatomic, strong) CBPeripheral *peripheral;
-
-/**
- *  连接状态
- */
-@property (nonatomic, assign) BasePeripheralState state;
 
 /**
  *  错误

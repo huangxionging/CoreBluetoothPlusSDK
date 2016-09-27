@@ -166,7 +166,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		返回值:
 			device_id: 表示设备编码;
 			protocol_version: 通讯协议版本;
-			upgraded_type: 升级方式, 0 表示无特殊功能, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件;
+			upgrade_type: 升级方式, 0 表示无特殊功能, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件;
 			firmware_version: 固件版本, 值越大表示固件越新;
 			device_type: 设备类型, ascii 字符.
 			
@@ -246,12 +246,18 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		返回值:
 			device_id: 表示设备编码;
 			protocol_version: 通讯协议版本;
-			upgraded_type: 升级方式, 0 表示无特殊功能, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件;
+			upgrade_type: 升级方式, 0 表示无特殊功能, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件, 3 表示 Cypress 升级;
 			firmware_version: 固件版本, 值越大表示固件越新;
 			device_type: 设备类型, ascii 字符.
 			
 ***
 *	4.10 <a name="firmware_upgrade">_固件升级_
+	
+		接口名称: firmware_upgrade.
+		
+		参数:
+			upgrade_type: 升级方式, 0 表示普通升级, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件, 3 表示 Cypress 升级;
+			filePath: 文件路径(包含扩展名);
 
 ***
 *	4.11 <a name="restart_device">_重启设备_

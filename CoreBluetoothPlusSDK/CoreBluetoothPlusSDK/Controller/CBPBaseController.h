@@ -75,12 +75,6 @@
  */
 - (void)setBaseDevice:(CBPBaseDevice *)baseDevice;
 
-/**
- *  @brief  发送操作
- *  @param  baseAction
- *  @return void
- */
-- (void) sendAction: (CBPBaseAction *) baseAction;
 
 /**
  *  @brief  设备开始工作, 通过传入外设模型

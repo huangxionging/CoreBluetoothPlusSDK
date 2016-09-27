@@ -507,7 +507,6 @@
     
     // 回复数据
     id result = model;
-    SEL selector = NSSelectorFromString(@"callAnswerResult:");
     // 发送消息
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
 }

@@ -108,37 +108,6 @@
     }
 }
 
-#pragma mark---发送操作
-- (void)sendAction:(CBPBaseAction *)baseAction {
-    
-    if (self.baseDevice.isChracteristicReady) {
-        
-        // 写操作的标示符
-        baseAction.characteristicUUIDString = self.writeCharacteristicUUIDString.lowercaseString;
-        
-        __weak CBPBaseController *weakSelf = self;
-        
-        [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: baseAction]];
-        
-        // 更新数据回调
-        [weakSelf.baseDevice setUpdateDataBlock:^(CBPBaseActionDataModel *actionDataModel) {
-            
-            [baseAction receiveUpdateData: actionDataModel];
-        }];
-        
-        // 写数据回调
-        [weakSelf.baseDevice setWriteDataBlock:^(CBPBaseActionDataModel *actionDataModel) {
-            [baseAction receiveUpdateData: actionDataModel];
-        }];
-        
-    }
-    else {
-        return;
-    }
-}
-
-
-
 #pragma mark---控制器开始工作
 - (void)startWorkWithBlock:(void (^)(id))block {
     

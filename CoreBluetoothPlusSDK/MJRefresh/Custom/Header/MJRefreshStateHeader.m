@@ -95,7 +95,7 @@
         } else {
             formatter.dateFormat = @"yyyy-MM-dd HH:mm";
         }
-        NSString *time = [formatter stringFromDate:lastUpdatedTime];
+//        NSString *time = [formatter stringFromDate:lastUpdatedTime];
         
         // 3.显示日期
 //        self.lastUpdatedTimeLabel.text = [NSString stringWithFormat:@"%@:%@%@",

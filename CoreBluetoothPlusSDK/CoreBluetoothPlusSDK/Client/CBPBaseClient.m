@@ -7,7 +7,7 @@
 //
 
 #import "CBPBaseClient.h"
-
+#import "CBPBasePeripheralModel.h"
 /**
  *  扫描回调
  */
@@ -27,11 +27,6 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 @property (nonatomic, strong) CBCentralManager *centralManager;
 
 /**
- *  外设
- */
-@property (nonatomic, strong) CBPeripheral *peripheral;
-
-/**
  *  扫描服务的数组
  */
 @property (nonatomic, strong) NSMutableArray<CBUUID *> *serviceUUIDs;
@@ -46,6 +41,10 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
  */
 @property (nonatomic, assign) NSTimeInterval timeOutInterval;
 
+/**
+ *  外设
+ */
+@property (nonatomic, strong) CBPBasePeripheralModel *peripheralModel;
 
 @end
 
@@ -140,12 +139,7 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 
 #pragma mark---设置可以扫描的回调
 - (void)setScanReadyBlock:(void (^)(CBManagerState))scanReadyBlock {
-    
     self->_scanReadyBlock = scanReadyBlock;
-#ifdef CBPLOG_FLAG
-    CBPDEBUG;
-#endif
-    
 }
 
 #pragma mark---找到外设
@@ -194,12 +188,10 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     return;
     if (self->_searchedPeripheralBlock) {
         CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
-        model.peripheral = self.peripheral;
-        model.state = kBasePeripheralStateConnected;
-        model.error = nil;
+        model = self.peripheralModel;
         
-        if (!self.peripheral) {
-            model.state = kBasePeripheralStateError;
+        if (!self.peripheralModel) {
+
             model.error = [NSError errorWithDomain: @"com.new_life" code: 1024 userInfo: nil];
         }
         
@@ -218,33 +210,33 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     
     // 连接外设
     [self stopScan];
-    self.peripheral = peripheralModel.peripheral;
+    self.peripheralModel = peripheralModel;
     [self.centralManager connectPeripheral: peripheralModel.peripheral options: options];
 }
 
 #pragma mark--停止连接
 - (void) cancelPeripheralConnection {
     
-    if (self.peripheral == nil) {
+    if (self.peripheralModel == nil) {
         return;
     }
     
-    for (CBService *service in self.peripheral.services) {
+    for (CBService *service in self.peripheralModel.peripheral.services) {
         
         if (service) {
             
             for (CBCharacteristic *characteristic in service.characteristics) {
                 if (characteristic.isNotifying) {
                     // 取消预订通知
-                    [self.peripheral setNotifyValue: NO forCharacteristic: characteristic];
+                    [self.peripheralModel.peripheral setNotifyValue: NO forCharacteristic: characteristic];
                 }
             }
             
         }
     }
     // 取消连接
-    [self.centralManager cancelPeripheralConnection: self.peripheral];
-    self.peripheral = nil;
+    [self.centralManager cancelPeripheralConnection: self.peripheralModel.peripheral];
+    self.peripheralModel = nil;
     self->_peripheralSingalValue = -90;
 }
 
@@ -252,10 +244,6 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     
-#ifdef CBPLOG_FLAG
-//    CBPDEBUG;
-    NSLog(@"中心设备已更新状态");
-#endif
     if (self->_scanReadyBlock) {
         self->_scanReadyBlock(central.state);
     }
@@ -294,7 +282,6 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     if (self->_connectionPeripheralBlock) {
         CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
         model.peripheral = peripheral;
-        model.state = kBasePeripheralStateConnected;
         model.error = nil;
         self->_connectionPeripheralBlock(model);
     }
@@ -306,7 +293,7 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     if (self->_connectionPeripheralBlock) {
         CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
         model.peripheral = peripheral;
-        model.state = kBasePeripheralStateError;
+  
         model.error = error;
         self->_connectionPeripheralBlock(model);
     }
@@ -314,11 +301,10 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     
-//    CBPDEBUG;
+    
     if (self->_connectionPeripheralBlock) {
         CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
         model.peripheral = peripheral;
-        model.state = kBasePeripheralStateConnected;
         model.error = error;
         self->_connectionPeripheralBlock(model);
     }

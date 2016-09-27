@@ -10,12 +10,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/Device/CBPBaseDevice.m"
-            timestampString = "496137044.601214"
+            timestampString = "496403262.646709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "-sendActionWithModel:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CoreBluetoothPlusSDK/CoreBluetoothPlusSDK/Device/CBPBaseDevice.m"
+            timestampString = "496403262.646709"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
+            landmarkName = "-peripheral:didReadRSSI:error:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

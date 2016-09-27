@@ -49,13 +49,8 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
  */
 - (NSData *)actionData;
 
-  
-/**
- *  对于不需要回复数据的操作, 建议使用此方法创建操作过
- *  @brief  通过类方法创建以及完成操作的回调
- *  @param  finishedBlock 是完成回调
- *  @return 返回为实例化
- */
+
+
 /**
  *  @author huangxiong, 2016/04/13 19:57:10
  *

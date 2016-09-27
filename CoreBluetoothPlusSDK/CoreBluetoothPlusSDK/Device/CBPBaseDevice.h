@@ -75,6 +75,14 @@
  */
 - (void) startWorkWith: (CBPBasePeripheralModel *)peripheralModel;
 
+
+/**
+ 切换外设模型, 前提是已连接的外设, 用于支持多外设连接
+
+ @param peripheralModel 外设模型
+ */
+- (void) changePeripheral: (CBPBasePeripheralModel *)peripheralModel;
+
 /**
  *  @brief  发送命令
  *  @param  actionDataModel 是操作的数据模型

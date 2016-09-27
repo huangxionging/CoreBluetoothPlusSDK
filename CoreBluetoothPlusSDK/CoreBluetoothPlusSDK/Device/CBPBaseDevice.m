@@ -54,7 +54,7 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     /**
      *  外设.
      */
-    CBPeripheral *_peripheral;
+    CBPBasePeripheralModel *_peripheralModel;
     
     /**
      *  服务 UUID 构成的字典
@@ -146,15 +146,12 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 #pragma mark---通过外设模型
 -(void)startWorkWith:(CBPBasePeripheralModel *)peripheralModel{
     
-    if (peripheralModel.state == kBasePeripheralStateError) {
-        
-    }
     // 设置外设
-    self->_peripheral = peripheralModel.peripheral;
+    self->_peripheralModel = peripheralModel;
     // 设置外设代理
-    self->_peripheral.delegate = self;
+    self->_peripheralModel.peripheral.delegate = self;
     // 发现服务
-    [self->_peripheral discoverServices: self->_serviceUUIDs.allValues];
+    [self->_peripheralModel.peripheral discoverServices: self->_serviceUUIDs.allValues];
     
     // 设置定时器
     self->_timeOutTimer = [NSTimer scheduledTimerWithTimeInterval: self.time  target:self selector: @selector(timeOut) userInfo: nil repeats: NO];
@@ -162,6 +159,14 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 
 - (void)discoverCharacteristicTimerTimeOutBlock:(void (^)(NSError *))timerBlock {
     self->_timeOutBlock = timerBlock;
+}
+
+#pragma mark- 切换外设
+- (void)changePeripheral:(CBPBasePeripheralModel *)peripheralModel {
+    // 必须是已连接的外设
+    if (peripheralModel.peripheral.state == CBPeripheralStateConnected) {
+        self->_peripheralModel = peripheralModel;
+    }
 }
 
 #pragma mark---定时器超时
@@ -218,7 +223,7 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
         // 两者都有
         if (characteristicModel && actionDataModel.actionData && [characteristicModel.flag isEqualToString: @"2"]) {
             // 写数据
-            [self->_peripheral writeValue: actionDataModel.actionData forCharacteristic: characteristicModel.chracteristic type: actionDataModel.writeType];
+            [self->_peripheralModel.peripheral writeValue: actionDataModel.actionData forCharacteristic: characteristicModel.chracteristic type: actionDataModel.writeType];
         }
         else {
             NSLog(@"发送数据失败");

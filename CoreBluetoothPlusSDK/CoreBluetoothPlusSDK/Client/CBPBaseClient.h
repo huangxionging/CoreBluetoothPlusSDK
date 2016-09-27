@@ -81,7 +81,7 @@
  *  @param  options 是连接选项
  *  @return void
  */
-- (void)connectPeripheral:(CBPBasePeripheralModel *)peripheralModel options:(nullable NSDictionary<NSString *, id> *)options;
+- (void)connectPeripheral:(CBPBasePeripheralModel *)peripheralModel options:(NSDictionary<NSString *, id> *)options;
 /**
  *  @brief  取消连接外设
  *  @param  void

@@ -8,8 +8,7 @@
 
 #import "CBPBaseController.h"
 #import "CBPBaseWorkingManager.h"
-#import <objc/message.h>
-
+#import "CBPDispatchMessageManager.h"
 
 /**
  *  @author huangxiong
@@ -168,7 +167,6 @@
     [weakSelf.baseDevice setWriteDataBlock:^(CBPBaseActionDataModel *actionDataModel) {
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
-        
         // 投送消息
         [action receiveUpdateData: actionDataModel];
     }];
@@ -239,10 +237,8 @@
 #pragma mark- 注册 action
 - (BOOL) registerAction: (CBPBaseAction *) action {
     
-    // 得到 action 的 key
-    SEL selector = NSSelectorFromString(@"keySetForAction");
-    // 获取 指令标识集合
-    NSSet *keySet = objc_msgSend([action class], selector);
+    // 键值
+    NSSet *keySet = [[CBPDispatchMessageManager shareManager] dispatchReturnValueTarget: [action class] method: @"keySetForAction", nil];
     
     // 子集 表明有这个指令存在
     if ([keySet isSubsetOfSet: self.actionKeywordSet]) {
@@ -270,12 +266,9 @@
 #pragma mark- 删除 action
 - (BOOL) removeAction: (CBPBaseAction *) action  {
     // 释放通道
-    // 得到 action 的 key
-    SEL selector = NSSelectorFromString(@"keySetForAction");
-    
     
     // 获取 指令标识集合
-    NSSet *keySet = objc_msgSend([action class], selector);
+    NSSet *keySet = [[CBPDispatchMessageManager shareManager] dispatchReturnValueTarget: [action class] method: @"keySetForAction", nil];
     
     if ([self.actionKeywordSet intersectsSet: keySet]) {
         // 求差集
