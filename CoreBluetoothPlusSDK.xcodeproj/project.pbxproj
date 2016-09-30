@@ -42,6 +42,7 @@
 		F26153941D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153931D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m */; };
 		F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */; };
 		F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */; };
+		F264B4CB1D9E5B9800E80B67 /* firmware.png in Resources */ = {isa = PBXBuildFile; fileRef = F264B4CA1D9E5B9800E80B67 /* firmware.png */; };
 		F26DD4B91D75731E0043FED4 /* NSDate+CBPUtilityTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */; };
 		F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */ = {isa = PBXBuildFile; fileRef = F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */; };
 		F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4BD1D7810320043FED4 /* CBPShowResultTableViewController.m */; };
@@ -147,6 +148,7 @@
 		F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLFirmwareUpgradeAction.m; sourceTree = "<group>"; };
 		F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLRestartAction.h; sourceTree = "<group>"; };
 		F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLRestartAction.m; sourceTree = "<group>"; };
+		F264B4CA1D9E5B9800E80B67 /* firmware.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = firmware.png; sourceTree = "<group>"; };
 		F26DD4B71D75731E0043FED4 /* NSDate+CBPUtilityTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CBPUtilityTool.h"; sourceTree = "<group>"; };
 		F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CBPUtilityTool.m"; sourceTree = "<group>"; };
 		F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPInterface.plist; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				F276371A1D61A45F006597AC /* AppDelegate.m */,
 				F276371C1D61A45F006597AC /* ViewController.h */,
 				F276371D1D61A45F006597AC /* ViewController.m */,
+				F264B4CA1D9E5B9800E80B67 /* firmware.png */,
 				F241896D1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.h */,
 				F241896E1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m */,
 				F26DD4BC1D7810320043FED4 /* CBPShowResultTableViewController.h */,
@@ -653,6 +656,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F27637261D61A45F006597AC /* LaunchScreen.storyboard in Resources */,
+				F264B4CB1D9E5B9800E80B67 /* firmware.png in Resources */,
 				F2DAE6301D6BE60100E01238 /* CBPUpgradeWay.plist in Resources */,
 				F24189B11D912512002E2914 /* MJRefresh.bundle in Resources */,
 				F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */,

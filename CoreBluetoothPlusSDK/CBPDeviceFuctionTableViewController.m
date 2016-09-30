@@ -104,6 +104,7 @@
             break;
         }
         case 8: {
+            [self upgradeFirmware];
             break;
         }
         case 9: {
@@ -111,6 +112,21 @@
             break;
         }
         case 10: {
+            [self lightLED];
+            break;
+        }
+        case 11: {
+            [self buzzerSound];
+            break;
+        }
+        case 12: {
+            break;
+        }
+        case 13: {
+            break;
+        }
+        case 14: {
+            [self changeColor];
             break;
         }
         case 15: {
@@ -125,6 +141,68 @@
             break;
     }
 
+}
+- (void) upgradeFirmware {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+  
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"firmware" ofType: @"png"];
+    
+    // 文件路径名
+    [parameter setObject: filePath forKey: @"file_path"];
+    // 点亮 led
+    [self.manager post: @"ble://firmware_upgrade" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+}
+
+- (void) changeColor {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+    NSInteger coloreValue = arc4random() % 4;
+    
+    NSString *color = [NSString stringWithFormat:@"%ld", (long)coloreValue];
+    [parameter setObject: color forKey: @"color_value"];
+    
+    // 点亮 led
+    [self.manager post: @"ble://change_color" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+
+}
+
+- (void) buzzerSound {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+    
+    [parameter setObject: @"1" forKey: @"switch"];
+    [parameter setObject: @"1000" forKey: @"duration_time"];
+    [parameter setObject: @"1000" forKey: @"frequency"];
+    [parameter setObject: @"20" forKey: @"repeat_count"];
+    // 点亮 led
+    [self.manager post: @"ble://buzzer_sound" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
+
+}
+
+- (void) lightLED {
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+    
+    [parameter setObject: @"0x000000ff" forKey: @"led"];
+    [parameter setObject: @"1000" forKey: @"light_on_time"];
+    [parameter setObject: @"1000" forKey: @"light_off_time"];
+    [parameter setObject: @"20" forKey: @"repeat_count"];
+    // 点亮 led
+    [self.manager post: @"ble://light_led" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        
+    }];
 }
 
 - (void) checkDeviceBindState {

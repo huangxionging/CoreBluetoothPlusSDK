@@ -98,7 +98,7 @@
             // 灭时长低字节
             bytes[11] = lightOffTime.integerValue % 256;
             
-            NSString *repeatCount = parameter[@"repeatCount"];
+            NSString *repeatCount = parameter[@"repeat_count"];
             
             // 重复次数高字节
             bytes[12] = repeatCount.integerValue / 256;

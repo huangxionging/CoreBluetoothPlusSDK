@@ -257,7 +257,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		
 		参数:
 			upgrade_type: 升级方式, 0 表示普通升级, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件, 3 表示 Cypress 升级;
-			filePath: 文件路径(包含扩展名);
+			file_path: 文件路径(包含扩展名);
 
 ***
 *	4.11 <a name="restart_device">_重启设备_
@@ -326,7 +326,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 			serial_count: 需要同步的条数
 		
 		返回值:
-		***	*	4.16 <a name="light_led">_点亮 led 灯_
+		***	*	4.16 <a name="light_led"> *点亮 led 灯*
 		接口名称: light_led.
 		
 		参数:
@@ -339,7 +339,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		返回值:
 			led_state: 指LED开关对应位的LED是否已按参数开始工作。0:表示未受控制,1:表示已受控制。
 ***	
-*	4.17 <a name="buzzer_sound">_蜂鸣器响_
+*	4.17 <a name="buzzer_sound"> *蜂鸣器响*
 
 		接口名称: buzzer_sound.
 		

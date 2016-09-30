@@ -184,16 +184,16 @@
         
         // 获得 action
         CBPBaseAction *action = [result objectForKey: @"action"];
-        
+        NSString *successState = [result objectForKey: @"state"];
         // 删除 action
         BOOL state = [weakSelf removeAction: action];
         
-        if (state == YES) {
+        if (state == YES && successState.integerValue) {
             // 成功回调
             success(action, [result objectForKey: @"result"]);
         } else {
-            CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeUnknown info: @"未知错误"];
-            failure(action, error);
+            // 失败回调
+            failure(action, [result objectForKey: @"result"]);
         }
     }];
     

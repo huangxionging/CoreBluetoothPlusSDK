@@ -97,7 +97,7 @@
     NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
     [blockDiction setObject: result forKey: @"result"];
     [blockDiction setObject: self forKey: @"action"];
-    
+    [blockDiction setObject: @"1" forKey: @"state"];
     // 回调
     if (_finishedBlock) {
         _finishedBlock(blockDiction);
@@ -108,6 +108,19 @@
 - (void) callAnswerResult: (id) result {
     if (_answerBlock) {
         _answerBlock(result);
+    }
+}
+
+#pragma mark-
+- (void) callBackFailedResult: (id) result {
+    NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
+    [blockDiction setObject: result forKey: @"result"];
+    [blockDiction setObject: self forKey: @"action"];
+    [blockDiction setObject: @"0" forKey: @"state"];
+    
+    // 回调
+    if (_finishedBlock) {
+        _finishedBlock(blockDiction);
     }
 }
 

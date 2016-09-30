@@ -178,12 +178,9 @@
 
 #pragma mark---清理
 - (void) cleanup {
-    
     _isWriteCharacteristic = NO;
     _isReadCharacterstic = NO;
     self.baseDevice.isChracteristicReady = NO;
-    self.baseDevice = nil;
-    [self.baseClient connectPeripheral: nil options: nil];
 }
 
 #pragma mark---设备开始工作
@@ -193,7 +190,7 @@
         self.baseDevice = [[CBPBaseDevice alloc] init];
         [self.baseDevice addObserver: self forKeyPath: @"isChracteristicReady" options:NSKeyValueObservingOptionNew context: nil];
     }
-    
+    [self cleanup];
     // 添加发现服务
     for (NSString *UUIDString in self->_discoverSeriveUUIDs) {
         [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString uppercaseString]];
@@ -312,15 +309,17 @@
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         
-        // 投送消息
-        [action receiveUpdateData: actionDataModel];
+        if ([action respondsToSelector: @selector(receiveUpdateData:)]) {
+            // 投送消息
+            [action receiveUpdateData: actionDataModel];
+        }
     }];
     
     // 写数据回调
     [weakSelf.baseDevice setWriteDataBlock:^(CBPBaseActionDataModel *actionDataModel) {
         
         if (!actionDataModel.actionData) {
-            return;
+            return ;
         }
         
         Byte *bytes = (Byte *)actionDataModel.actionData.bytes;
@@ -338,8 +337,11 @@
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         
-        // 投送消息
-        [action receiveUpdateData: actionDataModel];
+        if ([action respondsToSelector: @selector(receiveUpdateData:)]) {
+            // 投送消息
+            [action receiveUpdateData: actionDataModel];
+        }
+        
     }];
 }
 
