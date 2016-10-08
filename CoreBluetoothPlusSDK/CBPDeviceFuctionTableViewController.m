@@ -145,12 +145,14 @@
 - (void) upgradeFirmware {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
   
-    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"firmware" ofType: @"png"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"Update_V26_0814_1900" ofType: @"BIN"];
     
     // 文件路径名
     [parameter setObject: filePath forKey: @"file_path"];
     // 点亮 led
-    [self.manager post: @"ble://firmware_upgrade" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+    [self.manager post: @"ble://firmware_upgrade" parameters: parameter progress:^(double progress) {
+        NSLog(@"升级进度: %lf%%", progress * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
         
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
         

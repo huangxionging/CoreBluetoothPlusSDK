@@ -107,25 +107,27 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
 
 - (void)get:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
-    // 首先检查是否配置了管理器
-    CBPBaseError *error = [self checkConfig];
-    if (error) {
-        failure(nil, error);
-        return;
-    }
-    // 然后检查 URLString
-    
-    
+    // 跟 post 一样
+    [self post: URLString parameters: parameters success: success failure: failure];
 }
 
-- (void)post:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void)post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(double))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     CBPBaseError *error = [self checkConfig];
     if (error) {
         failure(nil, error);
     }
     // 处理参数
-    [self handleURLString: URLString parameters: parameters success: success failure: failure];
+    [self handleURLString: URLString parameters: parameters progress: progress success: success failure: failure];
+}
+
+- (void)post:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+    CBPBaseError *error = [self checkConfig];
+    if (error) {
+        failure(nil, error);
+    }
+    // 处理参数
+    [self handleURLString: URLString parameters: parameters progress: nil success: success failure: failure];
 }
 
 #pragma mark---检查配置
@@ -139,7 +141,7 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
 }
 
 #pragma mark---处理参数
-- (void ) handleURLString: (NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void ) handleURLString: (NSString *)URLString parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithCapacity: 4];
     
@@ -191,7 +193,7 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
         // 异步调用
         dispatch_async(dispatch_get_main_queue(), ^{
             // 处理参数和回调数据
-            [self->_baseController sendAction: workingAction parameters: allParameters success: success failure: failure];
+            [self->_baseController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
         });
     } else {
         

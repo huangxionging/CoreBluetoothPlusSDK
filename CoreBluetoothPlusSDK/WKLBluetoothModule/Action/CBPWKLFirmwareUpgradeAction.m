@@ -20,6 +20,12 @@ const NSInteger max_short_content_length = 17;
 // 短包最大程度 20字节
 const NSInteger max_short_package_length = 20;
 
+// 升级时间内 收不到数据认为超时
+const NSInteger firmware_upgrade_time_out = 3;
+
+// 重传次数, 超时重传次数
+const NSInteger retransmission_times = 5;
+
 static unsigned short ccitt_table[256] = {
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7, 0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF, 0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6, 0x9339, 0x8318, 0xB37B, 0xA35A, 0xD3BD, 0xC39C, 0xF3FF, 0xE3DE, 0x2462, 0x3443, 0x0420, 0x1401, 0x64E6, 0x74C7, 0x44A4, 0x5485, 0xA56A, 0xB54B, 0x8528, 0x9509, 0xE5EE, 0xF5CF, 0xC5AC, 0xD58D, 0x3653, 0x2672, 0x1611, 0x0630, 0x76D7, 0x66F6, 0x5695, 0x46B4, 0xB75B, 0xA77A, 0x9719, 0x8738, 0xF7DF, 0xE7FE, 0xD79D, 0xC7BC, 0x48C4, 0x58E5, 0x6886, 0x78A7, 0x0840, 0x1861, 0x2802, 0x3823, 0xC9CC, 0xD9ED, 0xE98E, 0xF9AF, 0x8948, 0x9969, 0xA90A, 0xB92B, 0x5AF5, 0x4AD4, 0x7AB7, 0x6A96, 0x1A71, 0x0A50, 0x3A33, 0x2A12,0xDBFD, 0xCBDC, 0xFBBF, 0xEB9E, 0x9B79, 0x8B58, 0xBB3B, 0xAB1A, 0x6CA6, 0x7C87, 0x4CE4, 0x5CC5, 0x2C22, 0x3C03, 0x0C60, 0x1C41, 0xEDAE, 0xFD8F, 0xCDEC, 0xDDCD, 0xAD2A, 0xBD0B, 0x8D68, 0x9D49, 0x7E97, 0x6EB6, 0x5ED5, 0x4EF4, 0x3E13, 0x2E32, 0x1E51, 0x0E70, 0xFF9F, 0xEFBE, 0xDFDD, 0xCFFC, 0xBF1B, 0xAF3A, 0x9F59, 0x8F78, 0x9188, 0x81A9, 0xB1CA, 0xA1EB, 0xD10C, 0xC12D, 0xF14E, 0xE16F, 0x1080, 0x00A1, 0x30C2, 0x20E3, 0x5004, 0x4025, 0x7046, 0x6067, 0x83B9, 0x9398, 0xA3FB, 0xB3DA, 0xC33D, 0xD31C, 0xE37F, 0xF35E, 0x02B1, 0x1290, 0x22F3, 0x32D2, 0x4235, 0x5214, 0x6277, 0x7256, 0xB5EA, 0xA5CB, 0x95A8, 0x8589, 0xF56E, 0xE54F, 0xD52C, 0xC50D, 0x34E2, 0x24C3, 0x14A0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405, 0xA7DB, 0xB7FA, 0x8799, 0x97B8, 0xE75F, 0xF77E, 0xC71D, 0xD73C, 0x26D3, 0x36F2, 0x0691, 0x16B0, 0x6657, 0x7676, 0x4615, 0x5634, 0xD94C, 0xC96D, 0xF90E, 0xE92F, 0x99C8, 0x89E9, 0xB98A, 0xA9AB, 0x5844, 0x4865, 0x7806, 0x6827, 0x18C0, 0x08E1, 0x3882, 0x28A3, 0xCB7D, 0xDB5C, 0xEB3F, 0xFB1E, 0x8BF9, 0x9BD8, 0xABBB, 0xBB9A, 0x4A75, 0x5A54, 0x6A37, 0x7A16, 0x0AF1, 0x1AD0, 0x2AB3, 0x3A92, 0xFD2E, 0xED0F, 0xDD6C, 0xCD4D, 0xBDAA, 0xAD8B, 0x9DE8, 0x8DC9, 0x7C26, 0x6C07, 0x5C64, 0x4C45, 0x3CA2, 0x2C83, 0x1CE0, 0x0CC1, 0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8, 0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
@@ -34,6 +40,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
 @interface CBPWKLFirmwareUpgradeAction () {
     // 位于表
     Byte _bitControlTable[15];
+    void (^_progress)(double progress);
 }
 
 // 升级包命令
@@ -100,7 +107,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
         return self.actionFirstData;
     }
     NSDictionary *parameter = [self valueForKey: @"parameter"];
-    
+    _progress = [self valueForKey: @"_progress"];
     Byte bytes[20] = {0};
     bytes[0] = 0x5a;
     bytes[1] = 0x11;
@@ -126,25 +133,40 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
             bytes[9] = (max_content_length & 0xff00) >> 8;
             bytes[10] = (max_content_length & 0x00ff);
             
+            // 超时时间
+            bytes[11] = firmware_upgrade_time_out;
+            
+            // 超时重传次数
+            bytes[12] = retransmission_times;
             // 计算长包个数
             self.longActionCount = (self.longActionLength % max_content_length)?(self.longActionLength / max_content_length + 1):(self.longActionLength / max_content_length);
             
             break;
         }
+        case 1: {
+            // 1 表示 Quintic OTA Profile升级固件
+            break;
+        }
         default:
             break;
     }
+    
     self.actionFirstData = [NSData dataWithBytes: bytes length: 20];
+    
+//    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackAnswer:",self.actionFirstData, nil];
+    NSLog(@"%@", self.actionFirstData);
+    
     return self.actionFirstData;
 }
 
 #pragma mark- 处理返回数据
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
-    NSLog(@"%@", updateDataModel.actionData);
+    NSLog(@"接受数据:%@", updateDataModel.actionData);
     
     if (updateDataModel) {
         Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
         
+    
         // 升级初始状态
         if (bytes[0] == 0x5b && bytes[1] == 0x11) {
             
@@ -162,6 +184,8 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
         }
     }
     
+    
+    
 }
 
 
@@ -175,18 +199,23 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
 // 发送每个长包的第一个数据
 - (void) sendShortFirstAction {
     
+    // 获得长包指令的长度
     NSInteger length = max_content_length;
     if (_indexOfLongAction == self.longActionCount - 1)  {
         length = self.longActionLength - _indexOfLongAction * max_content_length;
     }
     
-    NSData *subData = [self.firmwareData subdataWithRange: NSMakeRange(_indexOfLongAction * max_content_length, length)];
+    // 获得固件长包数据
+    NSData *subData = [self.firmwareData subdataWithRange: NSMakeRange(self.indexOfLongAction * max_content_length, length)];
     
+    // 获得长指令
     NSString *longAction = [[CBPHexStringManager shareManager] hexStringForData: subData];
    
-    // 字节数
+    // 字节数 长度
     NSInteger actionLength = longAction.length / 2;
-    _shortActionCount = actionLength / max_short_content_length + ((actionLength % max_short_content_length) ? 1 : 0);
+    
+    // 短包计数
+    self.shortActionCount = actionLength / max_short_content_length + ((actionLength % max_short_content_length) ? 1 : 0);
     
     // 清空数据
     [self.shortActionArray removeAllObjects];
@@ -194,7 +223,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     // 切割长指令为短包指令
     for (NSInteger index = 0; index < _shortActionCount; ++index) {
         NSInteger length = max_short_content_length;
-        if (index == _shortActionCount - 1) {
+        if (index == self.shortActionCount - 1) {
             length = actionLength - index * max_short_content_length;
         }
         
@@ -217,12 +246,12 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     bytes[4] = (actionLength & 0x00ff);
     
     // 如果只有一个长包
-    if (_longActionCount == 1) {
+    if (self.longActionCount == 1) {
         bytes[5] = 0x00;
         bytes[6] = 0x00;
     } else {
-        bytes[5] = ((_indexOfLongAction + 1) & 0xff00) >> 8;
-        bytes[6] = ((_indexOfLongAction + 1) & 0x00ff);
+        bytes[5] = ((self.indexOfLongAction + 1) & 0xff00) >> 8;
+        bytes[6] = ((self.indexOfLongAction + 1) & 0x00ff);
     }
     
     Byte *checkData = [[CBPHexStringManager shareManager] bytesForString: longAction];
@@ -239,13 +268,13 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
     
     // 回传位域表
-    _indexOfShortAction++;
+    self.indexOfShortAction++;
 
     id result = model;
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
     
     // 初始化位域表
-    memset(_bitControlTable, 0x00, sizeof(_bitControlTable));
+    memset(_bitControlTable, 0xff, sizeof(_bitControlTable));
 }
 
 // 发送有效数据
@@ -304,7 +333,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     
     // 不是最后一个长包的最后一个短包
 //    DLog(@"一个长包的最后一个短包: ======= %@", model.actionData);
-    _indexOfShortAction = 0;
+    
     _isSendFinished = YES;
 //    [self.timer setFireDate: [NSDate distantFuture]];
  
@@ -374,6 +403,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
         }
     }
     
+//    [self performSelector: @selector(continueSendAction) withObject: nil afterDelay: 1];
     // 调用本身
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"continueSendAction", nil];
 }
@@ -389,17 +419,24 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     Byte *bytes = (Byte *)[longTable bytes];
     NSInteger longPackageSerial = (bytes[3] << 8) + bytes[4];
     
-    if (self.indexOfLongAction == longPackageSerial - 1) {
+    if (self.indexOfLongAction == longPackageSerial - 2) {
         NSLog(@"已发完一个长包");
         
         if (self.indexOfLongAction < self.longActionCount - 1) {
             _indexOfLongAction++;
             _indexOfShortAction = 0;
             _isSendFinished = NO;
-            [self continueSendAction];
-        } else {
-            NSLog(@"固件升级完成");
+            // 进度
+            double progressValue = (self.indexOfLongAction) / (double) self.longActionCount;
+            NSNumber *progress = [NSNumber numberWithDouble: progressValue];
+            // 调度进度
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", progress, nil];
+            
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"continueSendAction:", nil];
+//            [self continueSendAction];
         }
+    } else if (longPackageSerial == 0xffff) {
+        // 表示升级完成
     }
     
 }
@@ -415,6 +452,8 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     // 获得位域表
     Byte *bytes = (Byte *)[bitControllTable bytes];
     self.currentIndexOfLongAction = (bytes[3] << 8) + bytes[4];
+    
+//    memcpy(_bitControlTable, &(bytes[5]), 15);
     
     // 获得位域表
     [bitControllTable getBytes: _bitControlTable  range: NSMakeRange(5, 15)];
@@ -464,6 +503,8 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     // 确认数据
     bytes[0] = 0x5a;
     bytes[1] = 0x05;
+    bytes[3] = ((self.indexOfLongAction + 1) & 0xff00) >> 8;
+    bytes[4] = ((self.indexOfLongAction + 1) & 0x00ff);
     
     // 确认信号
     NSData *data = [NSData dataWithBytes: bytes length: max_short_package_length];

@@ -73,7 +73,7 @@ Byte *CBPStringToHex::bytesForHexString(NSString *strings) {
         // 获取低位字符
         char lowChar = [lowcaseString characterAtIndex: index + 1];
         
-        NSLog(@"%c === %c", highChar, lowChar);
+//        NSLog(@"%c === %c", highChar, lowChar);
         // 获取值
         int highValue = hex_map.find(highChar)->second;
         int lowValue = hex_map.find(lowChar)->second;

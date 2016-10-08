@@ -96,7 +96,7 @@
  *
  *  @since 1.0
  */
-- (void) sendAction:(NSString *)actionName parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure;
+- (void) sendAction:(NSString *)actionName parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure;
 
 /**
  *  @author huangxiong, 2016/05/25 14:57:36

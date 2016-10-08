@@ -36,6 +36,7 @@
 - (NSString *) binStringForHexString: (NSString *) hexString;
 
 // 二进制字符串转16进制字符串
+
 - (NSString *) hexStringForBinString: (NSString *) binString;
 
 

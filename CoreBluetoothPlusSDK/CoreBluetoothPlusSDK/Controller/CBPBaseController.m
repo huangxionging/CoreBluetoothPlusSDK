@@ -172,7 +172,7 @@
     }];
 }
 
-- (void)sendAction:(NSString *)actionName parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void)sendAction:(NSString *)actionName parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     __weak CBPBaseController *weakSelf = self;
     
@@ -213,6 +213,11 @@
     } else {
         CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeChannelUsed info: @"通道已被占用"];
         failure(action, error);
+    }
+    
+    // 设置进度 block, 当需要进度的时候
+    if (progress) {
+        [action setValue: progress forKey: @"_progress"];
     }
 }
 

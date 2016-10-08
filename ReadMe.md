@@ -189,6 +189,9 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		参数:
 			start_date: 起始日期, 例子: 2016-09-01;(必须)
 			end_date: 结束日期, 例子: 2016-09-01.(必须)
+			
+		进度:
+			progress 同步进度会返回多次;
 		
 		返回值:
 			{
@@ -216,6 +219,9 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		参数:
 			start_date: 起始日期, 例子: 2016-09-01;(必须)
 			end_date: 结束日期, 例子: 2016-09-01.(必须)
+			
+		进度:
+			progress 同步进度会返回多次;
 		
 		返回值:
 			{
@@ -258,6 +264,15 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		参数:
 			upgrade_type: 升级方式, 0 表示普通升级, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件, 3 表示 Cypress 升级;
 			file_path: 文件路径(包含扩展名);
+			
+		进度:
+			progress 升级进度会返回多次;
+			
+		返回值: 
+			code: 0 表示升级成功, 1 表示升级失败;
+			
+			
+				
 
 ***
 *	4.11 <a name="restart_device">_重启设备_

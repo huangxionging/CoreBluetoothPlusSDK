@@ -36,6 +36,7 @@
     return self;
 }
 
+#pragma mark- 16进制转二进制表
 - (NSDictionary *)hexToBinDiction {
     
     return  @{
@@ -63,9 +64,8 @@
               @"F" : @"1111",};
 }
 
-
+#pragma mark- 二进制转16进制表
 - (NSDictionary *)binToHexDiction {
-    
     return  @{
               @"0000": @"0",
               @"0001": @"1",
@@ -144,9 +144,7 @@
 
 #pragma mark- data 转二进制字符串
 - (NSString *) binStringForData: (NSData *) data {
-    NSInteger length = data.length;
-    Byte *bytes = (Byte *)data.bytes;
-    return [self binStringForBytes: bytes length:length];
+    return [self binStringForHexString:_hexString->hexStringForData(data)];
 }
 
 #pragma mark- 字节数组转换为二进制字符串

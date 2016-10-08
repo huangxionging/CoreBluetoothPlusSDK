@@ -9,7 +9,6 @@
 #import "CBPDispatchMessageManager.h"
 #import <objc/message.h>
 
-#define EMOJI_METHOD(x,y) + (NSString *)x { return MAKE_EMOJI(y); }
 @implementation CBPDispatchMessageManager
 
 + (instancetype)shareManager {

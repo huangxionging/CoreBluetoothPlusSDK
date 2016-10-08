@@ -21,6 +21,8 @@
     answerBlock _answerBlock;
     NSTimer *_finishedActionTimer;
     id _parameter;
+    // 进度
+    void (^_progress)(double progress);
 }
 
 @end
@@ -93,6 +95,7 @@
     return self;
 }
 
+#pragma mark- 结果回调
 - (void) callBackResult: (id) result {
     NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
     [blockDiction setObject: result forKey: @"result"];
@@ -104,14 +107,15 @@
     }
 }
 
-// 回复结果
+#pragma mark-  回复数据
 - (void) callAnswerResult: (id) result {
+    NSLog(@"%@", [result actionData]);
     if (_answerBlock) {
         _answerBlock(result);
     }
 }
 
-#pragma mark-
+#pragma mark- 失败的结果
 - (void) callBackFailedResult: (id) result {
     NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
     [blockDiction setObject: result forKey: @"result"];
@@ -124,6 +128,14 @@
     }
 }
 
-
+#pragma mark- 回调进度
+- (void) callBackProgress: (NSNumber *)progress {
+    double progressValue = [progress doubleValue];
+    
+    // 如果进度存在
+    if (_progress) {
+        _progress(progressValue);
+    }
+}
 
 @end

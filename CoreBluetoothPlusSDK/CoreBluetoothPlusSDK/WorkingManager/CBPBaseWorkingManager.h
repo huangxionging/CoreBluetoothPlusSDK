@@ -56,4 +56,6 @@
  */
 - (void) post:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *action, id responseObject))success failure:(void (^)(CBPBaseAction *action, CBPBaseError *error))failure;
 
+- (void) post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure;
+
 @end
