@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CBPBaseActionDataModel.h"
 #import "CoreBluetoothPlus.h"
+#import "CBPBaseError.h"
 
 /**
  *  操作完成的回调
@@ -70,6 +71,12 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
  *  @return void
  */
 - (void) receiveUpdateData: (CBPBaseActionDataModel *)updateDataModel;
+
+
+/**
+ 超时处理
+ */
+- (void) timeOut;
 
 
 @end

@@ -172,14 +172,53 @@
     }];
 }
 
-- (void)sendAction:(NSString *)actionName parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void)sendAction:(NSString *)actionName parameters:(id)parameters progress:(void (^)(id))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     __weak CBPBaseController *weakSelf = self;
     
     CBPBaseAction *action = [[NSClassFromString(actionName) alloc] initWithParameter: parameters answer:^(CBPBaseActionDataModel *answerDataModel) {
         
-        // 发送回复数据
-        [weakSelf.baseDevice sendActionWithModel: answerDataModel];
+        CBPBasePeripheralModel *model = [weakSelf.baseDevice valueForKey: @"_peripheralModel"];
+        // 查询 action
+        CBPBaseAction *baseAction = [weakSelf.actionSheet objectForKey: answerDataModel.keyword];
+        
+        // 如果外设不存在
+        if (!model.peripheral) {
+            CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeBluetoothDisconnected info: @"蓝牙未连接"];
+            failure(baseAction, error);
+        } else {
+            
+            switch (model.peripheral.state) {
+                case CBPeripheralStateDisconnected: {
+                    CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnected info: @"当前外设断连"];
+                    failure(baseAction, error);
+                    break;
+                }
+                case CBPeripheralStateConnected: {
+                    // 发送回复数据
+                    [weakSelf.baseDevice sendActionWithModel: answerDataModel];
+                    
+                    // 启动超时定时器
+                    [[CBPDispatchMessageManager shareManager] dispatchTarget: baseAction method: @"startTimer", nil];
+                    break;
+                }
+                case CBPeripheralStateConnecting: {
+                    CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralConnecting info: @"当前外设正在连接"];
+                    failure(baseAction, error);
+                    break;
+                }
+                case CBPeripheralStateDisconnecting: {
+                    CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnecting info: @"当前外设正在断开连接"];
+                    failure(baseAction, error);
+                    break;
+                }
+                    
+                default:
+                    break;
+            }
+            
+        }
+
     } finished:^(id result) {
         
         // 获得 action
@@ -197,6 +236,11 @@
         }
     }];
     
+    // 设置进度 block, 当需要进度的时候, 要在发送数据之前设置好
+    if (progress) {
+        [action setValue: progress forKey: @"_progress"];
+    }
+    
     action.characteristicUUIDString = self.writeCharacteristicUUIDString;
 
     // 获取注册状态
@@ -207,18 +251,52 @@
         if (action.actionData == nil) {
             return;
         } else {
-            // 发送数据
-            [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: action]];
+            
+            CBPBasePeripheralModel *model = [weakSelf.baseDevice valueForKey: @"_peripheralModel"];
+            
+            // 如果外设不存在
+            if (!model.peripheral) {
+                CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeBluetoothDisconnected info: @"蓝牙未连接"];
+                failure(action, error);
+            } else {
+                
+                switch (model.peripheral.state) {
+                    case CBPeripheralStateDisconnected: {
+                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnected info: @"当前外设断连"];
+                        failure(action, error);
+                        break;
+                    }
+                    case CBPeripheralStateConnected: {
+                        // 发送数据
+                        [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: action]];
+                        
+                        // 启动超时定时器
+                        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"startTimer", nil];
+                        break;
+                    }
+                    case CBPeripheralStateConnecting: {
+                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralConnecting info: @"当前外设正在连接"];
+                        failure(action, error);
+                        break;
+                    }
+                    case CBPeripheralStateDisconnecting: {
+                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnecting info: @"当前外设正在断开连接"];
+                        failure(action, error);
+                        break;
+                    }
+                        
+                    default:
+                        break;
+                }
+                
+            }
+            
         }
     } else {
         CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeChannelUsed info: @"通道已被占用"];
         failure(action, error);
     }
     
-    // 设置进度 block, 当需要进度的时候
-    if (progress) {
-        [action setValue: progress forKey: @"_progress"];
-    }
 }
 
 #pragma mark- action 列表

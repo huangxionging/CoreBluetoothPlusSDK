@@ -29,7 +29,27 @@ typedef NS_ENUM(NSInteger, BaseErrorType) {
     kBaseErrorTypeChannelUsed               = 10006,
     // 10007 表示未知错误
     kBaseErrorTypeUnknown                   = 10007,
+    // 10008 表示超时
+    kBaseErrorTypeTimeOut                   = 10008,
+    // 10009 表示蓝牙未连接
+    kBaseErrorTypeBluetoothDisconnected     = 10009,
+    // 10010 表示外设断连
+    kBaseErrorTypePeripheralDisconnected    = 10010,
+    // 10011 表示外设正在连接
+    kBaseErrorTypePeripheralConnecting      = 10011,
+    // 10012 表示外设正在断连
+    kBaseErrorTypePeripheralDisconnecting   = 10012,
+    // 10013 表示无有效数据
+    kBaseErrorTypeInvalidData               = 10013,
+    // 10014 表示升级超时失失败
+    kBaseErrorTypeUpgradeTimeOut            = 10014,
+    // 10015 表示文件无效
+    kBaseErrorTypeFileInvalid               = 10015,
+    // 10016 表示文件太大
+    kBaseErrorTypeFileTooLarge              = 10016,
+    
 };
+
 
 @interface CBPBaseError : NSError
 

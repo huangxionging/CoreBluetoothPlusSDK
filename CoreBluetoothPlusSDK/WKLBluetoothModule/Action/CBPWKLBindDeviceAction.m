@@ -105,6 +105,7 @@
     if (updateDataModel) {
         Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
         
+        
         // 待回传的结果
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity: 5];
         
@@ -165,6 +166,7 @@
                 
                 CBPBaseActionDataModel *actionDataModel = [CBPBaseActionDataModel modelWithAction: self];
                 actionDataModel.actionData = actionData;
+                actionDataModel.keyword = @"0x0b";
                 id result = actionDataModel;
                 // 回复数据
                 [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
@@ -177,6 +179,13 @@
         
     }
     
+}
+
+- (void)timeOut {
+    
+    CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeTimeOut info: @"绑定流程超时"];
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
+    NSLog(@"超时");
 }
 
 

@@ -137,12 +137,38 @@
             [self checkDeviceWorkingState];
             break;
         }
+        case 26: {
+            [self quinticUpgrade];
+            break;
+        }
         default:
             break;
     }
 
 }
+- (void) quinticUpgrade {
+    self.manager.upgradeControllerKey = @"com.quintic.controller";
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"W007C_V0.51_B20150724A_app" ofType: @"bin"];
+    
+    // 文件路径名
+    [parameter setObject: filePath forKey: @"file_path"];
+    // 点亮 led
+    [self.manager post: @"ble://quintic_firmware_upgrade" parameters: parameter progress:^(id progressData) {
+        
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"升级进度: %0.2lf%%", [progress doubleValue] * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
+
+}
 - (void) upgradeFirmware {
+    
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
   
     NSString *filePath = [[NSBundle mainBundle] pathForResource: @"Update_V26_0814_1900" ofType: @"BIN"];
@@ -150,12 +176,14 @@
     // 文件路径名
     [parameter setObject: filePath forKey: @"file_path"];
     // 点亮 led
-    [self.manager post: @"ble://firmware_upgrade" parameters: parameter progress:^(double progress) {
-        NSLog(@"升级进度: %lf%%", progress * 100);
+    [self.manager post: @"ble://general_firmware_upgrade" parameters: parameter progress:^(id progressData) {
+        
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"升级进度: %0.2lf%%", [progress doubleValue] * 100);
     } success:^(CBPBaseAction *action, id responseObject) {
-        
+        NSLog(@"%@", responseObject);
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
-        
+        NSLog(@"%@", error.localizedDescription);
     }];
 }
 
@@ -244,11 +272,11 @@
 
 - (void)synchronizeParameter {
     
-    Byte bytes[5] = {0};
+//    Byte bytes[5] = {0};
     
-    Byte byte = bytes[3];
-    NSString *bin = [[CBPBinStringManager shareManager] binStringForBytes: &byte length:1];
-    NSString *sub = [bin substringToIndex: 2];
+//    Byte byte = bytes[3];
+//    NSString *bin = [[CBPBinStringManager shareManager] binStringForBytes: &byte length:1];
+//    NSString *sub = [bin substringToIndex: 2];
     //
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
     // \\设置运动目标
@@ -280,12 +308,12 @@
     // 断连 disconnect_remind
     [parameter setObject: @"1" forKey: @"disconnect_remind"];
     
-    NSDictionary *dict = parameter;
+//    NSDictionary *dict = parameter;
     [self.manager post: @"ble://synchronize_parameter" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
         NSLog(@"%@", responseObject);
         
         // 设备类型
-        NSString *deviceType = responseObject[@"device_type"];
+//        NSString *deviceType = responseObject[@"device_type"];
         
         NSLog(@"%@", parameter);
         CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];

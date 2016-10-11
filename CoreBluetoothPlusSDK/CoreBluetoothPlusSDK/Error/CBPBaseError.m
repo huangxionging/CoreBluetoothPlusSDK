@@ -13,9 +13,9 @@
 + (instancetype)errorWithcode:(BaseErrorType)errorType info:(NSString *)info {
     
     if ([info isKindOfClass: [NSString class]]) {
-        return [CBPBaseError errorWithDomain: @"www.new_life.com" code: errorType userInfo: @{NSLocalizedDescriptionKey : info}];
+        return [CBPBaseError errorWithDomain: @"www.movnow.com" code: errorType userInfo: @{NSLocalizedDescriptionKey : info}];
     } else {
-        return [CBPBaseError errorWithDomain: @"www.new_life.com" code: errorType userInfo: nil];
+        return [CBPBaseError errorWithDomain: @"www.movnow.com" code: errorType userInfo: nil];
     }
     
 }

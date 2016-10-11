@@ -264,9 +264,6 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 #pragma mark---CBPeripheralDelegate
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     
-#ifdef CBPLOG_FLAG
-    CBPDEBUG;
-#endif
     if (self->_discoverServiceBlock) {
         self->_serviceModel.service = service;
         self->_serviceModel.error = error;

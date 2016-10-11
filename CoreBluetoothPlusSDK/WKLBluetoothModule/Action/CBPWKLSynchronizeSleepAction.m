@@ -167,6 +167,7 @@
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     
     NSLog(@"%@", updateDataModel.actionData);
+    
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
         
         Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
@@ -216,6 +217,11 @@
     NSLog(@"总天数%@", @(self.dayCount));
     NSString *totalCount = [NSString stringWithFormat: @"%ld", (long)self.dayCount];
     
+    if (self.dayCount == 0) {
+        CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeInvalidData info: @"没有有效数据"];
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
+        return;
+    }
     // 清空数据
     [self.sleepDataDiction removeAllObjects];
     [self.allDaySleepData removeAllObjects];
@@ -459,7 +465,7 @@
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
-    
+    model.keyword = @"0x05";
     // 回复数据
     id result = model;
     // 回调
@@ -504,7 +510,7 @@
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
-    
+    model.keyword = @"0x06";
     // 回复数据
     id result = model;
     // 发送消息
@@ -540,4 +546,9 @@
     
     [self sendBitControllTable];
 }
+
+- (void)timeOut {
+    
+}
+
 @end

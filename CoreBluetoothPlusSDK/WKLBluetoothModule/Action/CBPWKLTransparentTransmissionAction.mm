@@ -278,7 +278,8 @@ unsigned short crc_ccitt(unsigned char *q, int len);
 
 #pragma mark- 接受数据
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
-    
+    // 关闭超时定时器
+//    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"stopTimer", nil];
     NSLog(@"接受数据 AAA %@", updateDataModel.actionData);
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
         
@@ -317,7 +318,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
                 NSLog(@"短包:%@  ==== length: %@", _longPackageData, @(_longPackageData.length));
                 
                 if (self->_finishedBlock) {
-                    NSString *string = _hexString->hexStringForData(_longPackageData);
+//                    NSString *string = _hexString->hexStringForData(_longPackageData);
                     self->_finishedBlock( _hexString->hexStringForData(_longPackageData));
                 }
 
@@ -369,7 +370,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
                 NSLog(@"短包:%@  ==== length: %@", _longPackageData, @(_longPackageData.length));
                 
                 if (self->_finishedBlock) {
-                    NSString *string = _hexString->hexStringForData(_longPackageData);
+//                    NSString *string = _hexString->hexStringForData(_longPackageData);
                     self->_finishedBlock(_hexString->hexStringForData(_longPackageData));
                 }
             }
@@ -598,7 +599,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         
         if (self->_finishedBlock) {
             
-            NSString *string = _hexString->hexStringForData(_longPackageData);
+//            NSString *string = _hexString->hexStringForData(_longPackageData);
             self->_finishedBlock(_hexString->hexStringForData(_longPackageData));
         }
         

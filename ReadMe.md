@@ -42,7 +42,7 @@
 	*	4.7 [同步计步数据](#synchronize_step_data)
 	*	4.8 [同步睡眠数据](#synchronize_sleep_data)
 	*	4.9 [查询设备版本](#query_device_version)
-	*	4.10[固件升级](#firmware_upgrade)
+	*	4.10[普通固件升级](#general_firmware_upgrade)
 	*	4.11[重启设备](#restart_device)
 	*	4.12[设置水杯参数](#setting_cups_parameter)
 	*	4.13[查询水杯状态](#check_cups_state)
@@ -72,6 +72,9 @@
 	*	4.37[设备心率](#device_heart_rate)
 	*	4.38[设备电量](#device_battery_power)
 	*	4.39[设备体温](#device_temperature)
+	*	4.40[昆天科固件升级](#quintic_firmware_upgrade)
+	*	4.41[dialog 固件升级](#dialog_firmware_upgrade)
+	* 	4.42[赛普拉斯 固件升级](#dialog_firmware_upgrade)
 
 
 ##<a name="structure"/> SDK 架构
@@ -120,8 +123,7 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 			code:	0 表示允许APP绑定,需要等待; 
 					1 表示绑定失败, 设备不允许绑定;
 					2 表示绑定失败, 设备被其他手机绑定了.
-			time:	只在 code 为 0 时有效, 表示时延,单位为秒; 若APP在超出此时 间后仍没有收到
-					设备发出的确认结果,则绑定失败.
+			time:	只在 code 为 0 时有效, 表示时延,单位为秒; 若APP在超出此时 间后仍没有收到设备发出的确认结果,则绑定失败.
 
 			
 ***
@@ -257,14 +259,12 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 			device_type: 设备类型, ascii 字符.
 			
 ***
-*	4.10 <a name="firmware_upgrade">_固件升级_
+*	4.10 <a name="general_firmware_upgrade">_普通固件升级_
 	
-		接口名称: firmware_upgrade.
+		接口名称: general_firmware_upgrade. 公司自己的升级方式
 		
 		参数:
-			upgrade_type: 升级方式, 0 表示普通升级, 1 表示 Quintic OTA Profile升级固件,  2 表示 Dialog 自定义的升级固件, 3 表示 Cypress 升级;
 			file_path: 文件路径(包含扩展名);
-			
 		进度:
 			progress 升级进度会返回多次;
 			
@@ -470,5 +470,34 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 	*	4.38[设备电量](#device_battery_power)
 	*	4.39[设备体温](#device_temperature)
 
+***
+*	4.40[昆天科固件升级](#quintic_firmware_upgrade)
+		
+		接口名称: quintic_firmware_upgrade.
+		
+		参数:
+			file_path: 文件路径(包含扩展名);
+		进度:
+			progress 升级进度会返回多次;
+			
+		返回值: 
+			code: 0 表示升级成功, 1 表示升级失败;
+***
+*	4.41[dialog 固件升级](#dialog_firmware_upgrade)
+	
+		接口名称: dialog_firmware_upgrade.
+		
+		参数:
+			file_path: 文件路径(包含扩展名);
+			device_id: 16 位编码
+		进度:
+			progress 升级进度会返回多次;
+			
+		返回值: 
+			code: 0 表示升级成功, 1 表示升级失败;
+***
+* 	4.42[赛普拉斯 固件升级](#dialog_firmware_upgrade)
+
+***
 	
 [架构导图]:HXBluetooth.png "架构导图"

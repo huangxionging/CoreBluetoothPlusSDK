@@ -118,6 +118,7 @@
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     NSLog(@"%@", updateDataModel.actionData);
+    
     Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
     
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
@@ -210,6 +211,10 @@
         // 回调
         [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", result, nil];
     }
+}
+
+- (void)timeOut {
+    
 }
 
 

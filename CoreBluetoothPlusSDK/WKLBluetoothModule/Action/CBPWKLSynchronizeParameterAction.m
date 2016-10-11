@@ -125,7 +125,6 @@
 
 #pragma mark- 重写接受数据方法
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
-    
     NSLog(@"%@", updateDataModel.actionData);
     
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser && updateDataModel.actionData) {
@@ -191,5 +190,11 @@
     }
     
 }
+
+#pragma mark- 超时处理
+- (void)timeOut {
+    
+}
+
 
 @end

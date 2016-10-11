@@ -29,6 +29,8 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
  */
 @property (nonatomic, strong) CBPBaseController *baseController;
 
+@property (nonatomic, strong) CBPBaseController *upgradeController;
+
 /**
  *  @author huangxiong
  *
@@ -104,6 +106,29 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     return _baseController;
 }
 
+#pragma mark- 固件更新使用的控制器的 key
+- (void)setUpgradeControllerKey:(NSString *)upgradeControllerKey {
+    // 需要从新配置
+    if (upgradeControllerKey) {
+        _upgradeController = nil;
+    }
+    _upgradeControllerKey = upgradeControllerKey;
+}
+
+#pragma mark- 更新使用的控制器
+- (CBPBaseController *)upgradeController {
+    if (_upgradeController == nil) {
+        
+        if (_upgradeControllerKey) {
+            NSString *classString = [self.controllerDict objectForKey: _upgradeControllerKey];
+            if (classString) {
+                _upgradeController = [[NSClassFromString(classString) alloc] init];
+            }
+        }
+    }
+    return _upgradeController;
+}
+
 
 - (void)get:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
@@ -111,7 +136,7 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     [self post: URLString parameters: parameters success: success failure: failure];
 }
 
-- (void)post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(double))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void)post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(id))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     CBPBaseError *error = [self checkConfig];
     if (error) {
@@ -141,7 +166,7 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
 }
 
 #pragma mark---处理参数
-- (void ) handleURLString: (NSString *)URLString parameters:(id)parameters progress:(void (^)(double progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void ) handleURLString: (NSString *)URLString parameters:(id)parameters progress:(void (^)(id progress))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
     
     NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithCapacity: 4];
     
@@ -192,8 +217,16 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     if (workingAction) {
         // 异步调用
         dispatch_async(dispatch_get_main_queue(), ^{
-            // 处理参数和回调数据
-            [self->_baseController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
+            
+            // 如果升级的控制 key 不为空, 则优先处理固件升级
+            if (self.upgradeControllerKey) {
+                // 处理参数和回调数据
+                [self.upgradeController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
+            } else if (self->_baseController) {
+                // 处理参数和回调数据
+                [self->_baseController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
+            }
+            
         });
     } else {
         

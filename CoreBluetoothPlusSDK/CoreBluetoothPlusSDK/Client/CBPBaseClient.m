@@ -68,6 +68,8 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
      *  已连接回调
      */
     basePeripheralBlock _connectionPeripheralBlock;
+    
+    basePeripheralBlock _upgradeConnectionPeripheralBlock;
 }
 
 #pragma mark---保护性判断, 之后在重写, .........
@@ -75,8 +77,7 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     CBPBaseClient *shareBaseClient = [[CBPBaseClient alloc] init];
     
     if (shareBaseClient) {
-        shareBaseClient.centralManager = [[CBCentralManager alloc] initWithDelegate: shareBaseClient queue: nil];
-        shareBaseClient->_peripheralSingalValue = -90;
+        
     }
     return shareBaseClient;
 }
@@ -104,6 +105,8 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
         dispatch_once(&onceToken, ^{
             baseClient = [super allocWithZone:zone];
             baseClient->_serviceUUIDs = nil;
+            baseClient.centralManager = [[CBCentralManager alloc] initWithDelegate: baseClient queue: nil];
+            baseClient->_peripheralSingalValue = -90;
         });
         return baseClient;
     }
@@ -151,6 +154,10 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
 
 - (void) setConnectionPeripheralBlock: (void(^)(CBPBasePeripheralModel *peripheral)) connectionPeripheralBlock {
     self->_connectionPeripheralBlock = connectionPeripheralBlock;
+}
+
+- (void)setUpgradeConnectionPeripheralBlock:(void (^)(CBPBasePeripheralModel *))upgradeConnectionPeripheralBlock {
+    self->_upgradeConnectionPeripheralBlock = upgradeConnectionPeripheralBlock;
 }
 
 #pragma mark---设置扫描超时
@@ -279,10 +286,14 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     NSLog(@"已连接: %@  ====> UUID: %@", peripheral, peripheral.identifier.UUIDString);
 //#endif
     
-    if (self->_connectionPeripheralBlock) {
-        CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
-        model.peripheral = peripheral;
-        model.error = nil;
+    CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
+    model.peripheral = peripheral;
+    model.error = nil;
+
+    // 升级优先
+    if (self->_upgradeConnectionPeripheralBlock) {
+        self->_upgradeConnectionPeripheralBlock(model);
+    } else if (self->_connectionPeripheralBlock) {
         self->_connectionPeripheralBlock(model);
     }
 }

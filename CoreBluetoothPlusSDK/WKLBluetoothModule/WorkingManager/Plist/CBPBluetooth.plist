@@ -7,24 +7,58 @@
 		<string>0xCC01</string>
 		<string>0000FEE9-0000-1000-8000-00805F9B34FB</string>
 		<string>00001802-0000-1000-8000-00805f9b34fb</string>
+		<string>0x6666</string>
+		<string>0xFCFA</string>
+		<string>0000FEE9-0000-1000-8000-00805F9B34FD</string>
+		<string>6E400001-B5A3-F393-E0A9-E50E24DCCA9E</string>
+		<string>000056ef-0000-1000-8000-00805f9b34fb</string>
+		<string>00060000-F8CE-11E4-ABF4-0002A5D5C51B</string>
 	</array>
 	<key>BraceletDiscoveredServices</key>
 	<array>
 		<string>0xCC01</string>
 		<string>000056ef-0000-1000-8000-00805f9b34fb</string>
 		<string>0000FEE9-0000-1000-8000-00805F9B34FB</string>
+		<string>0x6666</string>
+		<string>0xFCFA</string>
+		<string>0000FEE9-0000-1000-8000-00805F9B34FD</string>
+		<string>6E400001-B5A3-F393-E0A9-E50E24DCCA9E</string>
+		<string>00060000-F8CE-11E4-ABF4-0002A5D5C51B</string>
+		<string>0000fef5-0000-1000-8000-00805f9b34fb</string>
 	</array>
 	<key>BraceletWriteCBCharacteristics</key>
 	<array>
 		<string>0xCD20</string>
 		<string>000034e1-0000-1000-8000-00805f9b34fb</string>
 		<string>D44BC439-ABFD-45A2-B575-925416129600</string>
+		<string>0x8877</string>
+		<string>0x00D4</string>
+		<string>A44BC439-ABFD-45A2-B575-925416129600</string>
+		<string>0x6E400002-B5A3-F393-E0A9-E50E24DCCA9E</string>
+		<string>0x8888</string>
+		<string>00060001-F8CE-11E4-ABF4-0002A5D5C51B</string>
+		<string>8082caa8-41a6-4021-91c6-56f9b954cc34</string>
+		<string>724249f0-5ec3-4b5f-8804-42345af08651</string>
+		<string>9d84b9a3-000c-49d8-9183-855b673fda31</string>
+		<string>457871e8-d516-4ca1-9116-57d0b17b9cb2</string>
 	</array>
 	<key>BraceletReadCBCharacteristics</key>
 	<array>
 		<string>0xCD01</string>
 		<string>000034e2-0000-1000-8000-00805f9b34fb</string>
 		<string>D44BC439-ABFD-45A2-B575-925416129601</string>
+		<string>0x8888</string>
+		<string>0x01D4</string>
+		<string>0xA44BC439-ABFD-45A2-B575-925416129601</string>
+		<string>0x6E400003-B5A3-F393-E0A9-E50E24DCCA9E</string>
+		<string>0x8877</string>
+		<string>00060001-F8CE-11E4-ABF4-0002A5D5C51B</string>
+		<string>5f78df94-798c-46f5-990a-b3eb6a065c88</string>
+		<string>6c53db25-47a1-45fe-a022-7c92fb334fd4</string>
+		<string>8082caa8-41a6-4021-91c6-56f9b954cc34</string>
+		<string>724249f0-5ec3-4b5f-8804-42345af08651</string>
+		<string>9d84b9a3-000c-49d8-9183-855b673fda31</string>
+		<string>457871e8-d516-4ca1-9116-57d0b17b9cb2</string>
 	</array>
 </dict>
 </plist>

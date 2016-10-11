@@ -69,6 +69,14 @@
  */
 - (void) setConnectionPeripheralBlock: (void(^)(CBPBasePeripheralModel *peripheral)) connectionPeripheralBlock;
 
+
+/**
+ 升级专用 连接外设回调
+
+ @param upgradeConnectionPeripheralBlock 升级
+ */
+- (void) setUpgradeConnectionPeripheralBlock: (void(^)(CBPBasePeripheralModel *peripheral)) upgradeConnectionPeripheralBlock;
+
 /**
  *  @brief  停止扫描
  *  @param  void

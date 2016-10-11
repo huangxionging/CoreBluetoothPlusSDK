@@ -20,15 +20,19 @@
     finishedBlock _finishedBlock;
     answerBlock _answerBlock;
     NSTimer *_finishedActionTimer;
+    // 参数
     id _parameter;
     // 进度
-    void (^_progress)(double progress);
+    void (^_progress)(id progress);
+    // 定时器
+    NSTimer *_timer;
+    // 超时间隔
+    NSString *_timeOutInterval;
 }
 
 @end
 
 @implementation CBPBaseAction
-
 
 /**
  接口数组, 子类需重写
@@ -56,7 +60,6 @@
             [manager.actionDict setObject: classString forKey: obj];
         }
     }];
-    
 }
 
 + (instancetype)actionWithFinishedBlock:(void (^)(id responseObject))finishedBlock {
@@ -68,6 +71,8 @@
         action->_acionName = [NSString stringWithUTF8String: object_getClassName(self)];
         // 默认命令长度
         action->_actionLength = 20;
+        // 默认时长为 3.0
+        action->_timeOutInterval = @"3.0";
     }
     
     return action;
@@ -95,6 +100,22 @@
     return self;
 }
 
+#pragma mark- 开启定时器
+- (void) startTimer {
+    [self stopTimer];
+    _timer = [NSTimer scheduledTimerWithTimeInterval: [_timeOutInterval doubleValue] target: self selector: @selector(timeOut) userInfo: nil repeats: NO];
+    [[NSRunLoop mainRunLoop] addTimer: _timer forMode:NSRunLoopCommonModes];
+}
+
+- (void) stopTimer {
+    [_timer invalidate];
+    _timer = nil;
+}
+
+- (void)timeOut {
+    
+}
+
 #pragma mark- 结果回调
 - (void) callBackResult: (id) result {
     NSMutableDictionary *blockDiction = [NSMutableDictionary dictionaryWithCapacity: 2];
@@ -109,6 +130,7 @@
 
 #pragma mark-  回复数据
 - (void) callAnswerResult: (id) result {
+    
     NSLog(@"%@", [result actionData]);
     if (_answerBlock) {
         _answerBlock(result);
@@ -129,12 +151,10 @@
 }
 
 #pragma mark- 回调进度
-- (void) callBackProgress: (NSNumber *)progress {
-    double progressValue = [progress doubleValue];
-    
+- (void) callBackProgress: (id )progressData {
     // 如果进度存在
     if (_progress) {
-        _progress(progressValue);
+        _progress(progressData);
     }
 }
 

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F20E51961DACACEA00046732 /* libQBlueOta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51921DACACEA00046732 /* libQBlueOta.a */; };
+		F20E51971DACACEA00046732 /* libQBlueOtaFor4S.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51931DACACEA00046732 /* libQBlueOtaFor4S.a */; };
+		F20E51981DACACEA00046732 /* libQBlueOtaFor5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51941DACACEA00046732 /* libQBlueOtaFor5.a */; };
+		F20E519B1DACAD1300046732 /* qBleClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F20E519A1DACAD1300046732 /* qBleClient.m */; };
+		F20E519E1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F20E519D1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m */; };
+		F20E51A11DACBE6400046732 /* CBPQuinticUpgradeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F20E51A01DACBE6400046732 /* CBPQuinticUpgradeController.m */; };
+		F20E51A41DACBE7C00046732 /* CBPDialogUpgradeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F20E51A31DACBE7C00046732 /* CBPDialogUpgradeController.m */; };
 		F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */; };
 		F241896C1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F241896B1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.m */; };
 		F241896F1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F241896E1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m */; };
@@ -43,8 +50,9 @@
 		F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */; };
 		F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */; };
 		F264B4CB1D9E5B9800E80B67 /* firmware.png in Resources */ = {isa = PBXBuildFile; fileRef = F264B4CA1D9E5B9800E80B67 /* firmware.png */; };
-		F264B4CF1D9E616500E80B67 /* OTA in Resources */ = {isa = PBXBuildFile; fileRef = F264B4CE1D9E616500E80B67 /* OTA */; };
 		F264B4D11D9E62C800E80B67 /* Update_V26_0814_1900.BIN in Resources */ = {isa = PBXBuildFile; fileRef = F264B4D01D9E62C800E80B67 /* Update_V26_0814_1900.BIN */; };
+		F264B53C1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F264B53B1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.m */; };
+		F264B53F1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F264B53E1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m */; };
 		F26DD4B91D75731E0043FED4 /* NSDate+CBPUtilityTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */; };
 		F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */ = {isa = PBXBuildFile; fileRef = F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */; };
 		F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4BD1D7810320043FED4 /* CBPShowResultTableViewController.m */; };
@@ -80,9 +88,22 @@
 		F2DAE62F1D6BE60100E01238 /* CBPDevice.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62B1D6BE60100E01238 /* CBPDevice.plist */; };
 		F2DAE6301D6BE60100E01238 /* CBPUpgradeWay.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62C1D6BE60100E01238 /* CBPUpgradeWay.plist */; };
 		F2DAE6311D6BE60100E01238 /* CBPWKLBluetooth.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62D1D6BE60100E01238 /* CBPWKLBluetooth.plist */; };
+		F2E237801DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin in Resources */ = {isa = PBXBuildFile; fileRef = F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F20E51921DACACEA00046732 /* libQBlueOta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOta.a; sourceTree = "<group>"; };
+		F20E51931DACACEA00046732 /* libQBlueOtaFor4S.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOtaFor4S.a; sourceTree = "<group>"; };
+		F20E51941DACACEA00046732 /* libQBlueOtaFor5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOtaFor5.a; sourceTree = "<group>"; };
+		F20E51951DACACEA00046732 /* OtaApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OtaApi.h; sourceTree = "<group>"; };
+		F20E51991DACAD1300046732 /* qBleClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qBleClient.h; sourceTree = "<group>"; };
+		F20E519A1DACAD1300046732 /* qBleClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = qBleClient.m; sourceTree = "<group>"; };
+		F20E519C1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLQuinticFirmwareUpgradeAction.h; sourceTree = "<group>"; };
+		F20E519D1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLQuinticFirmwareUpgradeAction.m; sourceTree = "<group>"; };
+		F20E519F1DACBE6400046732 /* CBPQuinticUpgradeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPQuinticUpgradeController.h; sourceTree = "<group>"; };
+		F20E51A01DACBE6400046732 /* CBPQuinticUpgradeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPQuinticUpgradeController.m; sourceTree = "<group>"; };
+		F20E51A21DACBE7C00046732 /* CBPDialogUpgradeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPDialogUpgradeController.h; sourceTree = "<group>"; };
+		F20E51A31DACBE7C00046732 /* CBPDialogUpgradeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPDialogUpgradeController.m; sourceTree = "<group>"; };
 		F22228E11D810C7A00167379 /* CBPWKLWaterCupsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLWaterCupsAction.h; sourceTree = "<group>"; };
 		F22228E21D810C7A00167379 /* CBPWKLWaterCupsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLWaterCupsAction.m; sourceTree = "<group>"; };
 		F241896A1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSynchronizeHeartRateAction.h; sourceTree = "<group>"; };
@@ -151,8 +172,11 @@
 		F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLRestartAction.h; sourceTree = "<group>"; };
 		F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLRestartAction.m; sourceTree = "<group>"; };
 		F264B4CA1D9E5B9800E80B67 /* firmware.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = firmware.png; sourceTree = "<group>"; };
-		F264B4CE1D9E616500E80B67 /* OTA */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OTA; sourceTree = "<group>"; };
 		F264B4D01D9E62C800E80B67 /* Update_V26_0814_1900.BIN */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = Update_V26_0814_1900.BIN; sourceTree = "<group>"; };
+		F264B53A1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLDialogFirmwareUpgradeAction.h; sourceTree = "<group>"; };
+		F264B53B1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLDialogFirmwareUpgradeAction.m; sourceTree = "<group>"; };
+		F264B53D1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLCypressFirmwareUpgradeAction.h; sourceTree = "<group>"; };
+		F264B53E1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLCypressFirmwareUpgradeAction.m; sourceTree = "<group>"; };
 		F26DD4B71D75731E0043FED4 /* NSDate+CBPUtilityTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CBPUtilityTool.h"; sourceTree = "<group>"; };
 		F26DD4B81D75731E0043FED4 /* NSDate+CBPUtilityTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CBPUtilityTool.m"; sourceTree = "<group>"; };
 		F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPInterface.plist; sourceTree = "<group>"; };
@@ -217,6 +241,7 @@
 		F2DAE62B1D6BE60100E01238 /* CBPDevice.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPDevice.plist; sourceTree = "<group>"; };
 		F2DAE62C1D6BE60100E01238 /* CBPUpgradeWay.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPUpgradeWay.plist; sourceTree = "<group>"; };
 		F2DAE62D1D6BE60100E01238 /* CBPWKLBluetooth.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPWKLBluetooth.plist; sourceTree = "<group>"; };
+		F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = W007C_V0.51_B20150724A_app.bin; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,12 +249,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F20E51981DACACEA00046732 /* libQBlueOtaFor5.a in Frameworks */,
+				F20E51961DACACEA00046732 /* libQBlueOta.a in Frameworks */,
+				F20E51971DACACEA00046732 /* libQBlueOtaFor4S.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F20E51911DACACEA00046732 /* OTA */ = {
+			isa = PBXGroup;
+			children = (
+				F20E51921DACACEA00046732 /* libQBlueOta.a */,
+				F20E51931DACACEA00046732 /* libQBlueOtaFor4S.a */,
+				F20E51941DACACEA00046732 /* libQBlueOtaFor5.a */,
+				F20E51951DACACEA00046732 /* OtaApi.h */,
+				F20E51991DACAD1300046732 /* qBleClient.h */,
+				F20E519A1DACAD1300046732 /* qBleClient.m */,
+			);
+			path = OTA;
+			sourceTree = "<group>";
+		};
 		F24189731D912512002E2914 /* MJRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,6 +391,7 @@
 				F276371C1D61A45F006597AC /* ViewController.h */,
 				F276371D1D61A45F006597AC /* ViewController.m */,
 				F264B4D01D9E62C800E80B67 /* Update_V26_0814_1900.BIN */,
+				F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */,
 				F264B4CA1D9E5B9800E80B67 /* firmware.png */,
 				F241896D1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.h */,
 				F241896E1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m */,
@@ -521,6 +563,12 @@
 				F26153931D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m */,
 				F26153951D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.h */,
 				F26153961D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m */,
+				F20E519C1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.h */,
+				F20E519D1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m */,
+				F264B53A1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.h */,
+				F264B53B1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.m */,
+				F264B53D1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.h */,
+				F264B53E1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m */,
 				F26153981D7EB0B6008230B4 /* CBPWKLRestartAction.h */,
 				F26153991D7EB0B6008230B4 /* CBPWKLRestartAction.m */,
 				F22228E11D810C7A00167379 /* CBPWKLWaterCupsAction.h */,
@@ -549,6 +597,10 @@
 			children = (
 				F2C548EC1D630B4800A665F3 /* CBPWKLController.h */,
 				F2C548ED1D630B4800A665F3 /* CBPWKLController.m */,
+				F20E519F1DACBE6400046732 /* CBPQuinticUpgradeController.h */,
+				F20E51A01DACBE6400046732 /* CBPQuinticUpgradeController.m */,
+				F20E51A21DACBE7C00046732 /* CBPDialogUpgradeController.h */,
+				F20E51A31DACBE7C00046732 /* CBPDialogUpgradeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -577,7 +629,7 @@
 		F2C548CE1D62FC4E00A665F3 /* UnityTool */ = {
 			isa = PBXGroup;
 			children = (
-				F264B4CE1D9E616500E80B67 /* OTA */,
+				F20E51911DACACEA00046732 /* OTA */,
 			);
 			path = UnityTool;
 			sourceTree = "<group>";
@@ -668,7 +720,7 @@
 				F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */,
 				F26153861D7E66D8008230B4 /* CBPStepTableViewCell.xib in Resources */,
 				F2DAE6311D6BE60100E01238 /* CBPWKLBluetooth.plist in Resources */,
-				F264B4CF1D9E616500E80B67 /* OTA in Resources */,
+				F2E237801DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin in Resources */,
 				F27637231D61A45F006597AC /* Assets.xcassets in Resources */,
 				F2DAE62F1D6BE60100E01238 /* CBPDevice.plist in Resources */,
 				F264B4D11D9E62C800E80B67 /* Update_V26_0814_1900.BIN in Resources */,
@@ -694,6 +746,8 @@
 				F2C548D21D62FCBE00A665F3 /* CBPBaseDevice.m in Sources */,
 				F22228E31D810C7A00167379 /* CBPWKLWaterCupsAction.m in Sources */,
 				F2C549081D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m in Sources */,
+				F20E51A41DACBE7C00046732 /* CBPDialogUpgradeController.m in Sources */,
+				F264B53C1DAB6E4000E80B67 /* CBPWKLDialogFirmwareUpgradeAction.m in Sources */,
 				F24189AC1D912512002E2914 /* MJRefreshBackNormalFooter.m in Sources */,
 				F276371E1D61A45F006597AC /* ViewController.m in Sources */,
 				F2C548EB1D6309F200A665F3 /* CBPStringToHex.mm in Sources */,
@@ -701,6 +755,7 @@
 				F2C548EE1D630B4800A665F3 /* CBPWKLController.m in Sources */,
 				F2C548E51D6308B700A665F3 /* CBPBaseController.m in Sources */,
 				F24189B61D912512002E2914 /* UIView+MJExtension.m in Sources */,
+				F20E519E1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m in Sources */,
 				F24189A91D912512002E2914 /* MJRefreshAutoNormalFooter.m in Sources */,
 				F2C548E21D63084C00A665F3 /* CBPBaseWorkingManager.m in Sources */,
 				F26DD4C11D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m in Sources */,
@@ -714,6 +769,7 @@
 				F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */,
 				F26DD4CD1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m in Sources */,
 				F2C548C21D62FC4000A665F3 /* CBPBaseClient.m in Sources */,
+				F20E519B1DACAD1300046732 /* qBleClient.m in Sources */,
 				F24189B51D912512002E2914 /* UIScrollView+MJRefresh.m in Sources */,
 				F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */,
 				F241896C1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.m in Sources */,
@@ -728,6 +784,7 @@
 				F24189A61D912512002E2914 /* MJRefreshFooter.m in Sources */,
 				F2C548DF1D6307DD00A665F3 /* CBPBaseError.m in Sources */,
 				F26DD4B91D75731E0043FED4 /* NSDate+CBPUtilityTool.m in Sources */,
+				F20E51A11DACBE6400046732 /* CBPQuinticUpgradeController.m in Sources */,
 				F241896F1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m in Sources */,
 				F2B82CFE1D93C1DA0047E5DE /* CBPDispatchMessageManager.m in Sources */,
 				F24189AF1D912512002E2914 /* MJRefreshNormalHeader.m in Sources */,
@@ -738,6 +795,7 @@
 				F2CBB29F1D92542200EEB2E9 /* CBPWKLSimpleDataAction.m in Sources */,
 				F2C548C51D62FC4000A665F3 /* CBPBasePeripheralModel.m in Sources */,
 				F24189B31D912512002E2914 /* NSBundle+MJRefresh.m in Sources */,
+				F264B53F1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m in Sources */,
 				F276371B1D61A45F006597AC /* AppDelegate.m in Sources */,
 				F27637181D61A45F006597AC /* main.m in Sources */,
 				F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */,
@@ -862,9 +920,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = U9662QUFW3;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				INFOPLIST_FILE = CoreBluetoothPlusSDK/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CoreBluetoothPlusSDK/WKLBluetoothModule/UnityTool/OTA",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.new-life.CoreBluetoothPlusSDK";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -875,9 +938,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = U9662QUFW3;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				INFOPLIST_FILE = CoreBluetoothPlusSDK/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CoreBluetoothPlusSDK/WKLBluetoothModule/UnityTool/OTA",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.new-life.CoreBluetoothPlusSDK";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

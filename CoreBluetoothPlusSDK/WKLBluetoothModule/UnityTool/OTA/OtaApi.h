@@ -19,7 +19,7 @@
 #import <IOBluetooth/IOBluetooth.h>@protocol otaEnableConfirmDelegate
 #endif
 
-#import "QBleClient.h"
+#import "qBleClient.h"
 
 /// to notify discovered Services to app layer
 #define keyOtaPeripheral                @"key-OtaPeripheral"
