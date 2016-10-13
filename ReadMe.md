@@ -74,7 +74,7 @@
 	*	4.39[设备体温](#device_temperature)
 	*	4.40[昆天科固件升级](#quintic_firmware_upgrade)
 	*	4.41[dialog 固件升级](#dialog_firmware_upgrade)
-	* 	4.42[赛普拉斯 固件升级](#dialog_firmware_upgrade)
+	* 	4.42[赛普拉斯 固件升级](#cypress_firmware_upgrade)
 
 
 ##<a name="structure"/> SDK 架构

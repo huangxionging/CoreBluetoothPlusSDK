@@ -286,6 +286,8 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     NSLog(@"已连接: %@  ====> UUID: %@", peripheral, peripheral.identifier.UUIDString);
 //#endif
     
+    
+    
     CBPBasePeripheralModel *model = [[CBPBasePeripheralModel alloc] init];
     model.peripheral = peripheral;
     model.error = nil;

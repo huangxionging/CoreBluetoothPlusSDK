@@ -216,6 +216,10 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 #pragma mark---发送操作
 - (void)sendActionWithModel:(CBPBaseActionDataModel *)actionDataModel {
     
+    // 将代理改过来
+    if (_peripheralModel.peripheral.delegate != self) {
+        _peripheralModel.peripheral.delegate = self;
+    }
     // 发送操作
     if (self.isChracteristicReady) {
         // 查找特征
@@ -285,6 +289,8 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     if (error) {
         return;
     }
+    
+   
     for (CBService *service in peripheral.services) {
         [peripheral discoverCharacteristics: self->_characteristicUUIDs.allValues forService: service];
     }
@@ -330,6 +336,7 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     if (self->_writeDataBlock) {
         self->_actionDataModel.actionData = characteristic.value;
         self->_actionDataModel.characteristicString = characteristic.UUID.UUIDString.lowercaseString;
+        self->_actionDataModel.characteristic = characteristic;
         self->_actionDataModel.error = error;
         self->_actionDataModel.actionDatatype = kBaseActionDataTypeWriteAnswer;
         self->_writeDataBlock(self->_actionDataModel);

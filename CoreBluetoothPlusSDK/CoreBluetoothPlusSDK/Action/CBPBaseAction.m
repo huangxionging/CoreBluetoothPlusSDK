@@ -88,7 +88,6 @@
 
 - (void)setAnswerActionDataBlock:(void (^)(CBPBaseActionDataModel *))answerActionBlock {
     self->_answerBlock = answerActionBlock;
-    
 }
 
 - (instancetype)initWithParameter:(id)parameter answer:(void (^)(CBPBaseActionDataModel *))answerBlock finished:(void (^)(id))finished {
@@ -96,6 +95,10 @@
         _parameter = parameter;
         _answerBlock = answerBlock;
         _finishedBlock = finished;
+        _actionLength = 20;
+        // 默认时长为 3.0
+        _timeOutInterval = @"3.0";
+        _acionName = [NSString stringWithUTF8String: object_getClassName(self)];
     }
     return self;
 }

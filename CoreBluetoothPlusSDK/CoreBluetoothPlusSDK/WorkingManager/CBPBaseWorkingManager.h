@@ -79,6 +79,6 @@
  @param success    成功回调
  @param failure    失败回调
  */
-- (void) post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(id progressData))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure;
+- (void) post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(id progressData))progress success:(void (^)(CBPBaseAction *action, id responseObject))success failure:(void (^)(CBPBaseAction *action, CBPBaseError *error))failure;
 
 @end

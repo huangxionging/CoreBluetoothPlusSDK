@@ -54,7 +54,6 @@ static NSString* braceletReadCBCharacteristic7 = @"0x6E400003-B5A3-F393-E0A9-E50
 static NSString* braceletReadCBCharacteristic8 = @"0x8877";
 static NSString* braceletReadCBCharacteristic9 =@"00060001-F8CE-11E4-ABF4-0002A5D5C51B";//006F
 
-static NSString * Cypress_OTA_SERVICE_UUID = @"00060000-F8CE-11E4-ABF4-0002A5D5C51B";
 static NSString * SPOTA_SERVICE_UUID     = @"0000fef5-0000-1000-8000-00805f9b34fb";
 static NSString * SPOTA_MEM_DEV_UUID     = @"8082caa8-41a6-4021-91c6-56f9b954cc34";
 static NSString * SPOTA_GPIO_MAP_UUID    = @"724249f0-5ec3-4b5f-8804-42345af08651";
@@ -68,7 +67,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 /**
  *  扫描服务 UUIDs
  */
-@property (nonatomic, strong) NSArray<NSString *> *scanServiceUUIDs;
+@property (nonatomic, strong) NSArray<CBUUID *> *scanServiceUUIDs;
 
 /**
  *  发现特征的服务 UUIDs
@@ -95,8 +94,6 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
  */
 @property (nonatomic, assign) BOOL isWriteCharacteristic;
 
-
-@property (nonatomic, weak) NSDictionary *serviceDictionary;
 
 @property (nonatomic, strong) void(^block)(id result);
 
@@ -126,19 +123,31 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
         
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile: path];
         
-        _serviceDictionary = [NSDictionary dictionaryWithContentsOfFile: [[NSBundle mainBundle] pathForResource: @"" ofType: @"plist"]];
+//        self->_scanServiceUUIDs = dictionary[@"BraceletScanServices"];
         
-        self->_scanServiceUUIDs = dictionary[@"BraceletScanServices"];
-        self->_discoverSeriveUUIDs = dictionary[@"BraceletDiscoveredServices"];
-        self->_readChracteristicUUIDs = dictionary[@"BraceletReadCBCharacteristics"];
+//        self->_discoverSeriveUUIDs = dictionary[@"BraceletDiscoveredServices"];
+//        self->_readChracteristicUUIDs = dictionary[@"BraceletReadCBCharacteristics"];
         
-        self->_writeChracteristicUUIDs = dictionary[@"BraceletWriteCBCharacteristics"];
+//        self->_writeChracteristicUUIDs = dictionary[@"BraceletWriteCBCharacteristics"];
 
         self->_isReadCharacterstic = NO;
         self->_isWriteCharacteristic = NO;
     }
     
     return self;
+}
+
+- (NSArray<CBUUID *> *)scanServiceUUIDs {
+    if (_scanServiceUUIDs == nil) {
+        
+        // 正常广播的 搜索服务
+        _scanServiceUUIDs = @[[CBUUID UUIDWithString: braceletScanService1], [CBUUID UUIDWithString: braceletScanService2], [CBUUID UUIDWithString: braceletScanService3], [CBUUID UUIDWithString: braceletScanService4], [CBUUID UUIDWithString: braceletScanService5], [CBUUID UUIDWithString: braceletScanService6], [CBUUID UUIDWithString: braceletScanService7], [CBUUID UUIDWithString: braceletScanService8]];
+
+        //  Cypress 升级广播的数据
+        //  [CBUUID UUIDWithString: braceletScanService9]
+        
+    }
+    return _scanServiceUUIDs;
 }
 
 #pragma mark---观察者监听
@@ -166,8 +175,9 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 //    CBPDEBUG;
     weakSelf.baseClient = [CBPBaseClient shareBaseClient];
     
-    for (NSString *UUIDString in self->_scanServiceUUIDs) {
-        [weakSelf.baseClient addPeripheralScanService: [CBUUID UUIDWithString: UUIDString.uppercaseString]];
+    for (CBUUID *UUID in self.scanServiceUUIDs) {
+        // 添加扫描的设备服务 UUID
+        [weakSelf.baseClient addPeripheralScanService: UUID];
     }
     
     // 设置扫描超时时间
@@ -242,15 +252,15 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
     }
     [self cleanup];
     // 添加发现服务
-    for (NSString *UUIDString in self->_discoverSeriveUUIDs) {
-        [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString uppercaseString]];
-    }
+//    for (NSString *UUIDString in self->_discoverSeriveUUIDs) {
+//        [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString uppercaseString]];
+//    }
     
     // 添加读特征
-    for (NSString *UUIDString in self->_readChracteristicUUIDs) {
-        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
-    }
-    
+//    for (NSString *UUIDString in self->_readChracteristicUUIDs) {
+//        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
+//    }
+//    
     // 添加写特征
     for (NSString *UUIDString in self->_writeChracteristicUUIDs) {
         [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
@@ -297,9 +307,9 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
                 [device addCharacteristic: model];
                 _isReadCharacterstic = YES;
                 
-                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
-                    device.isChracteristicReady = YES;
-                }
+//                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
+//                    device.isChracteristicReady = YES;
+//                }
             }
             
             // 写特征
@@ -314,12 +324,15 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
                 // 添加
                 [device addCharacteristic: model];
                 
-                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
-                    device.isChracteristicReady = YES;
-                }
+//                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
+//                    device.isChracteristicReady = YES;
+//                }
                 
             }
             
+        }
+        if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
+            device.isChracteristicReady = YES;
         }
         
     }];

@@ -311,6 +311,18 @@
 #pragma mark- 处理有效短包
 - (void) handleShortPackageEffectiveAnswer: (Byte *) bytes {
     
+    if (self.dayCount == 1) {
+        // 进度
+        NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+        double progressValue = self.shortPackageSerialNumber / (double)self.shortPackageTotalCount;
+        // 取 4 位小数
+        NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+        // 进度
+        [progressData setObject: progress forKey: @"progress"];
+        // 调度进度
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", progressData, nil];
+    }
+
     // 屏蔽掉不合理数据
     if (bytes[2] < 0x02 || bytes[2] >= 0xfe) {
         return;
@@ -475,6 +487,28 @@
 #pragma mark- 处理请求下一天的数据
 - (void) handleNextDayDataPackage {
     
+    if (self.dayCount > 1) {
+        // 进度
+        NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+        double progressValue = self.longPackageSerialNumber / (double)self.dayCount;
+        // 取 4 位小数
+        NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+        // 进度
+        [progressData setObject: progress forKey: @"progress"];
+        // 调度进度
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", progressData, nil];
+    } else if (self.dayCount == 1) {
+        // 进度
+        NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+        double progressValue = self.shortPackageSerialNumber / (double)self.shortPackageTotalCount;
+        // 取 4 位小数
+        NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+        // 进度
+        [progressData setObject: progress forKey: @"progress"];
+        // 调度进度
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", progressData, nil];
+    }
+
     if (_longPackageSerialNumber == _dayCount || _dayCount == 1) {
         // 表示所有数据发送完成
         // 计步数据
@@ -548,7 +582,8 @@
 }
 
 - (void)timeOut {
-    
+    CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeSynchronizeDataTimeOut info: @"同步睡眠数据超时"];
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
 }
 
 @end

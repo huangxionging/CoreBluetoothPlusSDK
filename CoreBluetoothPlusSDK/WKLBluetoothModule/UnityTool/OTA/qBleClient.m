@@ -170,7 +170,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 
 #pragma mark -- 蓝牙数据写成功代理
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    
+//    NSLog(@"写数据成功");
 }
 
 #pragma mark -- 数据返回代理（与外设做数据交互）
@@ -181,7 +181,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
         for (CBService *aService in aPeripheral.services)
         {
             [_bleUpdateForOtaDelegate bleDidUpdateValueForOtaChar : aService withChar : characteristic error : error];
-            NSLog(@"文件数据: %@", characteristic.value);
+          //  NSLog(@"文件数据: %@", characteristic.value);
         }
     }
     @catch (NSException *exception) {

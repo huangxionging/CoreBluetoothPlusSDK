@@ -89,6 +89,8 @@
 		F2DAE6301D6BE60100E01238 /* CBPUpgradeWay.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62C1D6BE60100E01238 /* CBPUpgradeWay.plist */; };
 		F2DAE6311D6BE60100E01238 /* CBPWKLBluetooth.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62D1D6BE60100E01238 /* CBPWKLBluetooth.plist */; };
 		F2E237801DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin in Resources */ = {isa = PBXBuildFile; fileRef = F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */; };
+		F2E237A01DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin in Resources */ = {isa = PBXBuildFile; fileRef = F2E2379F1DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin */; };
+		F2E237A41DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin in Resources */ = {isa = PBXBuildFile; fileRef = F2E237A31DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -242,6 +244,8 @@
 		F2DAE62C1D6BE60100E01238 /* CBPUpgradeWay.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPUpgradeWay.plist; sourceTree = "<group>"; };
 		F2DAE62D1D6BE60100E01238 /* CBPWKLBluetooth.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPWKLBluetooth.plist; sourceTree = "<group>"; };
 		F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = W007C_V0.51_B20150724A_app.bin; sourceTree = "<group>"; };
+		F2E2379F1DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = W007A_V0.54_JingHua_B20150714.bin; sourceTree = "<group>"; };
+		F2E237A31DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = enW007A_V0.54_JingHua_B20150714.bin; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +396,8 @@
 				F276371D1D61A45F006597AC /* ViewController.m */,
 				F264B4D01D9E62C800E80B67 /* Update_V26_0814_1900.BIN */,
 				F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */,
+				F2E237A31DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin */,
+				F2E2379F1DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin */,
 				F264B4CA1D9E5B9800E80B67 /* firmware.png */,
 				F241896D1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.h */,
 				F241896E1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m */,
@@ -720,10 +726,12 @@
 				F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */,
 				F26153861D7E66D8008230B4 /* CBPStepTableViewCell.xib in Resources */,
 				F2DAE6311D6BE60100E01238 /* CBPWKLBluetooth.plist in Resources */,
+				F2E237A01DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin in Resources */,
 				F2E237801DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin in Resources */,
 				F27637231D61A45F006597AC /* Assets.xcassets in Resources */,
 				F2DAE62F1D6BE60100E01238 /* CBPDevice.plist in Resources */,
 				F264B4D11D9E62C800E80B67 /* Update_V26_0814_1900.BIN in Resources */,
+				F2E237A41DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin in Resources */,
 				F27637211D61A45F006597AC /* Main.storyboard in Resources */,
 				F26153911D7E9771008230B4 /* CBPSleepTableViewCell.xib in Resources */,
 				F2DAE62E1D6BE60100E01238 /* CBPBluetooth.plist in Resources */,

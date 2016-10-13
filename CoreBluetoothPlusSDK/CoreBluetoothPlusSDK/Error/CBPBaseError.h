@@ -47,7 +47,10 @@ typedef NS_ENUM(NSInteger, BaseErrorType) {
     kBaseErrorTypeFileInvalid               = 10015,
     // 10016 表示文件太大
     kBaseErrorTypeFileTooLarge              = 10016,
-    
+    // 10017 表示不允许升级
+    kBaseErrorTypeNotAllowUpgrade           = 10017,
+    // 10018 表示同步数据超时
+    kBaseErrorTypeSynchronizeDataTimeOut    = 10018,
 };
 
 

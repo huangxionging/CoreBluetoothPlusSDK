@@ -136,7 +136,7 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     [self post: URLString parameters: parameters success: success failure: failure];
 }
 
-- (void)post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(id))progress success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void)post:(NSString *)URLString parameters:(id)parameters progress:(void (^)(id progressData))progress success:(void (^)(CBPBaseAction *action, id responseObject))success failure:(void (^)(CBPBaseAction *action, CBPBaseError *error))failure {
     
     CBPBaseError *error = [self checkConfig];
     if (error) {
@@ -146,7 +146,8 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     [self handleURLString: URLString parameters: parameters progress: progress success: success failure: failure];
 }
 
-- (void)post:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *, id))success failure:(void (^)(CBPBaseAction *, CBPBaseError *))failure {
+- (void) post:(NSString *)URLString parameters:(id)parameters success:(void (^)(CBPBaseAction *action, id responseObject))success failure:(void (^)(CBPBaseAction *action, CBPBaseError *error))failure {
+    
     CBPBaseError *error = [self checkConfig];
     if (error) {
         failure(nil, error);

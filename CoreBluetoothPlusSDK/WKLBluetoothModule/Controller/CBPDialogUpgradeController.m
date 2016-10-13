@@ -7,7 +7,19 @@
 //
 
 #import "CBPDialogUpgradeController.h"
+#import "CBPDispatchMessageManager.h"
 
 @implementation CBPDialogUpgradeController
+
++ (void)load {
+    
+    // 注册控制器
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method: @"registerController:", self, nil];
+}
+
++ (NSString *)controllerKey {
+    return @"com.dialog.controller";
+}
+
 
 @end

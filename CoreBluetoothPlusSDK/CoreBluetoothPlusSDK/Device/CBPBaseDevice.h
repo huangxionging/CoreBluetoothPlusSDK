@@ -111,6 +111,7 @@
  */
 - (void) setDiscoverServiceBlock: (void(^)(CBPBaseServiceModel *discoverServiceModel))discoverServiceBlock;
 
+
 /**
  *  @brief   获取所有服务的 CBUUID
  */

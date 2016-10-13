@@ -45,6 +45,9 @@ typedef NS_ENUM(NSUInteger, BaseActionDataType){
  */
 @property (nonatomic, copy) NSString *characteristicString;
 
+// 使用的特征
+@property (nonatomic, weak) CBCharacteristic *characteristic;
+
 /**
  *  操作数据类型, 类型为发送的数据, 还是回复的数据
  */

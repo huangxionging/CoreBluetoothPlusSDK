@@ -137,8 +137,12 @@
             [self checkDeviceWorkingState];
             break;
         }
-        case 26: {
+        case 27: {
             [self quinticUpgrade];
+            break;
+        }
+        case 28: {
+            [self dialogUpgrade];
             break;
         }
         default:
@@ -146,11 +150,18 @@
     }
 
 }
+
+#pragma mark- dialog 升级
+- (void) dialogUpgrade {
+    // dialog 升级的 key
+    self.manager.upgradeControllerKey = @"com.dialog.controller";
+    
+}
 - (void) quinticUpgrade {
     self.manager.upgradeControllerKey = @"com.quintic.controller";
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"W007C_V0.51_B20150724A_app" ofType: @"bin"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"enW007A_V0.54_JingHua_B20150714" ofType: @"bin"];
     
     // 文件路径名
     [parameter setObject: filePath forKey: @"file_path"];
@@ -368,12 +379,17 @@
 - (void) synchronizeStep {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
     // 操作类型
-    [parameter setObject: @"2016-09-01" forKey: @"start_date"];
+    [parameter setObject: @"2016-10-12" forKey: @"start_date"];
     
     NSString *end = [[NSDate date] stringForCurrentDateWithFormatString: @"yyyy-MM-dd"];
     [parameter setObject: end forKey: @"end_date"];
     
-    [self.manager post: @"ble://synchronize_step_data" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+    
+    [self.manager post: @"ble://synchronize_step_data" parameters: parameter progress:^(id progressData) {
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"同步进度: %0.2lf%%", [progress doubleValue] * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
+        
         
         NSLog(@"计步数据: %@", responseObject);
         NSLog(@"计步参数%@", parameter);
@@ -383,7 +399,7 @@
         [self.navigationController pushViewController: vc animated: YES];
         
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
-        
+        NSLog(@"%@", error.localizedDescription);
     }];
 }
 
@@ -395,7 +411,10 @@
     NSString *end = [[NSDate date] stringForCurrentDateWithFormatString: @"yyyy-MM-dd"];
     [parameter setObject: end forKey: @"end_date"];
     
-    [self.manager post: @"ble://synchronize_sleep_data" parameters: parameter success:^(CBPBaseAction *action, id responseObject) {
+    [self.manager post: @"ble://synchronize_sleep_data" parameters: parameter progress:^(id progressData) {
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"同步进度: %0.2lf%%", [progress doubleValue] * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
         
         NSLog(@"睡眠数据: %@", responseObject);
         NSLog(@"睡眠参数%@", parameter);
@@ -405,7 +424,7 @@
         [self.navigationController pushViewController: vc animated: YES];
         
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
-        
+        NSLog(@"%@", error.localizedDescription);
     }];
 }
 
