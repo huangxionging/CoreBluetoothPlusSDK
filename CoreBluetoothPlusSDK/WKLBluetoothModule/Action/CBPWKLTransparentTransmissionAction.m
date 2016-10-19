@@ -168,6 +168,12 @@ unsigned short crc_ccitt(unsigned char *q, int len);
 
 #pragma mark- 发送指令相关
 - (void)actionData {
+    
+    NSDictionary *parameter = [self valueForKey: @"parameter"];
+    
+    NSAssert(parameter, @"参数写错了");
+    _content = parameter[@"content"];
+    _keyWord = parameter[@"keyword"];
     if (![_content hasPrefix: @"0x"]) {
         _content = [NSString stringWithFormat: @"0x%@", _content];
     }
