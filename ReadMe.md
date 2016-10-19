@@ -75,6 +75,8 @@
 	*	4.40[昆天科固件升级](#quintic_firmware_upgrade)
 	*	4.41[dialog 固件升级](#dialog_firmware_upgrade)
 	* 	4.42[赛普拉斯 固件升级](#cypress_firmware_upgrade)
+	*	4.43[同步心率数据](#synchronize_heart_rate_data)
+	*	4.44[透传功能](#transparent_transmission)
 
 
 ##<a name="structure"/> SDK 架构
@@ -489,14 +491,44 @@ NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5]
 		
 		参数:
 			file_path: 文件路径(包含扩展名);
-			device_id: 16 位编码
+			device_id: 设备位编码
 		进度:
 			progress 升级进度会返回多次;
 			
 		返回值: 
 			code: 0 表示升级成功, 1 表示升级失败;
 ***
-* 	4.42[赛普拉斯 固件升级](#dialog_firmware_upgrade)
+* 	4.42[赛普拉斯 固件升级](#cypress_firmware_upgrade)
+
+		接口名称: cypress_firmware_upgrade
+		
+		参数:
+			file_path: 文件路径(包含扩展名);
+			device_id: 设备位编码
+		进度:
+			progress 升级进度会返回多次;
+			
+		返回值: 
+			code: 0 表示升级成功, 1 表示升级失败;
+
+***
+
+*	4.43[同步心率数据](#synchronize_heart_rate_data)
+
+		接口名称: synchronize_heart_rate_data
+
+***
+
+*	4.44[透传功能](#transparent_transmission)
+
+		接口名称: transparent_transmission
+		
+		参数:
+			keyword: 表示关键字;
+			content: 表示传输内容;
+		
+		返回值
+			result: 表示透传结果
 
 ***
 	

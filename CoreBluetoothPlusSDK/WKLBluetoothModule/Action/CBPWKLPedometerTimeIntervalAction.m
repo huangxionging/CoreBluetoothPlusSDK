@@ -32,7 +32,7 @@
     return interfaces;
 }
 
-- (NSData *)actionData {
+- (void)actionData {
     NSDictionary *dict = [self valueForKey: @"parameter"];
     
     NSString *timeInterval = dict[@"time_interval"]?dict[@"time_interval"]:@"30"; // 默认值为 30
@@ -43,9 +43,8 @@
     bytes[1] = 0x02;
     bytes[3] = timeInterval.integerValue;
     NSData *data = [NSData dataWithBytes: bytes length: 20];
-    
-    //    NSLog(@"时间间隔: %@", data);
-    return data;
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {

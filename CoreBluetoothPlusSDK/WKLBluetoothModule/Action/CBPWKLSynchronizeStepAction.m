@@ -104,7 +104,7 @@
 }
 
 
-- (NSData *)actionData {
+- (void)actionData {
     NSDictionary *dict = [self valueForKey: @"parameter"];
     
     NSString *startDate = dict[@"start_date"];
@@ -143,11 +143,10 @@
             bytes[8] = [end dayOfMonth];
         }
     
-    NSData *actionData = [NSData dataWithBytes: bytes length: 20];
+    NSData *data = [NSData dataWithBytes: bytes length: 20];
     
-    NSLog(@"%@", actionData);
-    return actionData;
-
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 
@@ -309,7 +308,7 @@
     [_oneDayDataDict setObject: timeInterval forKey: @"time_interval"];
     
     // 有效内容的条数
-    NSInteger count = bytes[14];
+//    NSInteger count = bytes[14];
 }
 
 #pragma mark- 处理有效短包
@@ -344,6 +343,7 @@
     Byte *effectiveByte = &bytes[3];
     
     // 获取短包序号 是从 0x02 开始, 所以要减去 2
+    
     memcpy(_shortPackage[_shortPackageSerialNumber - 2], effectiveByte, sizeof(Byte) * 17);
 }
 
@@ -419,11 +419,6 @@
     }
     
     NSLog(@"%@: 所有数据:%@ ====> %@", _indicatorDate, _longPackageData, @(_longPackageData.length));
-    
-    if (_longPackageData.length % 2 != 0) {
-        //        CBPDEBUG;
-        exit(0);
-    }
     
     // 获得数据
     Byte *bytes = (Byte *)[_longPackageData bytes];

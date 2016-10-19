@@ -49,7 +49,7 @@
     return [NSSet setWithObjects:@"0x0c", nil];
 }
 
-- (NSData *)actionData {
+- (void) actionData {
     
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     
@@ -161,7 +161,9 @@
         default:
             break;
     }
-    return [NSData dataWithBytes: bytes length: 20];
+    NSData *data = [NSData dataWithBytes: bytes length: 20];
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 - (void) receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {

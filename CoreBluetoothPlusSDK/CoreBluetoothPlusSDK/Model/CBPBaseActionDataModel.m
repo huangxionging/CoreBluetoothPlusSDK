@@ -15,7 +15,7 @@
     CBPBaseActionDataModel *actionDataModel = [[CBPBaseActionDataModel alloc] init];
     
     if (actionDataModel) {
-        actionDataModel.actionData = [action actionData];
+//        actionDataModel.actionData = [action actionData];
         actionDataModel.characteristicString = [action.characteristicUUIDString lowercaseString];
         actionDataModel.actionDatatype = kBaseActionDataTypeUpdateSend;
         actionDataModel.writeType = CBCharacteristicWriteWithResponse;

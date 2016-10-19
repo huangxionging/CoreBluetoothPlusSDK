@@ -50,7 +50,7 @@ NSInteger max_content_length = 1024;
 }
 
 
-- (NSData *)actionData {
+- (void) actionData {
     
     // 1 表示 Quintic OTA Profile升级固件
     NSDictionary *parameter = [self valueForKey: @"parameter"];
@@ -61,8 +61,7 @@ NSInteger max_content_length = 1024;
     // 设置超时时间
     [self setValue: @"15.0" forKey: @"_timeOutInterval"];
     [otaApi sharedInstance].otaEnableConfirmDelegate = self;
-    [otaApi sharedInstance].otaApiUpdateAppDataDelegate =self;
-    return nil;
+    [otaApi sharedInstance].otaApiUpdateAppDataDelegate = self;
 }
 
 #pragma mark --------------------昆电科OTA升级 部分-------------------

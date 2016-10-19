@@ -33,7 +33,6 @@
  */
 - (void) dispatchTarget:(id) target method: (NSString *)method, ... NS_REQUIRES_NIL_TERMINATION;
 
-
 /**
  调度传送消息, 参数可变, method 后面最多支持 10 个参数, 且都为 id 对象类型, 必须要添加 nil 结尾 NS_REQUIRES_NIL_TERMINATION;
  此方法有返回值.

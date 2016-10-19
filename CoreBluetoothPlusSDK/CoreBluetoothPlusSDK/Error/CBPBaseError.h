@@ -51,6 +51,26 @@ typedef NS_ENUM(NSInteger, BaseErrorType) {
     kBaseErrorTypeNotAllowUpgrade           = 10017,
     // 10018 表示同步数据超时
     kBaseErrorTypeSynchronizeDataTimeOut    = 10018,
+    // 10019 表示固件相同
+    kBaseErrorTypeFirmwareSame              = 10019,
+    // 10020 表示外部存储器读取错误
+    kBaseErrorTypeExternalMemoryReadError   = 10020,
+    // 10021 表示无效硬件产品
+    kBaseErrorTypeInvalidProductHardware    = 10021,
+    // 10022 表示 App 错误
+    kBaseErrorTypeAppError                  = 10022,
+    // 10023 表示无效存储类型
+    kBaseErrorTypeInvalidMemoryType         = 10023,
+    // 10024 表示内部存储器错误
+    kBaseErrorTypeInternalMemoryError       = 10024,
+    // 10025 表示外部存储器写错误
+    kBaseErrorTypeExternalMemoryWriteError  = 10025,
+    // 10026 表示补丁长度错误
+    kBaseErrorTypePatchLengthError          = 10026,
+    // 10027 表示 crc 校验错误
+    kBaseErrorTypeCRCError                  = 10027,
+    // 10028 表示服务退出
+    kBaseErrorTypeServiceExit               = 10028,
 };
 
 

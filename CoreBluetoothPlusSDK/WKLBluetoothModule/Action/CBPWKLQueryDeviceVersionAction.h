@@ -9,7 +9,5 @@
 #import "CBPBaseAction.h"
 
 @interface CBPWKLQueryDeviceVersionAction : CBPBaseAction
-- (NSData *)actionData;
 
-- (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel;
 @end

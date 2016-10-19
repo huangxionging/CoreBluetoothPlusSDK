@@ -104,7 +104,7 @@
 }
 
 
-- (NSData *)actionData {
+- (void) actionData {
     NSDictionary *dict = [self valueForKey: @"parameter"];
     
     NSString *startDate = dict[@"start_date"];
@@ -143,11 +143,9 @@
         bytes[8] = [end dayOfMonth];
     }
     
-    NSData *actionData = [NSData dataWithBytes: bytes length: 20];
-    
-    NSLog(@"%@", actionData);
-    return actionData;
-    
+    NSData *data = [NSData dataWithBytes: bytes length: 20];
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 

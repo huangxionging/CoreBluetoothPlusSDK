@@ -10,8 +10,4 @@
 
 @interface CBPWKLSynchronizeStepAction : CBPBaseAction
 
-- (NSData *)actionData;
-
-- (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel;
-
 @end

@@ -10,9 +10,5 @@
 
 @interface CBPWKLBindDeviceAction : CBPBaseAction
 
-/**
- *  绑定操作
- */
-- (NSData *)actionData;
 
 @end

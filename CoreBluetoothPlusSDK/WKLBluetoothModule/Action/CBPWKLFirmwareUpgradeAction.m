@@ -99,10 +99,10 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
 }
 
 #pragma mark- 数据
-- (NSData *)actionData {
+- (void) actionData {
     
     if (self.actionFirstData) {
-        return self.actionFirstData;
+        return;
     }
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     
@@ -141,10 +141,9 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     
     self.actionFirstData = [NSData dataWithBytes: bytes length: 20];
     
-//    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackAnswer:",self.actionFirstData, nil];
-    NSLog(@"%@", self.actionFirstData);
     
-    return self.actionFirstData;
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", self.actionFirstData, nil];
 }
 
 #pragma mark- 处理返回数据
@@ -527,7 +526,7 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
     model.writeType = CBCharacteristicWriteWithResponse;
     model.characteristicString = [self.characteristicUUIDString lowercaseString];
     model.keyword = @"0x05";
-//    [self.timer fire];
+
     // 最后一个长包的最后一个短包
     id result = model;
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];

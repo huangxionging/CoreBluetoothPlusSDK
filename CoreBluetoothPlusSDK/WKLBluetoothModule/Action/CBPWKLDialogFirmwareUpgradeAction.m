@@ -9,14 +9,8 @@
 #import "CBPWKLDialogFirmwareUpgradeAction.h"
 #import "CBPDispatchMessageManager.h"
 #import "CBPHexStringManager.h"
-
-static NSString * SPOTA_SERVICE_UUID     = @"0000fef5-0000-1000-8000-00805f9b34fb";
-static NSString * SPOTA_MEM_DEV_UUID     = @"8082caa8-41a6-4021-91c6-56f9b954cc34";
-static NSString * SPOTA_GPIO_MAP_UUID    = @"724249f0-5ec3-4b5f-8804-42345af08651";
-static NSString * SPOTA_MEM_INFO_UUID    = @"6c53db25-47a1-45fe-a022-7c92fb334fd4";
-static NSString * SPOTA_PATCH_LEN_UUID   = @"9d84b9a3-000c-49d8-9183-855b673fda31";
-static NSString * SPOTA_PATCH_DATA_UUID  = @"457871e8-d516-4ca1-9116-57d0b17b9cb2";
-static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c88";
+#import "CBPWKLDialogUpgradeServiceCharacteristicManager.h"
+#import "CBPWKLDialogUpgradeServiceCharacteristicModel.h"
 
 enum upgradeType
 {
@@ -125,6 +119,9 @@ static unsigned int crc_tab[256] = {
     NSString *mSettings;
     
     Byte *versionData;            //保存固件数据
+    
+    // 切换设备服务信号
+    void (^_changeDeviceServiceSingal)();
 }
 
 // 长指令长度字节数
@@ -165,12 +162,11 @@ static unsigned int crc_tab[256] = {
     return interfaces;
 }
 
-- (NSData *)actionData {
+- (void) actionData {
     
     if (self.actionFirstData) {
-        return self.actionFirstData;
+        return;
     }
-    
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     Byte bytes[20] = {0};
     bytes[0] = 0x5a;
@@ -181,7 +177,12 @@ static unsigned int crc_tab[256] = {
     versionData = (Byte *)[self.firmwareData bytes];
     self.longActionLength = self.firmwareData.length;
     self.devceID = parameter[@"device_id"];
-    NSAssert(self.devceID, @"设备 id 必须有");
+    if (!self.devceID) {
+        CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeParameterError info: @"缺参数 device_id"];
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
+        return;
+    }
+//    NSAssert(self.devceID, @"设备 id 必须有");
     
     // 设置超时时间为 15 s
     [self setValue: @"15.0" forKey: @"_timeOutInterval"];
@@ -191,90 +192,163 @@ static unsigned int crc_tab[256] = {
     bytes[1] = 0x11;
     
     self.actionFirstData = [NSData dataWithBytes: bytes length: 3];
+    NSLog(@"命令数据: %@", self.actionFirstData);
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", self.actionFirstData, nil];
+}
+
+- (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
+    NSLog(@"接收数据: %@", updateDataModel.actionData);
     
-    NSLog(@"%@", self.actionFirstData);
+    if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser && updateDataModel.actionData) {
+        
+        Byte *bytes = (Byte *)[updateDataModel.actionData bytes];
+        
+        // 0x5b110001 表示允许升级
+        if (bytes[0] == 0x5b && bytes[1] == 0x11 && bytes[3] == 0x01) {
+            // 允许升级, 切换设备服务
+            if (_changeDeviceServiceSingal) {
+                _changeDeviceServiceSingal();
+            }
+        }
+    }
+}
+
+- (void) writeStatusChange: (CBPBaseActionDataModel *) writeDataModel {
     
-    return self.actionFirstData;
+    if (writeDataModel.error) {
+        
+        if (mSpotaWriteStatus == SPOTA_WRITE_SUCESS) {
+            // 进度
+            NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+            double progressValue = 1.0;
+            // 取 4 位小数
+            NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+            // 进度
+            [progressData setObject: progress forKey: @"progress"];
+            id result = progressData;
+            // 调度进度
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", result, nil];
+            
+            // 完成信息
+            // 待回传的结果
+            NSMutableDictionary *success = [NSMutableDictionary dictionaryWithCapacity: 5];
+            NSString *code = @"0";
+            [success setObject: code forKey: @"code"];
+            // 回传结果
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", success, nil];
+        }
+        
+    }else
+    {
+        switch (mSpotaWriteStatus) {
+            case SPOTA_WRITE_MEM_DEV:
+            {
+                [self suotaWriteMemGpioMap];
+            }
+                break;
+            case SPOTA_WRITE_GPIO_MAP:
+            {
+                [self suotaWriteDataLen:mBlockSize];
+                mBlockOffset = 0;
+                mBlockLength = (mImageDataLength - mBlockOffset) > mBlockSize ? mBlockSize
+                : (mImageDataLength - mBlockOffset);
+            }
+                break;
+            case SPOTA_WRITE_PATH_LEN:
+            {
+                double progressValue = 0;
+                // 取 4 位小数
+                NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+                NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+                // 进度
+                [progressData setObject: progress forKey: @"progress"];
+                id result = progressData;
+                // 调度进度
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", result, nil];
+                mChunckOffset=0;
+                mChunckLength = (mBlockLength - mChunckOffset) > mChunckSize ? mChunckSize
+                : (mBlockLength - mChunckOffset);
+                mIsLastChunk = false;
+                [self suotaWriteChunk];
+                
+            }
+                break;
+            case SPOTA_WRITE_PATH_DATA:
+            {
+                if (!mIsLastChunk) {
+                    if ([self isLastChunk]) {
+                        mIsLastChunk = true;
+                    }
+                }
+                [self suotaWriteChunk];
+            }
+                break;
+            case SPOTA_WRITE_SUCESS:
+            {
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }
 
 }
 
+- (void) handleFirstAnswer {
+    mI2cSclGpio = 2;
+    mI2cSdaGpio = 3;
+    mAddress = 0x50;
+    mSpiCsGpio = 3;
+    mSpiClkGpio = 0;
+    mSpiMosiGpio = 6;
+    mSpiMisoGpio = 5;
+    mMemoryType = SPI_TYPE;
+    mSpotaWriteStatus = -1;
+    readDataIsOver = false;
+    mBlockSize = 240;
+    mBlockLength = 0;
+    mBlockOffset = 0;
+    mImageDataLength = 0;
+    mChunckSize = 20;
+    mChunckLength = 0;
+    mChunckOffset = 0;
+    mIsLastChunk = false;
+    mIsWriteLastLen = false;
+    mSettings = @"spi:clk=0x00,cs=0x03,mosi=0x06,miso=0x05,blocksize=240";
+    
+    [self checkSum];
+    [self setSuotaSettings:mSettings];
+    mIsWriteLastLen = false;
+    [self suotaWriteMemDev];
+}
 
--(NSArray *)privateHandlerBTaddress
+- (NSArray *) handleMacAddress
 {
+    // device_id @"00 cd ff 00 1c 22 "
     
-    NSMutableArray *writeArrayList=[NSMutableArray array];
-    NSMutableString *valueString=[NSMutableString stringWithString: self.devceID];
-    valueString=[NSMutableString stringWithString:[valueString substringFromIndex:6]];
-    [valueString appendString:@"-"];
+    Byte *bytes = [[CBPHexStringManager shareManager] bytesForString: self.devceID];
     
-    NSMutableString *tmpValue=[NSMutableString stringWithString:(NSString *)valueString];
-    NSString *itemValue=[NSString string];
-    while ([tmpValue rangeOfString:@"-"].location !=NSNotFound) {
+    NSInteger count = self.devceID.length / 2;
+    
+    NSMutableArray *writeArrayList = [NSMutableArray arrayWithCapacity: 6];
+    
+    for (NSInteger index = 0; index < count; ++index) {
+        Byte byte = bytes[index];
         
-        NSInteger location=[tmpValue rangeOfString:@"-"].location;
-        itemValue = [tmpValue substringWithRange:NSMakeRange(location-2, location)];
-        tmpValue =(NSMutableString *)[tmpValue substringFromIndex:location+1];
-        int tmp;
-        if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"a"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"A"]) {
-            tmp = 0x0a<<4;
-            
-        }else if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"b"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"B"])
-        {
-            tmp = 0x0b<<4;
-        }else if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"c"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"C"])
-        {
-            tmp = 0x0c<<4;
-        }else if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"d"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"D"])
-        {
-            tmp = 0x0d<<4;
-        }else if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"e"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"E"])
-        {
-            tmp = 0x0e<<4;
-        }else if ([[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"f"] || [[itemValue substringWithRange:NSMakeRange(0,1)] isEqualToString:@"F"])
-        {
-            tmp = 0x0f<<4;
-        }else
-        {
-            tmp =[[itemValue substringWithRange:NSMakeRange(0,1)] intValue]<<4;
-        }
-        
-        if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"a"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"A"] ) {
-            tmp |=0x0a;
-        }else if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"b"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"B"])
-        {
-            tmp |=0x0b;
-        }
-        else if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"c"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"C"])
-        {
-            tmp |=0x0c;
-        }
-        else if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"d"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"D"])
-        {
-            tmp |=0x0d;
-        }
-        else if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"e"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"E"])
-        {
-            tmp |=0x0e;
-        }
-        else if ([[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"f"] || [[itemValue substringWithRange:NSMakeRange(1,1)] isEqualToString:@"F"])
-        {
-            tmp |=0x0f;
-        }else
-        {
-            tmp |=[[itemValue substringWithRange:NSMakeRange(1,1)] intValue];
-        }
-        
-        
-        [writeArrayList addObject:[NSNumber numberWithInt:tmp]];
+        NSInteger value = (byte & 0xf0) | (byte & 0x0f);
+        // 添加数据
+        [writeArrayList addObject: [NSNumber numberWithInteger: value]];
         
     }
     
     return (NSArray *)writeArrayList;
 }
 
--(void)privateCheckSum
+-(void)checkSum
 {
-    NSArray *btAddressArrayList=[self privateHandlerBTaddress];
+    NSArray *btAddressArrayList=[self handleMacAddress];
     mImageDataLength= self.longActionLength;
     Byte  crc_code = 0;
     Byte crc_32bit[4];
@@ -282,94 +356,106 @@ static unsigned int crc_tab[256] = {
     crc_32bit[1]=0xff;
     crc_32bit[2]=0xff;
     crc_32bit[3]=0xff;
-    for (int i=0;i<mImageDataLength;i++) {
-        int tmp;
-        if(i>0x417 && i<0x41e)
+    
+    for (NSInteger index = 0; index < mImageDataLength; index++) {
+        NSInteger tmp;
+        
+        // 在此范围内
+        if(index > 0x417 && index< 0x41e)
         {
-            tmp = [btAddressArrayList[6-(i-0x417)] intValue];
-            versionData[i]=tmp;
+            tmp = [btAddressArrayList[6 - (index - 0x417)] integerValue];
+            versionData[index] = tmp;
         }
-        tmp=versionData[i];
-        if (i>63) {
+        
+        tmp = versionData[index];
+        
+        // 大于63
+        if (index > 63) {
             Byte crt[4];
-            crt[0] = ((crc_tab[(crc_32bit[0]^tmp)&0x000000ff]>>0)&0xff);
-            crt[1] = ((crc_tab[(crc_32bit[0]^tmp)&0x000000ff]>>8)&0xff);
-            crt[2] = ((crc_tab[(crc_32bit[0]^tmp)&0x000000ff]>>16)&0xff);
-            crt[3] = ((crc_tab[(crc_32bit[0]^tmp)&0x000000ff]>>24)&0xff);
+            crt[0] = ((crc_tab[(crc_32bit[0] ^ tmp) & 0x000000ff] >> 0) & 0xff);
+            crt[1] = ((crc_tab[(crc_32bit[0] ^ tmp) & 0x000000ff] >> 8) & 0xff);
+            crt[2] = ((crc_tab[(crc_32bit[0] ^ tmp) & 0x000000ff] >> 16) & 0xff);
+            crt[3] = ((crc_tab[(crc_32bit[0] ^ tmp) & 0x000000ff] >> 24) & 0xff);
             
-            crc_32bit[0] = crc_32bit[1]&0x000000ff;
-            crc_32bit[1] = crc_32bit[2]&0x000000ff;
-            crc_32bit[2] = crc_32bit[3]&0x000000ff;
+            crc_32bit[0] = crc_32bit[1] & 0x000000ff;
+            crc_32bit[1] = crc_32bit[2] & 0x000000ff;
+            crc_32bit[2] = crc_32bit[3] & 0x000000ff;
             crc_32bit[3] = 0;
             
-            crc_32bit[0] = ((crc_32bit[0]&0x0000000ff)^(crt[0]&0x000000ff))&0x0000000ff;
-            crc_32bit[1] = ((crc_32bit[1]&0x0000000ff)^(crt[1]&0x000000ff))&0x0000000ff;
-            crc_32bit[2] = ((crc_32bit[2]&0x0000000ff)^(crt[2]&0x000000ff))&0x0000000ff;
-            crc_32bit[3] = ((crc_32bit[3]&0x0000000ff)^(crt[3]&0x000000ff))&0x0000000ff;
+            crc_32bit[0] = ((crc_32bit[0] & 0x0000000ff) ^ (crt[0] & 0x000000ff)) & 0x0000000ff;
+            crc_32bit[1] = ((crc_32bit[1] & 0x0000000ff) ^ (crt[1] & 0x000000ff)) & 0x0000000ff;
+            crc_32bit[2] = ((crc_32bit[2] & 0x0000000ff) ^ (crt[2] & 0x000000ff)) & 0x0000000ff;
+            crc_32bit[3] = ((crc_32bit[3] & 0x0000000ff) ^ (crt[3] & 0x000000ff)) & 0x0000000ff;
         }
     }
     
-    crc_32bit[0] = (crc_32bit[0]^0xff)&0x000000ff;
-    crc_32bit[1] = (crc_32bit[1]^0xff)&0x000000ff;
-    crc_32bit[2] = (crc_32bit[2]^0xff)&0x000000ff;
-    crc_32bit[3] = (crc_32bit[3]^0xff)&0x000000ff;
-    for (int j=0; j<4; j++) {
-        int crc = crc_32bit[j] & 0xff;
-        versionData[8+j] =crc;
+    crc_32bit[0] = (crc_32bit[0] ^ 0xff) & 0x000000ff;
+    crc_32bit[1] = (crc_32bit[1] ^ 0xff) & 0x000000ff;
+    crc_32bit[2] = (crc_32bit[2] ^ 0xff) & 0x000000ff;
+    crc_32bit[3] = (crc_32bit[3] ^ 0xff) & 0x000000ff;
+    for (NSInteger index1 = 0; index1< 4; index1++) {
+        NSInteger crc = crc_32bit[index1] & 0xff;
+        versionData[8 + index1] = crc;
     }
+    
     crc_code = 0;
-    for (int m=0; m<mImageDataLength;m++) {
-        int tmp = versionData[m];
+    
+    for (NSInteger index2 = 0; index2 < mImageDataLength; index2++) {
+        NSInteger tmp = versionData[index2];
         crc_code ^= tmp;
     }
-    int ret =crc_code & 0xff;
-    versionData[mImageDataLength]=ret;
-    mImageDataLength+=1;
+    
+    NSInteger ret = crc_code & 0xff;
+    versionData[mImageDataLength] = ret;
+    mImageDataLength += 1;
 }
 
--(BOOL)privateSetSuotaSettings:(NSString *)settings
+-(BOOL) setSuotaSettings: (NSString *)settings
 {
     
     if ([settings rangeOfString:@":"].location==NSNotFound) {
         return false;
     }
+    
     NSString *tmp=[settings substringWithRange:NSMakeRange(0,[settings rangeOfString:@":"].location)];
-    NSString *tmp1=[NSString string];
-    NSString *tmp2=[NSString string];
+ 
+    Byte tmpByte = 0;
     if ([tmp isEqualToString:@"i2c"]) {
-        if ([settings rangeOfString:@"scl=0x"].location==NSNotFound
-            || [settings rangeOfString:@"sda=0x"].location==NSNotFound
-            || [settings rangeOfString:@"blocksize="].location==NSNotFound
-            || [settings rangeOfString:@"address="].location==NSNotFound
+        if ([settings rangeOfString:@"scl=0x"].location == NSNotFound
+            || [settings rangeOfString:@"sda=0x"].location == NSNotFound
+            || [settings rangeOfString:@"blocksize="].location == NSNotFound
+            || [settings rangeOfString:@"address="].location == NSNotFound
             ) {
             return false;
         }
+        // 内存 type
         mMemoryType = I2C_TYPE;
-        tmp=[settings substringWithRange:NSMakeRange([settings rangeOfString:@"scl=0x"].location+6,[settings rangeOfString:@"scl=0x"].location+8)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mI2cSclGpio= ([tmp1 intValue]<<4) | [tmp2 intValue];
+        tmp = [settings substringWithRange:NSMakeRange([settings rangeOfString:@"scl=0x"].location+6,[settings rangeOfString:@"scl=0x"].location+8)];
+        // 解析 scl
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
         
-        tmp=[settings substringWithRange:NSMakeRange([settings rangeOfString:@"sda=0x"].location+6,[settings rangeOfString:@"sda=0x"].location+8)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mI2cSdaGpio=([tmp1 intValue]<<4) | [tmp2 intValue];
+        mI2cSclGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
         
-        tmp=[settings substringWithRange:NSMakeRange([settings rangeOfString:@"address=0x"].location+6,[settings rangeOfString:@"sda=0x"].location+8)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mAddress=([tmp1 intValue]<<4) | [tmp2 intValue];
+        // 解析 sda
+        tmp = [settings substringWithRange:NSMakeRange([settings rangeOfString:@"sda=0x"].location + 6,[settings rangeOfString:@"sda=0x"].location + 8)];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        mI2cSdaGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
         
-        tmp=[settings substringWithRange:NSMakeRange([settings rangeOfString:@"blocksize="].location+10,settings.length)];
+        // 解析 address
+        tmp = [settings substringWithRange:NSMakeRange([settings rangeOfString:@"address=0x"].location + 6, [settings rangeOfString:@"address=0x"].location + 8)];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        
+        mAddress = (tmpByte & 0xf0) | (tmpByte & 0x0f);
+        
+        // 解析 blocksize
+        tmp=[settings substringWithRange:NSMakeRange([settings rangeOfString:@"blocksize="].location + 10,settings.length)];
         if (tmp) {
-            mBlockSize=[tmp intValue];
-        }else
-        {
-            mBlockSize=240;
+            mBlockSize = [tmp intValue];
+        } else {
+            mBlockSize = 240;
         }
         
-    }else if ([tmp isEqualToString:@"spi"])
-    {
+    } else if ([tmp isEqualToString:@"spi"]) {
         if ([settings rangeOfString:@"blocksize="].location==NSNotFound
             || [settings rangeOfString:@"clk=0x"].location==NSNotFound
             || [settings rangeOfString:@"cs=0x"].location==NSNotFound
@@ -379,281 +465,305 @@ static unsigned int crc_tab[256] = {
             return false;
         }
         
-        mMemoryType=SPI_TYPE;
+        // SPI 类型
+        mMemoryType = SPI_TYPE;
+        
+        // 解析 clk
         tmp=[settings substringWithRange:NSMakeRange(([settings rangeOfString:@"clk=0x"].location+6),2)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mSpiClkGpio= ([tmp1 intValue]<<4) | [tmp2 intValue];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        mSpiClkGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
         
+        // 解析 cs
         tmp=[settings substringWithRange:NSMakeRange(([settings rangeOfString:@"cs=0x"].location+5),2)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mSpiCsGpio= ([tmp1 intValue]<<4) | [tmp2 intValue];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        mSpiCsGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
+        
+        // 解析 mosi
         tmp=[settings substringWithRange:NSMakeRange(([settings rangeOfString:@"mosi=0x"].location+7),2)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mSpiMosiGpio= ([tmp1 intValue]<<4) | [tmp2 intValue];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        mSpiMosiGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
         
+        // 解析 miso
         tmp=[settings substringWithRange:NSMakeRange(([settings rangeOfString:@"miso=0x"].location+7),2)];
-        tmp1=[tmp substringWithRange:NSMakeRange(0,1)];
-        tmp2=[tmp substringWithRange:NSMakeRange(1,1)];
-        mSpiMisoGpio= ([tmp1 intValue]<<4) | [tmp2 intValue];
+        tmpByte = *[[CBPHexStringManager shareManager] bytesForString: tmp];
+        mSpiMisoGpio = (tmpByte & 0xf0) | (tmpByte & 0x0f);
         
-        tmp=[settings substringWithRange:NSMakeRange(([settings rangeOfString:@"blocksize="].location+10),3)];
+        // 解析 blocksize
+        tmp = [settings substringWithRange:NSMakeRange(([settings rangeOfString:@"blocksize="].location+10),3)];
         if (tmp) {
-            mBlockSize=[tmp intValue];
-        }else
-        {
-            mBlockSize=240;
+            mBlockSize = [tmp intValue];
+        } else {
+            mBlockSize = 240;
         }
-        
     }
     return true;
 }
 
--(void)privateSuotaWriteMemDev
-{
+-(void) suotaWriteMemDev {
     Byte mem_dev[4]={0};
-    mSpotaWriteStatus=SPOTA_WRITE_MEM_DEV;
-    if(mMemoryType==I2C_TYPE)
-    {
-        mem_dev[3]=0x12;
-    }else if (mMemoryType == SPI_TYPE)
-    {
-        mem_dev[3]=0x13;
+    mSpotaWriteStatus = SPOTA_WRITE_MEM_DEV;
+    if(mMemoryType == I2C_TYPE) {
+        mem_dev[3] = 0x12;
+    } else if (mMemoryType == SPI_TYPE) {
+        mem_dev[3] = 0x13;
     }
-    NSData *data=[NSData dataWithBytes:mem_dev length:4];
+    NSData *data = [NSData dataWithBytes:mem_dev length:4];
     
     CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
-    
     
     model.actionData = data;
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [SPOTA_MEM_DEV_UUID lowercaseString];
-    model.keyword = @"0x05";
+    model.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.MEM_DEV_UUID.UUIDString lowercaseString];
+    
     // 回复数据
     id result = model;
     // 回调
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
-    
-//    if (client_.activePeripheral && client_.activePeripheral.state == CBPeripheralStateConnected && client_.spota_mem_dev_ch) {
-//        DLog(@"%@, sendData:%@, len=%d\n ", self, data, (int)data.length);
-//        [client_.activePeripheral writeValue:data forCharacteristic:client_.spota_mem_dev_ch type:CBCharacteristicWriteWithResponse];
-//    }
 }
 
--(void)privateSuotaWriteMemGpioMap
-{
-    Byte mem_gpio_map[4]={0};
-    if (mMemoryType ==I2C_TYPE) {
-        mem_gpio_map[0]=mI2cSdaGpio;
-        mem_gpio_map[1]=mI2cSclGpio;
-        mem_gpio_map[2]=mAddress;
-    }else if (mMemoryType == SPI_TYPE)
-    {
-        mem_gpio_map[0]=mSpiClkGpio;
-        mem_gpio_map[1]=mSpiCsGpio;
-        mem_gpio_map[2]=mSpiMosiGpio;
-        mem_gpio_map[3]=mSpiMisoGpio;
+-(void)suotaWriteMemGpioMap {
+    Byte mem_gpio_map[4] = {0};
+    if (mMemoryType == I2C_TYPE) {
+        mem_gpio_map[0] = mI2cSdaGpio;
+        mem_gpio_map[1] = mI2cSclGpio;
+        mem_gpio_map[2] = mAddress;
+    } else if (mMemoryType == SPI_TYPE) {
+        mem_gpio_map[0] = mSpiClkGpio;
+        mem_gpio_map[1] = mSpiCsGpio;
+        mem_gpio_map[2] = mSpiMosiGpio;
+        mem_gpio_map[3] = mSpiMisoGpio;
     }
-    mSpotaWriteStatus=SPOTA_WRITE_GPIO_MAP;
-    NSData *data=[NSData dataWithBytes:mem_gpio_map length:4];
+    mSpotaWriteStatus = SPOTA_WRITE_GPIO_MAP;
+    NSData *data = [NSData dataWithBytes: mem_gpio_map length:4];
     
     CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
-    
-    
     model.actionData = data;
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [SPOTA_GPIO_MAP_UUID lowercaseString];
-    model.keyword = @"0x05";
+    model.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.GPIO_MAP_UUID.UUIDString lowercaseString];;
     // 回复数据
     id result = model;
     // 回调
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
-//    if (client_.activePeripheral && client_.activePeripheral.state == CBPeripheralStateConnected && client_.spota_gpio_map_ch) {
-//        DLog(@"%@, sendData:%@, len=%d\n ", self, data, (int)data.length);
-//        [client_.activePeripheral writeValue:data forCharacteristic:client_.spota_gpio_map_ch type:CBCharacteristicWriteWithResponse];
-//        
-//    }
 }
 
 
--(void)privateSuotaWriteDataLen:(int)datalen
-{
-    Byte len[2]={0};
-    len[0]=(datalen & 0xff);
-    len[1]=((datalen>>8) & 0xff);
-    mSpotaWriteStatus=SPOTA_WRITE_PATH_LEN;
+-(void)suotaWriteDataLen: (NSInteger) datalen {
+    Byte len[2] = {0};
+    len[0] = (datalen & 0xff);
+    len[1] = ((datalen >> 8) & 0xff);
+    // 更改状态
+    mSpotaWriteStatus = SPOTA_WRITE_PATH_LEN;
     NSData *data=[NSData dataWithBytes:len length:2];
     CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
-    
-    
     model.actionData = data;
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [SPOTA_PATCH_LEN_UUID lowercaseString];
-    model.keyword = @"0x05";
+    model.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.PATCH_LEN_UUID.UUIDString lowercaseString];;
     // 回复数据
     id result = model;
     // 回调
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
     
-//    if (client_.activePeripheral && client_.activePeripheral.state == CBPeripheralStateConnected && client_.spota_patch_len_ch) {
-//        DLog(@"%@, sendData:%@, len=%d\n ", self, data, (int)data.length);
-//        [client_.activePeripheral writeValue:data forCharacteristic:client_.spota_patch_len_ch type:CBCharacteristicWriteWithResponse];
-//    }
 }
 
--(void)privateSuotaWriteChunk
-{
-    Byte temp[20]={0};
+-(void)suotaWriteChunk {
+    Byte temp[20] = {0};
     
-    NSLog(@"mBlockOffset+mChunckOffset=%d",mBlockOffset+mChunckOffset);
-    for (int i=0;i<mChunckLength; i++) {
-        temp[i] =versionData[mBlockOffset+mChunckOffset+i];
+    NSLog(@"mBlockOffset+mChunckOffset=%ld",(long)mBlockOffset + mChunckOffset);
+    for (NSInteger index = 0; index < mChunckLength; ++index) {
+        temp[index] = versionData[mBlockOffset + mChunckOffset + index];
     }
-    NSData *data=[NSData dataWithBytes:temp length:mChunckLength];
-    if (data.length==0) {
+    NSData *data = [NSData dataWithBytes:temp length:mChunckLength];
+    if (data.length == 0) {
         return;
     }
+    // 更改状态
     mSpotaWriteStatus = SPOTA_WRITE_PATH_DATA;
-    
+
+    // 写数据
     CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
-    
-    
     model.actionData = data;
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [SPOTA_PATCH_DATA_UUID lowercaseString];
-    model.keyword = @"0x05";
+    model.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.PATCH_DATA_UUID.UUIDString lowercaseString];
     // 回复数据
     id result = model;
     // 回调
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
-//    if (client_.activePeripheral && client_.activePeripheral.state == CBPeripheralStateConnected && client_.spota_patch_data_ch) {
-//        DLog(@"%@, sendData:%@, len=%d\n ", self, data, (int)data.length);
-//        [client_.activePeripheral writeValue:data forCharacteristic:client_.spota_patch_data_ch type:CBCharacteristicWriteWithResponse];
-//    }
-    
-    [self privateNextChunk];
+
+    [self handleNextChunk];
 }
 
 
--(void)privateSuotaWriteEnd
-{
-    Byte endCode[4]={0};
-    endCode[3]=0xfe;
-    mSpotaWriteStatus=SPOTA_WRITE_SUCESS;
+-(void)suotaWriteEnd {
+    // 最后一包数据
+    Byte endCode[4] = {0};
+    endCode[3] = 0xfe;
+    mSpotaWriteStatus = SPOTA_WRITE_SUCESS;
     NSData *data=[NSData dataWithBytes:endCode length:4];
     CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
     
-    
     model.actionData = data;
     model.actionDatatype = kBaseActionDataTypeUpdateSend;
     model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [SPOTA_MEM_DEV_UUID lowercaseString];
-    model.keyword = @"0x05";
+    model.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.MEM_DEV_UUID.UUIDString lowercaseString];;
     // 回复数据
     id result = model;
     // 回调
     [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", result, nil];
     
-//    if (client_.activePeripheral && client_.activePeripheral.state == CBPeripheralStateConnected && client_.spota_mem_dev_ch) {
-//        DLog(@"%@, sendData:%@, len=%d\n ", self, data, (int)data.length);
-//        [client_.activePeripheral writeValue:data forCharacteristic:client_.spota_mem_dev_ch type:CBCharacteristicWriteWithResponse];
-//    }
-//    upgradeSucBlock_(@"dialogOTA升级成功");
-//    [[WklBleBaseOperation sharedInstance] privateStopDialogOTAUpgrade];
 }
 
--(void)privateNextChunk
+-(void) handleNextChunk
 {
+    // 计算偏移量
     mChunckOffset += mChunckLength;
     mChunckLength = (mBlockLength - mChunckOffset) > mChunckSize ? mChunckSize
 				: (mBlockLength - mChunckOffset);
 }
 
--(BOOL)privateIsLastBlock
-{
+- (BOOL)isLastBlock {
     return (mBlockOffset + mBlockLength) == mImageDataLength;
 }
 
--(BOOL)privateIsLastChunk
-{
+-(BOOL)isLastChunk {
     return (mChunckOffset + mChunckLength) == mBlockLength;
 }
 
--(void)privateNextBlock
-{
+-(void)handleNextBlock {
     mBlockOffset += mBlockLength;
     mBlockLength = (mImageDataLength - mBlockOffset) > mBlockSize ? mBlockSize
 				: (mImageDataLength - mBlockOffset);
 }
 
--(void)privateOnSuotaServiceStatusChange:(CBCharacteristic *)characteristic
-{
-    int length = (int)[characteristic.value length];
-    Byte temp[length];
-    [characteristic.value getBytes:temp length:length];
+-(void)onSuotaServiceStatusChange: (CBPBaseActionDataModel *) actionModel {
     
+    NSLog(@"%@", actionModel.actionData);
+    Byte *temp = (Byte *)[actionModel.actionData bytes];
+    NSString *error = nil;
+    BaseErrorType type = 0;
+    // 根据 temp[0] 来判断
     switch (temp[0]) {
-        case SPOTAR_SRV_EXIT:
-        case SPOTAR_CRC_ERR:
-        case SPOTAR_PATCH_LEN_ERR:
-        case SPOTAR_EXT_MEM_WRITE_ERR:
-        case SPOTAR_INT_MEM_ERR:
-        case SPOTAR_INVAL_MEM_TYPE:
-        case SPOTAR_APP_ERROR:
+        case SPOTAR_SRV_EXIT: {
+            error = @"服务退出";
+            type = kBaseErrorTypeServiceExit;
+            break;
+        }
+        case SPOTAR_CRC_ERR: {
+            error = @"CRC 校验错误";
+            type = kBaseErrorTypeCRCError;
+            break;
+        }
+        case SPOTAR_PATCH_LEN_ERR: {
+            error = @"补丁长度错误";
+            type = kBaseErrorTypePatchLengthError;
+            break;
+        }
+        case SPOTAR_EXT_MEM_WRITE_ERR: {
+            error = @"外部存储器写错误";
+            type = kBaseErrorTypeExternalMemoryWriteError;
+            break;
+        }
+        case SPOTAR_INT_MEM_ERR: {
+            error = @"内部存储器错误";
+            type = kBaseErrorTypeInternalMemoryError;
+            break;
+        }
+        case SPOTAR_INVAL_MEM_TYPE: {
+            error = @"无效存储类型";
+            type = kBaseErrorTypeInvalidMemoryType;
+            break;
+        }
+        case SPOTAR_APP_ERROR: {
+            error = @"App 错误";
+            type = kBaseErrorTypeAppError;
+            break;
+        }
         case SPOTAR_INVAL_IMG_BANK:
         case SPOTAR_INVAL_IMG_HDR:
-        case SPOTAR_INVAL_IMG_SIZE:
-        case SPOTAR_SAME_IMG_ERR:
-        case SPOTAR_EXT_MEM_READ_ERR:
-        case SPOTAR_INVAL_PRODUCT_HDR:
-        {
-            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"固件不完整"                                                                      forKey:NSLocalizedDescriptionKey];
-//            WklBleError *aError = [[WklBleError alloc] initWithWklBleErrorType:WklBleErrorTypeFirmware userInfo:userInfo];
-//            upgradeFailureBlock_(aError);
-            
-        }
+        case SPOTAR_INVAL_IMG_SIZE: {
+            error = @"无效固件";
+            type = kBaseErrorTypeFileInvalid;
             break;
-        case SPOTAR_CMP_OK:
+        }
+        case SPOTAR_INVAL_PRODUCT_HDR: {
+            error = @"无效硬件产品";
+            type = kBaseErrorTypeInvalidProductHardware;
+            break;
+        }
+        case SPOTAR_EXT_MEM_READ_ERR: {
+            error = @"外部存储器读取错误";
+            type = kBaseErrorTypeExternalMemoryReadError;
             
-        {
-            if(mSpotaWriteStatus == SPOTA_WRITE_PATH_DATA)
-            {
-                int progress = 100*(mBlockOffset+mChunckOffset)/mImageDataLength;
-//                upgradeProgressBlock_(progress);
-                [self privateNextBlock];
-                if ([self privateIsLastBlock]) {
+            break;
+        }
+        case SPOTAR_SAME_IMG_ERR: {
+            error = @"设备当前固件与目标固件相同";
+            type = kBaseErrorTypeFirmwareSame;
+            break;
+        }
+            
+        case SPOTAR_CMP_OK: {
+            if(mSpotaWriteStatus == SPOTA_WRITE_PATH_DATA) {
+                // 进度
+                NSMutableDictionary *progressData = [NSMutableDictionary dictionaryWithCapacity: 4];
+                
+                double progressValue = (double)(mBlockOffset+mChunckOffset) / mImageDataLength;
+                // 取 4 位小数
+                NSString *progress = [NSString stringWithFormat: @"%0.4lf", progressValue];
+                // 进度
+                [progressData setObject: progress forKey: @"progress"];
+                id result = progressData;
+                // 调度进度
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackProgress:", result, nil];
+                // 处理下一块
+                [self handleNextBlock];
+                
+                // 判断是否是最后一块
+                if ([self isLastBlock]) {
+                    
                     if (!mIsWriteLastLen) {
-                        mIsWriteLastLen=true;
-                        [self privateSuotaWriteDataLen:mBlockLength];
-                    }else
-                    {
-                      //  [client_.activePeripheral readValueForCharacteristic:client_.spota_mem_info_ch];
+                        mIsWriteLastLen = true;
+                        [self suotaWriteDataLen:mBlockLength];
+                    } else {
+                        CBPBaseActionDataModel *actionModel = [[CBPBaseActionDataModel alloc] init];
+                        actionModel.actionDatatype = kBaseActionDataTypeReadData;
+                        actionModel.characteristicString = [[CBPWKLDialogUpgradeServiceCharacteristicManager shareManager].serviceCharacteristicModel.MEM_INFO_UUID.UUIDString lowercaseString];
+                        
+                        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callAnswerResult:", actionModel, nil];
                     }
-                }else
-                {
+                } else {
                     mIsLastChunk = false;
                     mChunckOffset = 0;
                     mChunckLength = (mBlockLength - mChunckOffset) > mChunckSize ? mChunckSize
                     : (mBlockLength - mChunckOffset);
-                    [self privateSuotaWriteChunk];
+                    [self suotaWriteChunk];
                 }
             }
-        }
+            return;
             break;
+        }
         default:
             break;
     }
+    
+    if (error) {
+        CBPBaseError *baseError = [CBPBaseError errorWithcode: type info: error];
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
+    }
+    
     
 }
 
 - (void)dealloc {
     NSLog(@"挂了---");
+}
+
+- (void)timeOut {
+    CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeUpgradeTimeOut info: @"升级超时"];
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
 }
 
 @end

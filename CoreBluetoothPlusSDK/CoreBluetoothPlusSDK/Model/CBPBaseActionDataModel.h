@@ -31,6 +31,11 @@ typedef NS_ENUM(NSUInteger, BaseActionDataType){
      *  @see peripheral:didWriteValueForCharacteristic:error
      */
     kBaseActionDataTypeWriteAnswer,
+    
+    /**
+     * 读取数据
+     */
+    kBaseActionDataTypeReadData,
 };
 
 @interface CBPBaseActionDataModel : NSObject

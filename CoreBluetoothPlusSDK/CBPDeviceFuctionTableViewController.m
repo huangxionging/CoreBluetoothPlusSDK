@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) CBPBaseWorkingManager *manager;
 
+@property (nonatomic, copy) NSString *deviceID;
+
 @end
 
 @implementation CBPDeviceFuctionTableViewController
@@ -145,9 +147,44 @@
             [self dialogUpgrade];
             break;
         }
+        case 29: {
+            break;
+        }
+        case 30: {
+            [self synchronizeHeartRate];
+            break;
+        }
         default:
             break;
     }
+
+}
+
+- (void) synchronizeHeartRate {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 5];
+    // 操作类型
+    [parameter setObject: @"2016-10-12" forKey: @"start_date"];
+    
+    NSString *end = [[NSDate date] stringForCurrentDateWithFormatString: @"yyyy-MM-dd"];
+    [parameter setObject: end forKey: @"end_date"];
+    
+    
+    [self.manager post: @"ble://synchronize_heart_rate_data" parameters: parameter progress:^(id progressData) {
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"同步进度: %0.2lf%%", [progress doubleValue] * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
+        
+        
+        NSLog(@"心率数据数据: %@", responseObject);
+        NSLog(@"心率参数%@", parameter);
+        SynchronizeStepTableViewController *vc = [[SynchronizeStepTableViewController alloc] init];
+        vc.parameter = parameter;
+        vc.result = responseObject;
+        [self.navigationController pushViewController: vc animated: YES];
+        
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
 
 }
 
@@ -155,6 +192,29 @@
 - (void) dialogUpgrade {
     // dialog 升级的 key
     self.manager.upgradeControllerKey = @"com.dialog.controller";
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"W079A_V0.18_B20151103" ofType: @"img"];
+    NSString *devceID = self.deviceID;
+    // 文件路径名
+    [parameter setObject: filePath forKey: @"file_path"];
+    
+    if (devceID) {
+        [parameter setObject: devceID forKey: @"device_id"];
+    }
+    
+    // 点亮 led
+    [self.manager post: @"ble://dialog_firmware_upgrade" parameters: parameter progress:^(id progressData) {
+        
+        NSString *progress = [progressData objectForKey: @"progress"];
+        NSLog(@"升级进度: %0.2lf%%", [progress doubleValue] * 100);
+    } success:^(CBPBaseAction *action, id responseObject) {
+        NSLog(@"%@", responseObject);
+    } failure:^(CBPBaseAction *action, CBPBaseError *error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
+
+    
     
 }
 - (void) quinticUpgrade {
@@ -325,7 +385,7 @@
         
         // 设备类型
 //        NSString *deviceType = responseObject[@"device_type"];
-        
+        self.deviceID = responseObject[@"device_id"];
         NSLog(@"%@", parameter);
         CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
         vc.parameter = parameter;
@@ -433,6 +493,7 @@
     [self.manager post: @"ble://query_device_version" parameters: nil success:^(CBPBaseAction *action, id responseObject) {
         NSLog(@"%@", responseObject);
         CBPShowResultTableViewController *vc = [[CBPShowResultTableViewController alloc] init];
+        self.deviceID = responseObject[@"device_id"];
         vc.parameter = @{@"无":@"无"};
         vc.result = responseObject;
         [self.navigationController pushViewController: vc animated: YES];

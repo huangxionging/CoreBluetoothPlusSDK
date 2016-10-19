@@ -20,9 +20,9 @@ typedef void(^updateDataBlock)(CBPBaseActionDataModel *data);
 typedef void(^writeDataBlock)(CBPBaseActionDataModel *data);
 
 /**
- *  发现服务的特征回调
+ *  发现服务的回调
  */
-typedef void(^discoverServiceBlock) (CBPBaseServiceModel *serviceModel);
+
 
 /**
  *  搜索特征定时器超时回调
@@ -42,9 +42,12 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     writeDataBlock _writeDataBlock;
     
     /**
-     * 发现特征的服务回调
+     * 发现服务回调
      */
-    discoverServiceBlock _discoverServiceBlock;
+    NSArray<CBUUID *>* (^_discoverServiceBlock)(CBPBaseServiceModel *model);
+    
+    // 发现服务的特征回调
+    void (^_discoverServiceCharacteristicBlock)(CBPBaseServiceModel *model, CBPBasePeripheralModel *peripheralModel);
     
     /**
      *  定时器超时回调
@@ -161,6 +164,10 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     self->_timeOutBlock = timerBlock;
 }
 
+- (void)setDiscoverServiceCharacteristicBlock:(void (^)(CBPBaseServiceModel *discoverServiceCharacteristicModel, CBPBasePeripheralModel *peripheralModel))discoverServiceCharacteristicBlock {
+    self->_discoverServiceCharacteristicBlock = discoverServiceCharacteristicBlock;
+}
+
 #pragma mark- 切换外设
 - (void)changePeripheral:(CBPBasePeripheralModel *)peripheralModel {
     // 必须是已连接的外设
@@ -224,15 +231,22 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
     if (self.isChracteristicReady) {
         // 查找特征
         CBPBaseCharacteristicModel *characteristicModel = [self->_chracteristics objectForKey: actionDataModel.characteristicString.lowercaseString];
-        // 两者都有
-        if (characteristicModel && actionDataModel.actionData && [characteristicModel.flag isEqualToString: @"2"]) {
-            // 写数据
-            [self->_peripheralModel.peripheral writeValue: actionDataModel.actionData forCharacteristic: characteristicModel.chracteristic type: actionDataModel.writeType];
+        
+        if (actionDataModel.actionDatatype == kBaseActionDataTypeUpdateSend) {
+            // 两者都有
+            if (characteristicModel && actionDataModel.actionData && [characteristicModel.flag isEqualToString: @"2"]) {
+                // 写数据
+                [self->_peripheralModel.peripheral writeValue: actionDataModel.actionData forCharacteristic: characteristicModel.chracteristic type: actionDataModel.writeType];
+            }
+            else {
+                NSLog(@"发送数据失败");
+                return;
+            }
+        } else if (actionDataModel.actionDatatype == kBaseActionDataTypeReadData) {
+            
+            [self->_peripheralModel.peripheral readValueForCharacteristic: characteristicModel.chracteristic];
         }
-        else {
-            NSLog(@"发送数据失败");
-            return;
-        }
+        
     }
 }
 
@@ -247,7 +261,7 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 }
 
 #pragma mark---设置发现指定特征的服务回调
-- (void) setDiscoverServiceBlock: (void(^)(CBPBaseServiceModel *discoverServiceModel))discoverServiceBlock {
+- (void) setDiscoverServiceBlock: (NSArray<CBUUID *> *(^)(CBPBaseServiceModel *discoverServiceModel))discoverServiceBlock {
     self->_discoverServiceBlock = discoverServiceBlock;
 }
 
@@ -268,10 +282,12 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
 #pragma mark---CBPeripheralDelegate
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     
-    if (self->_discoverServiceBlock) {
+    // 发现特征
+    if (self->_discoverServiceCharacteristicBlock) {
         self->_serviceModel.service = service;
         self->_serviceModel.error = error;
-        self->_discoverServiceBlock(self->_serviceModel);
+        self->_peripheralModel.peripheral = peripheral;
+        self->_discoverServiceCharacteristicBlock(self->_serviceModel, self->_peripheralModel);
     }
 }
 
@@ -290,9 +306,20 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
         return;
     }
     
-   
     for (CBService *service in peripheral.services) {
-        [peripheral discoverCharacteristics: self->_characteristicUUIDs.allValues forService: service];
+        
+        // 回传 model
+        self->_serviceModel.error = error;
+        self->_serviceModel.service = service;
+        // 获取特征
+        NSArray<CBUUID *> *characteristicUUIDs = _discoverServiceBlock(self->_serviceModel);
+        
+        // 非空则发现特征
+        if (characteristicUUIDs) {
+            // 发现特征
+            [peripheral discoverCharacteristics:characteristicUUIDs forService: service];
+        }
+        
     }
 }
 
@@ -317,6 +344,7 @@ typedef void(^discoverCharacteristicTimerBlock)(NSError *error);
         // 特征数据
         self->_actionDataModel.actionData = characteristic.value;
         self->_actionDataModel.characteristicString = characteristic.UUID.UUIDString.lowercaseString;
+        self->_actionDataModel.characteristic = characteristic;
         self->_actionDataModel.error = error;
         self->_actionDataModel.actionDatatype = kBaseActionDataTypeUpdateAnwser;
         self->_updateDataBlock(self->_actionDataModel);

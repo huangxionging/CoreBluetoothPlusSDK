@@ -38,7 +38,7 @@
 }
 
 
-- (NSData *)actionData {
+- (void) actionData {
     
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     
@@ -118,9 +118,8 @@
     }
     
     NSData *data = [NSData dataWithBytes: bytes length: 20];
-    NSLog(@"同步参数:%@", data);
-//    CBPDEBUG;
-    return data;
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 #pragma mark- 重写接受数据方法

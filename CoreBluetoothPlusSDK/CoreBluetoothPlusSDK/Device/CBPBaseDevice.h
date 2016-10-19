@@ -109,7 +109,15 @@
  *  @param  discoverServiceBlock 写回调
  *  @return void
  */
-- (void) setDiscoverServiceBlock: (void(^)(CBPBaseServiceModel *discoverServiceModel))discoverServiceBlock;
+- (void) setDiscoverServiceBlock: (NSArray<CBUUID *> *(^)(CBPBaseServiceModel *discoverServiceModel))discoverServiceBlock ;
+
+
+/**
+ 发现服务的特征回调
+
+ @param discoverServiceCharacteristicBlock 服务的特征回调
+ */
+- (void) setDiscoverServiceCharacteristicBlock:(void (^)(CBPBaseServiceModel *discoverServiceCharacteristicModel, CBPBasePeripheralModel *peripheralModel))discoverServiceCharacteristicBlock;
 
 
 /**

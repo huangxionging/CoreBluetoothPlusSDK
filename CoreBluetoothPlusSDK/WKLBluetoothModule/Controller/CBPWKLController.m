@@ -12,55 +12,8 @@
 #import "CBPBaseCharacteristicModel.h"
 #import "CBPHexStringManager.h"
 #import "CBPDispatchMessageManager.h"
-
-static NSString* braceletScanService1 = @"0xCC01";
-static NSString* braceletScanService2 = @"0000FEE9-0000-1000-8000-00805F9B34FB";
-static NSString* braceletScanService3 = @"00001802-0000-1000-8000-00805f9b34fb";
-static NSString* braceletScanService4 = @"0x6666";
-static NSString* braceletScanService5 = @"0xFCFA";
-static NSString* braceletScanService6 = @"0000FEE9-0000-1000-8000-00805F9B34FD";
-static NSString* braceletScanService7 = @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"; // 32手表
-static NSString* braceletScanService8 = @"000056ef-0000-1000-8000-00805f9b34fb";//006F
-static NSString* braceletScanService9 = @"00060000-F8CE-11E4-ABF4-0002A5D5C51B";//006F
-
-//读写服务UUID
-static NSString* braceletDiscoveredService1 = @"0xCC01";
-static NSString* braceletDiscoveredService2 = @"0000FEE9-0000-1000-8000-00805F9B34FB";
-static NSString* braceletDiscoveredService3 = @"000056ef-0000-1000-8000-00805f9b34fb";
-static NSString* braceletDiscoveredService4 = @"0x6666";
-static NSString* braceletDiscoveredService5 = @"0xFCFA";
-static NSString* braceletDiscoveredService6 = @"0000FEE9-0000-1000-8000-00805F9B34FD";
-static NSString* braceletDiscoveredService7 = @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E";
-static NSString* braceletDiscoveredService8 = @"00060000-F8CE-11E4-ABF4-0002A5D5C51B";//006F
-
-//写数据UUID
-static NSString* braceletWriteCBCharacteristice1 = @"0xCD20";
-static NSString* braceletWriteCBCharacteristice2 = @"D44BC439-ABFD-45A2-B575-925416129600";
-static NSString* braceletWriteCBCharacteristice3 = @"000034e1-0000-1000-8000-00805f9b34fb";
-static NSString* braceletWriteCBCharacteristice4 = @"0x8877";
-static NSString* braceletWriteCBCharacteristice5 = @"0x00D4";
-static NSString* braceletWriteCBCharacteristice6 = @"A44BC439-ABFD-45A2-B575-925416129600";
-static NSString* braceletWriteCBCharacteristice7 = @"0x6E400002-B5A3-F393-E0A9-E50E24DCCA9E";
-static NSString* braceletWriteCBCharacteristice8 = @"0x8888";
-static NSString* braceletWriteCBCharacteristice9 = @"00060001-F8CE-11E4-ABF4-0002A5D5C51B";//006F
-//Notify数据UUID,读数据UUID
-static NSString* braceletReadCBCharacteristic1 = @"0xCD01";
-static NSString* braceletReadCBCharacteristic2 = @"D44BC439-ABFD-45A2-B575-925416129601";
-static NSString* braceletReadCBCharacteristic3 = @"000034e2-0000-1000-8000-00805f9b34fb";
-static NSString* braceletReadCBCharacteristic4 = @"0x8888";
-static NSString* braceletReadCBCharacteristic5 = @"0x01D4";
-static NSString* braceletReadCBCharacteristic6 = @"0xA44BC439-ABFD-45A2-B575-925416129601";
-static NSString* braceletReadCBCharacteristic7 = @"0x6E400003-B5A3-F393-E0A9-E50E24DCCA9E";
-static NSString* braceletReadCBCharacteristic8 = @"0x8877";
-static NSString* braceletReadCBCharacteristic9 =@"00060001-F8CE-11E4-ABF4-0002A5D5C51B";//006F
-
-static NSString * SPOTA_SERVICE_UUID     = @"0000fef5-0000-1000-8000-00805f9b34fb";
-static NSString * SPOTA_MEM_DEV_UUID     = @"8082caa8-41a6-4021-91c6-56f9b954cc34";
-static NSString * SPOTA_GPIO_MAP_UUID    = @"724249f0-5ec3-4b5f-8804-42345af08651";
-static NSString * SPOTA_MEM_INFO_UUID    = @"6c53db25-47a1-45fe-a022-7c92fb334fd4";
-static NSString * SPOTA_PATCH_LEN_UUID   = @"9d84b9a3-000c-49d8-9183-855b673fda31";
-static NSString * SPOTA_PATCH_DATA_UUID  = @"457871e8-d516-4ca1-9116-57d0b17b9cb2";
-static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c88";
+#import "CBPWKLServiceCharacteristicManager.h"
+#import "CBPWKLServiceCharacteristicModel.h"
 
 @interface CBPWKLController ()
 
@@ -72,7 +25,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 /**
  *  发现特征的服务 UUIDs
  */
-@property (nonatomic, strong) NSArray<NSString *> *discoverSeriveUUIDs;
+@property (nonatomic, strong) NSArray<CBUUID *> *discoverSeriveUUIDs;
 
 /**
  *  读特征
@@ -85,9 +38,9 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 @property (nonatomic, strong) NSArray<NSString *> *writeChracteristicUUIDs;
 
 /**
- *  是否具备读特征
+ *  是否具备通知特征
  */
-@property (nonatomic, assign) BOOL isReadCharacterstic;
+@property (nonatomic, assign) BOOL isNotifyCharacterstic;
 
 /**
  *  是否具备写特征
@@ -97,6 +50,15 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 
 @property (nonatomic, strong) void(^block)(id result);
 
+
+/**
+ 服务特征管理器
+ */
+@property (nonatomic, strong)CBPWKLServiceCharacteristicManager *serviceCharacteristicManager;
+/**
+ 当前的服务特征模型
+ */
+@property (nonatomic, strong) CBPWKLServiceCharacteristicModel *currentServiceCharacteristicModel;
 
 
 @end
@@ -119,35 +81,13 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
     self = [super init];
     
     if (self) {
-        NSString *path = [[NSBundle mainBundle] pathForResource: @"CBPBluetooth" ofType: @"plist"];
-        
-        NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile: path];
-        
-//        self->_scanServiceUUIDs = dictionary[@"BraceletScanServices"];
-        
-//        self->_discoverSeriveUUIDs = dictionary[@"BraceletDiscoveredServices"];
-//        self->_readChracteristicUUIDs = dictionary[@"BraceletReadCBCharacteristics"];
-        
-//        self->_writeChracteristicUUIDs = dictionary[@"BraceletWriteCBCharacteristics"];
-
-        self->_isReadCharacterstic = NO;
+        self->_isNotifyCharacterstic = NO;
         self->_isWriteCharacteristic = NO;
+        // 单例
+        self.serviceCharacteristicManager =[CBPWKLServiceCharacteristicManager shareManager];
     }
     
     return self;
-}
-
-- (NSArray<CBUUID *> *)scanServiceUUIDs {
-    if (_scanServiceUUIDs == nil) {
-        
-        // 正常广播的 搜索服务
-        _scanServiceUUIDs = @[[CBUUID UUIDWithString: braceletScanService1], [CBUUID UUIDWithString: braceletScanService2], [CBUUID UUIDWithString: braceletScanService3], [CBUUID UUIDWithString: braceletScanService4], [CBUUID UUIDWithString: braceletScanService5], [CBUUID UUIDWithString: braceletScanService6], [CBUUID UUIDWithString: braceletScanService7], [CBUUID UUIDWithString: braceletScanService8]];
-
-        //  Cypress 升级广播的数据
-        //  [CBUUID UUIDWithString: braceletScanService9]
-        
-    }
-    return _scanServiceUUIDs;
 }
 
 #pragma mark---观察者监听
@@ -175,6 +115,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 //    CBPDEBUG;
     weakSelf.baseClient = [CBPBaseClient shareBaseClient];
     
+    // 有就添加, 空就扫描所以
     for (CBUUID *UUID in self.scanServiceUUIDs) {
         // 添加扫描的设备服务 UUID
         [weakSelf.baseClient addPeripheralScanService: UUID];
@@ -229,7 +170,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
         else {
             NSLog(@"断开链接");
             _isWriteCharacteristic = NO;
-            _isReadCharacterstic = NO;
+            _isNotifyCharacterstic = NO;
             self.baseDevice.isChracteristicReady = NO;
             [weakSelf.baseClient cancelPeripheralConnection];
         }
@@ -239,7 +180,7 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
 #pragma mark---清理
 - (void) cleanup {
     _isWriteCharacteristic = NO;
-    _isReadCharacterstic = NO;
+    _isNotifyCharacterstic = NO;
     self.baseDevice.isChracteristicReady = NO;
 }
 
@@ -251,21 +192,17 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
         [self.baseDevice addObserver: self forKeyPath: @"isChracteristicReady" options:NSKeyValueObservingOptionNew context: nil];
     }
     [self cleanup];
-    // 添加发现服务
-//    for (NSString *UUIDString in self->_discoverSeriveUUIDs) {
-//        [self.baseDevice addServiceUUIDWithUUIDString: [UUIDString uppercaseString]];
-//    }
     
-    // 添加读特征
-//    for (NSString *UUIDString in self->_readChracteristicUUIDs) {
-//        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
-//    }
-//    
-    // 添加写特征
-    for (NSString *UUIDString in self->_writeChracteristicUUIDs) {
-        [self.baseDevice addCharacteristicUUIDWithUUIDString: [UUIDString uppercaseString]];
+    // 发现服务
+    self.discoverSeriveUUIDs = [self.serviceCharacteristicManager discoverServiceUUIDs];
+    
+    // 添加服务
+    for (CBUUID *uuid in self.discoverSeriveUUIDs) {
+        NSString *uuids = uuid.UUIDString;
+        [self.baseDevice addServiceUUIDWithUUIDString: uuids];
     }
-    // 开始工作
+
+     // 开始工作
     [self.baseDevice startWorkWith: peripheralModel];
     
     // 超时定时器回调
@@ -278,72 +215,95 @@ static NSString * SPOTA_SERV_STATUS_UUID = @"5f78df94-798c-46f5-990a-b3eb6a065c8
     }];
     
     
-    __weak typeof(self) weakSelf = self;
-    
-    NSArray *readArray = [self->_readChracteristicUUIDs valueForKeyPath:@"uppercaseString"];
-    
-    NSArray *writeArray = [self->_writeChracteristicUUIDs valueForKeyPath: @"uppercaseString"];
     
     __weak CBPBaseDevice *device = self.baseDevice;
     
-    
+    // 发现特征回调
+    [self discoverServiceCharacteristic];
+    // 发现服务回调
+    [self discoverService];
+    // 传送数据
+    [self deviceDeliverData];
+
+}
+
+- (void) discoverService {
     // 发现特征服务回调
-    [self.baseDevice setDiscoverServiceBlock:^(CBPBaseServiceModel *discoverServiceModel) {
+    __weak CBPWKLController *weakSelf = self;
+    [weakSelf.baseDevice setDiscoverServiceBlock:^NSArray<CBUUID *> *(CBPBaseServiceModel *discoverServiceModel) {
         
-        for (CBCharacteristic *characteristic in discoverServiceModel.service.characteristics) {
+        CBService *service = discoverServiceModel.service;
+        
+        // 如果存在
+        if ([[self.serviceCharacteristicManager discoverServiceUUIDs] containsObject: service.UUID]) {
             
-            NSLog(@"%@", characteristic);
+            // 获得索引值
+            NSInteger index = [[self.serviceCharacteristicManager discoverServiceUUIDs] indexOfObject: service.UUID];
             
-            // 读特征
-            if ([readArray containsObject: [characteristic.UUID.UUIDString uppercaseString]]) {
-                
-                // 预定特征
-                [peripheralModel.peripheral setNotifyValue: YES forCharacteristic: characteristic];
-                [peripheralModel.peripheral readValueForCharacteristic: characteristic];
-                
-                NSDictionary *dicton = @{@"chracteristic":characteristic, @"flag":@"1"};
-                CBPBaseCharacteristicModel *model = [CBPBaseCharacteristicModel modelWithDictionary:dicton];
-                
-                [device addCharacteristic: model];
-                _isReadCharacterstic = YES;
-                
-//                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
-//                    device.isChracteristicReady = YES;
-//                }
-            }
+            // 获得服务特征模型
+            CBPWKLServiceCharacteristicModel *model = [self.serviceCharacteristicManager serviceCharacteristicModels][index];
             
-            // 写特征
-            if ([writeArray containsObject: [characteristic.UUID.UUIDString uppercaseString]]) {
-                
-                _isWriteCharacteristic = YES;
-                weakSelf.writeCharacteristicUUIDString = [characteristic.UUID.UUIDString lowercaseString];
-                
-                NSDictionary *dicton = @{@"chracteristic":characteristic, @"flag":@"2"};
-                CBPBaseCharacteristicModel *model = [CBPBaseCharacteristicModel modelWithDictionary:dicton];
-                
-                // 添加
-                [device addCharacteristic: model];
-                
-//                if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
-//                    device.isChracteristicReady = YES;
-//                }
-                
-            }
-            
-        }
-        if (_isWriteCharacteristic == YES && _isReadCharacterstic == YES) {
-            device.isChracteristicReady = YES;
+            // 将特征返回
+            return [model characteristicUUIDs];
+        } else {
+            return nil;
         }
         
     }];
+
+}
+
+- (void) discoverServiceCharacteristic {
     
-    [self deviceDeliverData];
-//    // 调用父类私有 API
-//    struct objc_super superObj;
-//    superObj.receiver = self;
-//    superObj.super_class = [self superclass];
-//    SEL selector = NSSelectorFromString(@"deviceDeliverData");
-//    objc_msgSendSuper(&superObj, selector);
+    __weak CBPBaseDevice *device = self.baseDevice;
+    [device setDiscoverServiceCharacteristicBlock:^(CBPBaseServiceModel *discoverServiceCharacteristicModel, CBPBasePeripheralModel *peripheralModel) {
+       
+        CBService *service = discoverServiceCharacteristicModel.service;
+        
+        if ([[self.serviceCharacteristicManager discoverServiceUUIDs] containsObject: service.UUID]) {
+            
+            // 获得索引值
+            NSInteger index = [[self.serviceCharacteristicManager discoverServiceUUIDs] indexOfObject: service.UUID];
+            
+            // 获得服务特征模型
+            CBPWKLServiceCharacteristicModel *model = [self.serviceCharacteristicManager serviceCharacteristicModels][index];
+            
+            for (CBCharacteristic *characteristic in service.characteristics) {
+                
+                // 通知特征, 注意, 这里不能使用 if else, 因为读写特征可能会相同
+                if ([characteristic.UUID isEqual: model.notifyCharacteristicUUID]) {
+                    
+                    model.notifyCharacteristic = characteristic;
+                    
+                    CBPBaseCharacteristicModel *chaModel = [[CBPBaseCharacteristicModel alloc] init];
+                    chaModel.chracteristic = characteristic;
+                    chaModel.flag = @"1";
+                    [device addCharacteristic: chaModel];
+                    
+                    // 预定通知
+                    _isNotifyCharacterstic = YES;
+                    [peripheralModel.peripheral setNotifyValue: YES forCharacteristic: characteristic];
+                    
+                }
+                
+                if ([characteristic.UUID isEqual: model.writeCharacteristicUUID]) {
+                    
+                    model.writeCharacteristic = characteristic;
+                    CBPBaseCharacteristicModel *chaModel = [[CBPBaseCharacteristicModel alloc] init];
+                    chaModel.chracteristic = characteristic;
+                    chaModel.flag = @"2";
+                    [device addCharacteristic: chaModel];
+                    _isWriteCharacteristic = YES;
+                    self.writeCharacteristicUUIDString = [characteristic.UUID.UUIDString lowercaseString];
+                }
+            }
+            
+            if (_isNotifyCharacterstic == YES && _isWriteCharacteristic == YES) {
+                self.currentServiceCharacteristicModel = model;
+                self.baseDevice.isChracteristicReady = YES;
+            }
+        }
+    }];
 }
 
 - (void) deviceDeliverData {

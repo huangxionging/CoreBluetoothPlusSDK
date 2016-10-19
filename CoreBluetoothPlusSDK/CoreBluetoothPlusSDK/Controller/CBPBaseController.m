@@ -246,52 +246,7 @@
     // 获取注册状态
     BOOL state = [weakSelf registerAction: action];
     if (state == YES) {
-        
-        // 如果数据为空, 表示不发送, 等待设备主动发数据
-        if (action.actionData == nil) {
-            return;
-        } else {
-            
-            CBPBasePeripheralModel *model = [weakSelf.baseDevice valueForKey: @"_peripheralModel"];
-            
-            // 如果外设不存在
-            if (!model.peripheral) {
-                CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeBluetoothDisconnected info: @"蓝牙未连接"];
-                failure(action, error);
-            } else {
-                
-                switch (model.peripheral.state) {
-                    case CBPeripheralStateDisconnected: {
-                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnected info: @"当前外设断连"];
-                        failure(action, error);
-                        break;
-                    }
-                    case CBPeripheralStateConnected: {
-                        // 发送数据
-                        [weakSelf.baseDevice sendActionWithModel: [CBPBaseActionDataModel modelWithAction: action]];
-                        
-                        // 启动超时定时器
-                        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"startTimer", nil];
-                        break;
-                    }
-                    case CBPeripheralStateConnecting: {
-                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralConnecting info: @"当前外设正在连接"];
-                        failure(action, error);
-                        break;
-                    }
-                    case CBPeripheralStateDisconnecting: {
-                        CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypePeripheralDisconnecting info: @"当前外设正在断开连接"];
-                        failure(action, error);
-                        break;
-                    }
-                        
-                    default:
-                        break;
-                }
-                
-            }
-            
-        }
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"actionData", nil];
     } else {
         CBPBaseError *error = [CBPBaseError errorWithcode:kBaseErrorTypeChannelUsed info: @"通道已被占用"];
         failure(action, error);

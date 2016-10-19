@@ -51,7 +51,7 @@
     return interfaces;
 }
 
-- (NSData *)actionData {
+- (void) actionData {
     NSDictionary *parameter = [self valueForKey: @"parameter"];
     
     Byte bytes[20] = {0};
@@ -67,7 +67,7 @@
     if (index <= 9) {
         bytes[3] = 0x80 + index;
     } else {
-        return nil;
+        return;
     }
 
     // 0, 1 都没有参数, 2 不需要实现
@@ -113,7 +113,9 @@
             break;
     }
     
-    return [NSData dataWithBytes: bytes length: 20];
+    NSData *data = [NSData dataWithBytes: bytes length: 20];
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {

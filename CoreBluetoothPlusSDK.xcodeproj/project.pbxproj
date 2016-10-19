@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F20B56831DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */; };
+		F20B56861DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B56851DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m */; };
+		F20B57241DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B57231DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m */; };
+		F20B572A1DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B57291DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m */; };
+		F20B572D1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B572C1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m */; };
+		F20B572F1DB0C48900688D4E /* W079A_V0.18_B20151103.img in Resources */ = {isa = PBXBuildFile; fileRef = F20B572E1DB0C48900688D4E /* W079A_V0.18_B20151103.img */; };
 		F20E51961DACACEA00046732 /* libQBlueOta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51921DACACEA00046732 /* libQBlueOta.a */; };
 		F20E51971DACACEA00046732 /* libQBlueOtaFor4S.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51931DACACEA00046732 /* libQBlueOtaFor4S.a */; };
 		F20E51981DACACEA00046732 /* libQBlueOtaFor5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F20E51941DACACEA00046732 /* libQBlueOtaFor5.a */; };
@@ -57,7 +63,6 @@
 		F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */ = {isa = PBXBuildFile; fileRef = F26DD4BA1D780A6F0043FED4 /* CBPInterface.plist */; };
 		F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4BD1D7810320043FED4 /* CBPShowResultTableViewController.m */; };
 		F26DD4C11D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4C01D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m */; };
-		F26DD4CA1D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4C91D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m */; };
 		F26DD4CD1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F26DD4CC1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m */; };
 		F27637181D61A45F006597AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F27637171D61A45F006597AC /* main.m */; };
 		F276371B1D61A45F006597AC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F276371A1D61A45F006597AC /* AppDelegate.m */; };
@@ -82,7 +87,7 @@
 		F2C549021D644DEC00A665F3 /* CBPWKLBindDeviceAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C548F31D644DEC00A665F3 /* CBPWKLBindDeviceAction.m */; };
 		F2C549051D644DEC00A665F3 /* CBPWKLSimpleControlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C548F91D644DEC00A665F3 /* CBPWKLSimpleControlAction.m */; };
 		F2C549081D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C548FF1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m */; };
-		F2C549091D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.mm */; };
+		F2C549091D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.m */; };
 		F2CBB29F1D92542200EEB2E9 /* CBPWKLSimpleDataAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CBB29E1D92542200EEB2E9 /* CBPWKLSimpleDataAction.m */; };
 		F2DAE62E1D6BE60100E01238 /* CBPBluetooth.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62A1D6BE60100E01238 /* CBPBluetooth.plist */; };
 		F2DAE62F1D6BE60100E01238 /* CBPDevice.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DAE62B1D6BE60100E01238 /* CBPDevice.plist */; };
@@ -94,6 +99,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F20B56811DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLServiceCharacteristicManager.h; sourceTree = "<group>"; };
+		F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLServiceCharacteristicManager.m; sourceTree = "<group>"; };
+		F20B56841DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLServiceCharacteristicModel.h; sourceTree = "<group>"; };
+		F20B56851DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLServiceCharacteristicModel.m; sourceTree = "<group>"; };
+		F20B57221DB0828000688D4E /* CBPWKLDialogUpgradeDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLDialogUpgradeDevice.h; sourceTree = "<group>"; };
+		F20B57231DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLDialogUpgradeDevice.m; sourceTree = "<group>"; };
+		F20B57281DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLDialogUpgradeServiceCharacteristicManager.h; sourceTree = "<group>"; };
+		F20B57291DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLDialogUpgradeServiceCharacteristicManager.m; sourceTree = "<group>"; };
+		F20B572B1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLDialogUpgradeServiceCharacteristicModel.h; sourceTree = "<group>"; };
+		F20B572C1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLDialogUpgradeServiceCharacteristicModel.m; sourceTree = "<group>"; };
+		F20B572E1DB0C48900688D4E /* W079A_V0.18_B20151103.img */ = {isa = PBXFileReference; lastKnownFileType = file; path = W079A_V0.18_B20151103.img; sourceTree = "<group>"; };
 		F20E51921DACACEA00046732 /* libQBlueOta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOta.a; sourceTree = "<group>"; };
 		F20E51931DACACEA00046732 /* libQBlueOtaFor4S.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOtaFor4S.a; sourceTree = "<group>"; };
 		F20E51941DACACEA00046732 /* libQBlueOtaFor5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQBlueOtaFor5.a; sourceTree = "<group>"; };
@@ -186,8 +202,6 @@
 		F26DD4BD1D7810320043FED4 /* CBPShowResultTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPShowResultTableViewController.m; sourceTree = "<group>"; };
 		F26DD4BF1D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLPedometerTimeIntervalAction.h; sourceTree = "<group>"; };
 		F26DD4C01D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLPedometerTimeIntervalAction.m; sourceTree = "<group>"; };
-		F26DD4C81D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSendCommonLongPackageAction.h; sourceTree = "<group>"; };
-		F26DD4C91D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLSendCommonLongPackageAction.m; sourceTree = "<group>"; };
 		F26DD4CB1D7821490043FED4 /* CBPWKLSynchronizeStepAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSynchronizeStepAction.h; sourceTree = "<group>"; };
 		F26DD4CC1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLSynchronizeStepAction.m; sourceTree = "<group>"; };
 		F27637131D61A45F006597AC /* CoreBluetoothPlusSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreBluetoothPlusSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,7 +250,7 @@
 		F2C548FE1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSynchronizeParameterAction.h; sourceTree = "<group>"; };
 		F2C548FF1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLSynchronizeParameterAction.m; sourceTree = "<group>"; };
 		F2C549001D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLTransparentTransmissionAction.h; sourceTree = "<group>"; };
-		F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CBPWKLTransparentTransmissionAction.mm; sourceTree = "<group>"; };
+		F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLTransparentTransmissionAction.m; sourceTree = "<group>"; };
 		F2CBB29D1D92542200EEB2E9 /* CBPWKLSimpleDataAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLSimpleDataAction.h; sourceTree = "<group>"; };
 		F2CBB29E1D92542200EEB2E9 /* CBPWKLSimpleDataAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLSimpleDataAction.m; sourceTree = "<group>"; };
 		F2DAE62A1D6BE60100E01238 /* CBPBluetooth.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBPBluetooth.plist; sourceTree = "<group>"; };
@@ -398,6 +412,7 @@
 				F2E2377F1DACE5400013DCC1 /* W007C_V0.51_B20150724A_app.bin */,
 				F2E237A31DADE51B0013DCC1 /* enW007A_V0.54_JingHua_B20150714.bin */,
 				F2E2379F1DADD8710013DCC1 /* W007A_V0.54_JingHua_B20150714.bin */,
+				F20B572E1DB0C48900688D4E /* W079A_V0.18_B20151103.img */,
 				F264B4CA1D9E5B9800E80B67 /* firmware.png */,
 				F241896D1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.h */,
 				F241896E1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m */,
@@ -557,8 +572,6 @@
 				F2C548F31D644DEC00A665F3 /* CBPWKLBindDeviceAction.m */,
 				F26DD4BF1D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.h */,
 				F26DD4C01D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m */,
-				F26DD4C81D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.h */,
-				F26DD4C91D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m */,
 				F26DD4CB1D7821490043FED4 /* CBPWKLSynchronizeStepAction.h */,
 				F26DD4CC1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m */,
 				F26153871D7E6D0F008230B4 /* CBPWKLSynchronizeSleepAction.h */,
@@ -586,7 +599,7 @@
 				F2C548FE1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.h */,
 				F2C548FF1D644DEC00A665F3 /* CBPWKLSynchronizeParameterAction.m */,
 				F2C549001D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.h */,
-				F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.mm */,
+				F2C549011D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.m */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -614,6 +627,8 @@
 		F2C548CB1D62FC4E00A665F3 /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				F20B57221DB0828000688D4E /* CBPWKLDialogUpgradeDevice.h */,
+				F20B57231DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -628,6 +643,10 @@
 		F2C548CD1D62FC4E00A665F3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F20B56841DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.h */,
+				F20B56851DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m */,
+				F20B572B1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.h */,
+				F20B572C1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -635,6 +654,10 @@
 		F2C548CE1D62FC4E00A665F3 /* UnityTool */ = {
 			isa = PBXGroup;
 			children = (
+				F20B56811DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.h */,
+				F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */,
+				F20B57281DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.h */,
+				F20B57291DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m */,
 				F20E51911DACACEA00046732 /* OTA */,
 			);
 			path = UnityTool;
@@ -721,6 +744,7 @@
 			files = (
 				F27637261D61A45F006597AC /* LaunchScreen.storyboard in Resources */,
 				F264B4CB1D9E5B9800E80B67 /* firmware.png in Resources */,
+				F20B572F1DB0C48900688D4E /* W079A_V0.18_B20151103.img in Resources */,
 				F2DAE6301D6BE60100E01238 /* CBPUpgradeWay.plist in Resources */,
 				F24189B11D912512002E2914 /* MJRefresh.bundle in Resources */,
 				F26DD4BB1D780A6F0043FED4 /* CBPInterface.plist in Resources */,
@@ -762,19 +786,22 @@
 				F26153941D7EA139008230B4 /* CBPWKLQueryDeviceVersionAction.m in Sources */,
 				F2C548EE1D630B4800A665F3 /* CBPWKLController.m in Sources */,
 				F2C548E51D6308B700A665F3 /* CBPBaseController.m in Sources */,
+				F20B572A1DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m in Sources */,
 				F24189B61D912512002E2914 /* UIView+MJExtension.m in Sources */,
 				F20E519E1DACAD3B00046732 /* CBPWKLQuinticFirmwareUpgradeAction.m in Sources */,
 				F24189A91D912512002E2914 /* MJRefreshAutoNormalFooter.m in Sources */,
 				F2C548E21D63084C00A665F3 /* CBPBaseWorkingManager.m in Sources */,
 				F26DD4C11D7816F50043FED4 /* CBPWKLPedometerTimeIntervalAction.m in Sources */,
-				F2C549091D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.mm in Sources */,
+				F2C549091D644DEC00A665F3 /* CBPWKLTransparentTransmissionAction.m in Sources */,
+				F20B572D1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m in Sources */,
 				F2C548D51D62FDBF00A665F3 /* CBPBaseAction.m in Sources */,
 				F26153901D7E9771008230B4 /* CBPSleepTableViewCell.m in Sources */,
 				F26153891D7E6D0F008230B4 /* CBPWKLSynchronizeSleepAction.m in Sources */,
-				F26DD4CA1D7820FD0043FED4 /* CBPWKLSendCommonLongPackageAction.m in Sources */,
 				F24E97BE1D86B178001AB1FB /* CBPBinStringManager.mm in Sources */,
+				F20B56861DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m in Sources */,
 				F261538C1D7E9476008230B4 /* SynchronizeSleepTableViewController.m in Sources */,
 				F26DD4BE1D7810320043FED4 /* CBPShowResultTableViewController.m in Sources */,
+				F20B57241DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m in Sources */,
 				F26DD4CD1D7821490043FED4 /* CBPWKLSynchronizeStepAction.m in Sources */,
 				F2C548C21D62FC4000A665F3 /* CBPBaseClient.m in Sources */,
 				F20E519B1DACAD1300046732 /* qBleClient.m in Sources */,
@@ -783,6 +810,7 @@
 				F241896C1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.m in Sources */,
 				F2C548C61D62FC4000A665F3 /* CBPBaseServiceModel.m in Sources */,
 				F24189B21D912512002E2914 /* MJRefreshConst.m in Sources */,
+				F20B56831DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m in Sources */,
 				F2C548C31D62FC4000A665F3 /* CBPBaseActionDataModel.m in Sources */,
 				F24189AB1D912512002E2914 /* MJRefreshBackGifFooter.m in Sources */,
 				F24189A31D912512002E2914 /* MJRefreshAutoFooter.m in Sources */,

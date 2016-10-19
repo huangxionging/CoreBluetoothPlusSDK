@@ -76,12 +76,9 @@
             failure(action, [result objectForKey: @"result"]);
         }
         
-//        [self.actionSheet removeAllObjects];
-        // 重新恢复代理
-//        self.peripheralModel.peripheral.delegate = self.baseDevice;
-        // 清理升级控制器
-//        [CBPBaseWorkingManager manager].upgradeControllerKey = @"com.quintic.controller";
-//        [CBPBaseWorkingManager manager].upgradeControllerKey = nil;
+        // 5秒钟后启动自毁程序, 这样就不会崩溃了
+        [self performSelector: @selector(selfDestruction) withObject: nil afterDelay: 5.0];
+
         
     }];
     
@@ -97,6 +94,17 @@
     // 保持 action
     [self.actionSheet setObject: action forKey: @"quintic_upgrade"];
     
+}
+
+
+#pragma mark- 启动自毁程序
+- (void) selfDestruction {
+    [self.actionSheet removeAllObjects];
+    // 重新恢复代理
+    self.peripheralModel.peripheral.delegate = self.baseDevice;
+    // 清理升级控制器
+    [CBPBaseWorkingManager manager].upgradeControllerKey = @"com.quintic.controller";
+    [CBPBaseWorkingManager manager].upgradeControllerKey = nil;
 }
 
 

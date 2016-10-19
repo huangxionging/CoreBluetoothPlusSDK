@@ -48,7 +48,7 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
 /**
  *  操作的数据
  */
-- (NSData *)actionData;
+- (void) actionData;
 
 
 

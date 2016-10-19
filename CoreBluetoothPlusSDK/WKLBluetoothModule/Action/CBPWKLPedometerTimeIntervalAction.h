@@ -10,8 +10,4 @@
 
 @interface CBPWKLPedometerTimeIntervalAction : CBPBaseAction
 
-- (NSData *)actionData;
-
-- (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel;
-
 @end

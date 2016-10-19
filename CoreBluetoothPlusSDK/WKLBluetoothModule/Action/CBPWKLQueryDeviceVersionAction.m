@@ -34,7 +34,7 @@
     return interfaces;
 }
 
-- (NSData *)actionData {
+- (void)actionData {
     Byte bytes[20] = {0};
     
     
@@ -42,8 +42,8 @@
     bytes[1] = 0x10;
     
     NSData *data = [NSData dataWithBytes: bytes length: 20];
-    //    NSLog(@"绑定指令: %@", data);
-    return data;
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {

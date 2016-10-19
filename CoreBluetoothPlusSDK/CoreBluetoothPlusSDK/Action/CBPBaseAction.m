@@ -9,6 +9,7 @@
 #import "CBPBaseAction.h"
 #import "CBPBaseActionDataModel.h"
 #import "CBPBaseWorkingManager.h"
+#import "CBPDispatchMessageManager.h"
 
 @interface CBPBaseWorkingManager ()
 
@@ -78,8 +79,8 @@
     return action;
 }
 
-- (NSData *)actionData {
-    return [[NSData alloc] init];
+- (void) actionData {
+    
 }
 
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
@@ -131,10 +132,27 @@
     }
 }
 
+#pragma mark- 发送设备命令, 非回复数据
+- (void) sendActionData: (NSData *) actionData {
+    
+    NSLog(@"命令数据: %@", actionData);
+    
+    CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
+    model.actionData = actionData;
+    model.characteristicString = [self.characteristicUUIDString lowercaseString];
+    model.actionDatatype = kBaseActionDataTypeUpdateSend;
+    model.writeType = CBCharacteristicWriteWithResponse;
+    
+    NSSet *keySet = [[CBPDispatchMessageManager shareManager] dispatchReturnValueTarget: [self class] method: @"keySetForAction", nil];
+    model.keyword = [keySet anyObject];
+    // 回复数据
+    id result = model;
+    // 利用回复数据的通道
+    [self callAnswerResult: result];
+}
+
 #pragma mark-  回复数据
 - (void) callAnswerResult: (id) result {
-    
-    NSLog(@"%@", [result actionData]);
     if (_answerBlock) {
         _answerBlock(result);
     }

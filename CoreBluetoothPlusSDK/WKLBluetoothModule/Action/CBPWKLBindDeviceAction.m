@@ -67,7 +67,7 @@
 
 
 #pragma mark---命令数据
-- (NSData *)actionData {
+- (void) actionData {
     
     NSDictionary *dict = [self valueForKey: @"parameter"];
     
@@ -77,7 +77,7 @@
     
     // 当 interface 为 confirm_bind_device, 不发送数据
     if (index == 2) {
-        return nil;
+        return;
     }
     
     Byte bytes[20] = {0};
@@ -93,8 +93,9 @@
     }
     
     NSData *data = [NSData dataWithBytes: bytes length: 20];
-//    NSLog(@"绑定指令: %@", data);
-    return data;
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
+
 }
 
 #pragma mark--- 接收数据的方法

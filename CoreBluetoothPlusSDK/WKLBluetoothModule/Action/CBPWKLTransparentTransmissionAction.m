@@ -7,7 +7,19 @@
 //
 
 #import "CBPWKLTransparentTransmissionAction.h"
-#include "CBPStringToHex.h"
+#include "CBPHexStringManager.h"
+#import "CBPDispatchMessageManager.h"
+
+
+
+// 每个长包内容的最大长度
+static NSInteger max_content_length = 1024;
+
+// 每个短包内容的最大长度 字节
+static NSInteger max_short_content_length = 17;
+
+// 短包最大程度 20字节
+static NSInteger max_short_package_length = 20;
 
 unsigned short crc_ccitt(unsigned char *q, int len);
 
@@ -34,7 +46,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
      */
     BOOL _deviceFirst;
     
-    CBPStringToHex *_hexString;
+    CBPHexStringManager *_hexStringMangaer;
     
     // 关键字
     Byte _byteKeyWord;
@@ -42,9 +54,26 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     Byte _actionKeyWord;
     
     long _totalSize;
-    answerBlock _answerBlock;
-    finishedBlock _finishedBlock;
 }
+
+/**
+ *  0x00 表示透传操作为短包, 内容由收发双方自定义;
+ *  0x01~0x10 表示短包, 也表示内容长度;
+ *  关键字取值为0x01~0x10时,除表示本包为短包透传指令外,还表示内容部分的长度;
+ *  关键字0x01~0x10表示相同的功能,同一项目中一般应分配给同一个逻辑功能。若分配给多个功能,则
+ *  设备与 APP 端应协商一致,并严格按约定使用。
+ *  0x11~0xef 表示短包, 未定义功能, 预留
+ *  0xf0 表示长包, 支付相关功能
+ *  0xf1~0xfe 表示长包, 未定义
+ *  0xff 表示长包, 需要协商
+ *  keyWord
+ */
+@property (nonatomic, copy) NSString *keyWord;
+
+/**
+ *  数据内容, 总共长度不固定, 最大为 16 字节以 0x 开头的16进制字符串, 每个字节栈两位
+ */
+@property (nonatomic, copy) NSString *content;
 
 /**
  *  同时表示长包的个数
@@ -104,17 +133,30 @@ unsigned short crc_ccitt(unsigned char *q, int len);
 
 @synthesize isLongAction = _isLongAction;
 
++ (void)load {
+    // 加载
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: [self superclass] method:@"registerAction:", self, nil];
+    
+}
+
+// 指令标识集合
++ (NSSet *)keySetForAction {
+    return [NSSet setWithObjects:@"0x19", @"0x05", @"0x06", nil];
+}
+
+// 接口数组
++ (NSArray *)actionInterfaces {
+    // 对应的 keys 同步心率数据
+    NSArray *interfaces = @[@"synchronize_heart_rate_data"];
+    // 返回接口
+    return interfaces;
+}
+
+
 - (NSInteger)actionLength {
     return _actionLength;
 }
 
-- (NSTimer *)timer {
-    if (_timer == nil) {
-        _timer = [NSTimer timerWithTimeInterval: 2.0f target: self selector: @selector(continueSendAction) userInfo: nil repeats: YES];
-        [[NSRunLoop mainRunLoop] addTimer: _timer forMode: NSRunLoopCommonModes];
-    }
-    return _timer;
-}
 
 #pragma mark- 长指令数组
 - (NSMutableArray *)longActionArray {
@@ -125,7 +167,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
 }
 
 #pragma mark- 发送指令相关
-- (NSData *)actionData {
+- (void)actionData {
     if (![_content hasPrefix: @"0x"]) {
         _content = [NSString stringWithFormat: @"0x%@", _content];
     }
@@ -134,13 +176,13 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         NSInteger length = _content.length / 2 - 1;
         _actionLength = length;
     } else {
-        return nil;
+        return;
     }
     
     Byte *bytes = (Byte *)malloc(sizeof(Byte) * max_short_package_length);
     memset(bytes, 0x00, sizeof(Byte) * max_short_package_length);
     // 创建 解析器
-    _hexString = CBPStringToHex::getInstance();
+    _hexStringMangaer = [CBPHexStringManager shareManager];
     
     bytes[0] = 0x5a;
     bytes[1] = 0x19;
@@ -149,11 +191,11 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 超过16 就要分包了.
     if (_actionLength <= 16) {
         // 记录关键字
-        _byteKeyWord = *_hexString->bytesForHexString(_keyWord);
+        _byteKeyWord = *[_hexStringMangaer bytesForString: _keyWord];
         bytes[3] = _byteKeyWord;
         
         // 拷贝数据
-        memcpy(&bytes[4], _hexString->bytesForHexString(_content), _actionLength);
+        memcpy(&bytes[4], [_hexStringMangaer bytesForString: _content], _actionLength);
         _isLongAction = NO;
     } else {
         _isLongAction = YES;
@@ -176,7 +218,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         
         bytes[3] = 0x11;
         // 拷贝数据
-        memcpy(&bytes[4], _hexString->bytesForHexString([self.longActionArray firstObject]), 16);
+        memcpy(&bytes[4], [_hexStringMangaer bytesForString:[self.longActionArray firstObject]], 16);
     }
     
     _actionKeyWord = 0x19;
@@ -185,12 +227,8 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     NSData *data = [NSData dataWithBytes: bytes length: max_short_package_length];
     
     
-    NSLog(@"首包指令 == : %@", data);
-    // App 主动发
-    _deviceFirst = NO;
-    
-    return data;
-}
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];}
 
 #pragma mark- 继续发送
 - (void) continueSendAction {
@@ -210,7 +248,6 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     if (_indexOfAction > self.longActionArray.count) {
         return;
     }
-    CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
     
     Byte bytes[20] = {0};
     
@@ -222,21 +259,11 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 拷贝数据
     NSString *lastAction = self.longActionArray[_indexOfAction];
     
-    memcpy(&bytes[4], _hexString->bytesForHexString(lastAction), lastAction.length / 2);
-    
-    NSData *data = [NSData dataWithBytes: bytes length: lastAction.length / 2 + 4];
-    NSLog(@"普通包 == %@", data);
-    model.actionData = data;
-    model.actionDatatype = kBaseActionDataTypeUpdateSend;
-    model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [self.characteristicUUIDString lowercaseString];
-    
+    memcpy(&bytes[4], [_hexStringMangaer bytesForString: lastAction], lastAction.length / 2);
     _indexOfAction++;
-    // 回传位域表
-    NSLog(@"位域表: ======= %@", model.actionData);
-    if (self->_answerBlock) {
-        self->_answerBlock(model);
-    }
+    // 发送指令数据
+    NSData *data = [NSData dataWithBytes: bytes length: lastAction.length / 2 + 4];
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 #pragma mark- 发送最后的包
@@ -246,7 +273,6 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         return;
     }
     
-    CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
     
     Byte bytes[20] = {0};
     
@@ -258,28 +284,18 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     // 拷贝数据
     NSString *lastAction = [self.longActionArray lastObject];
     
-    memcpy(&bytes[4], _hexString->bytesForHexString(lastAction), lastAction.length / 2);
+    memcpy(&bytes[4], [_hexStringMangaer bytesForString: lastAction], lastAction.length / 2);
     
     NSData *data = [NSData dataWithBytes: bytes length: lastAction.length / 2 + 4];
-    NSLog(@"最后一包指令 == %@", data);
-    model.actionData = data;
-    model.actionDatatype = kBaseActionDataTypeUpdateSend;
-    model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [self.characteristicUUIDString lowercaseString];
     
     _indexOfAction = self.longActionArray.count + 1;
-    // 回传位域表
-    NSLog(@"位域表: ======= %@", model.actionData);
-    if (self->_answerBlock) {
-        self->_answerBlock(model);
-    }
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", data, nil];
 }
 
 
 #pragma mark- 接受数据
 - (void)receiveUpdateData:(CBPBaseActionDataModel *)updateDataModel {
     // 关闭超时定时器
-//    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"stopTimer", nil];
     NSLog(@"接受数据 AAA %@", updateDataModel.actionData);
     if (updateDataModel.actionDatatype == kBaseActionDataTypeUpdateAnwser) {
         
@@ -317,10 +333,15 @@ unsigned short crc_ccitt(unsigned char *q, int len);
                 // 短包 回复, 回复都是 0x5b
                 NSLog(@"短包:%@  ==== length: %@", _longPackageData, @(_longPackageData.length));
                 
-                if (self->_finishedBlock) {
-//                    NSString *string = _hexString->hexStringForData(_longPackageData);
-                    self->_finishedBlock( _hexString->hexStringForData(_longPackageData));
-                }
+                // 完成信息
+                // 待回传的结果
+                NSMutableDictionary *success = [NSMutableDictionary dictionaryWithCapacity: 5];
+                
+                NSString *result = [_hexStringMangaer  hexStringForData:_longPackageData];
+                // 传输结果
+                [success setObject: result forKey: @"result"];
+                // 回传结果
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", success, nil];
 
             }
             // 设备开始主动发数据, 通用长包处理过程
@@ -345,7 +366,7 @@ unsigned short crc_ccitt(unsigned char *q, int len);
                     
                 } else if (bytes[2] == 0x00) {
                     // 特殊回应
-                    [self handleNextDayDataPackage];
+                    [self handleNextDataPackage];
                 }
             }
 
@@ -369,12 +390,16 @@ unsigned short crc_ccitt(unsigned char *q, int len);
                 // 短包 回复, 回复都是 0x5b
                 NSLog(@"短包:%@  ==== length: %@", _longPackageData, @(_longPackageData.length));
                 
-                if (self->_finishedBlock) {
-//                    NSString *string = _hexString->hexStringForData(_longPackageData);
-                    self->_finishedBlock(_hexString->hexStringForData(_longPackageData));
-                }
+                // 待回传的结果
+                NSMutableDictionary *success = [NSMutableDictionary dictionaryWithCapacity: 5];
+                
+                NSString *result = [_hexStringMangaer  hexStringForData:_longPackageData];
+                // 传输结果
+                [success setObject: result forKey: @"result"];
+                // 回传结果
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", success, nil];
             }
-        }       
+        }
     }
 }
 
@@ -443,14 +468,6 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     for (NSInteger index = (_shortPackageCount) / 8 + 1; index < 15; ++index) {
         _bitControlTable[index] = 0x00;
     }
-    
-//    // 年月日
-//    NSInteger year = bytes[10] + 2000;
-//    NSInteger month = bytes[11];
-//    NSInteger day = bytes[12];
-//    
-//    // 当前指示日期
-//    _indicatorDate = [NSString stringWithFormat:@"%@/%@/%@", @(year), @(month), @(day)];
     
     memset(_shortPackage, '\0', sizeof(_shortPackage));
 }
@@ -557,7 +574,6 @@ unsigned short crc_ccitt(unsigned char *q, int len);
 #pragma mark---发送位域控制表
 - (void) sendBitControllTable {
     @try {
-        CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
         
         Byte bytes[20] = {0};
         
@@ -572,44 +588,34 @@ unsigned short crc_ccitt(unsigned char *q, int len);
         memcpy(bitControlTable, _bitControlTable, sizeof(_bitControlTable) / sizeof(Byte));
         
         NSData *bitControlTableData = [NSData dataWithBytes: bytes length: 20];
-        
-        model.actionData = bitControlTableData;
-        model.actionDatatype = kBaseActionDataTypeUpdateSend;
-        model.writeType = CBCharacteristicWriteWithResponse;
-        model.characteristicString = [self.characteristicUUIDString lowercaseString];
-        
-        // 回传位域表
-        NSLog(@"位域表: ======= %@", model.actionData);
-        if (self->_answerBlock) {
-            self->_answerBlock(model);
+        // 发送指令数据
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", bitControlTableData, nil];
         }
-    }
     @catch (NSException *exception) {
         NSLog(@"exception=%@",exception);
     }   
 }
 
 #pragma mark---处理请求下一个长包
-- (void) handleNextDayDataPackage {
+- (void) handleNextDataPackage {
     
     if (_longPackageNumber == _longPackageTotal || _longPackageTotal == 1) {
         // 表示所有数据发送完成
         
         NSLog(@"%@  ==== length: %@", _longPackageData, @(_longPackageData.length));
         
-        if (self->_finishedBlock) {
-            
-//            NSString *string = _hexString->hexStringForData(_longPackageData);
-            self->_finishedBlock(_hexString->hexStringForData(_longPackageData));
-        }
+        // 待回传的结果
+        NSMutableDictionary *success = [NSMutableDictionary dictionaryWithCapacity: 5];
         
+        NSString *result = [_hexStringMangaer  hexStringForData:_longPackageData];
+        // 传输结果
+        [success setObject: result forKey: @"result"];
+        // 回传结果
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackResult:", success, nil];
         return;
     }
     
     memset(_bitControlTable, 0xff, sizeof(Byte) * 15);
-    
-    // 请求下一个长包数据
-    CBPBaseActionDataModel *model = [[CBPBaseActionDataModel alloc] init];
     
     Byte bytes[20] = {0};
     
@@ -626,14 +632,9 @@ unsigned short crc_ccitt(unsigned char *q, int len);
     
     // 请求下一个回复数据
     NSData *nextData = [NSData dataWithBytes: bytes length: 20];
-    model.actionData = nextData;
-    model.actionDatatype = kBaseActionDataTypeUpdateSend;
-    model.writeType = CBCharacteristicWriteWithResponse;
-    model.characteristicString = [self.characteristicUUIDString lowercaseString];
     
-    // 回传信息
-    self->_answerBlock(model);
-    
+    // 发送指令数据
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"sendActionData:", nextData, nil];
 }
 
 #pragma mark---处理最后一个长包的最后一个短包数据
