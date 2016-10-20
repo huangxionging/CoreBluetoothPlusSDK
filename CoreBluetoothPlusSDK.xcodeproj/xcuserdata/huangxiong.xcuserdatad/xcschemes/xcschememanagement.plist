@@ -9,9 +9,24 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>CoreBluetoothPlusSDKDemo.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>F255990D1DB860390057E2D3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F255994B1DB860F60057E2D3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>F27637121D61A45F006597AC</key>
 		<dict>
 			<key>primary</key>

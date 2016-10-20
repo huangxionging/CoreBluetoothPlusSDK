@@ -160,7 +160,8 @@
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         
         // 投送消息
-        [action receiveUpdateData: actionDataModel];
+//        [action receiveUpdateData: actionDataModel];
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"receiveUpdateData:", actionDataModel, nil];
     }];
     
     // 写数据回调
@@ -168,7 +169,8 @@
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         // 投送消息
-        [action receiveUpdateData: actionDataModel];
+//        [action receiveUpdateData: actionDataModel];
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"receiveUpdateData:", actionDataModel, nil];
     }];
 }
 

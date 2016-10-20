@@ -89,7 +89,9 @@
     }
 
     // 调用
-    [action actionData];
+    if (action) {
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"actionData", nil];
+    }
     
     // 保持 action
     [self.actionSheet setObject: action forKey: @"quintic_upgrade"];

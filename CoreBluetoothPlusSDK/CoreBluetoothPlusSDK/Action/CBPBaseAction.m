@@ -31,6 +31,13 @@
     NSString *_timeOutInterval;
 }
 
+/**
+ *  @brief  接收更新数据
+ *  @param  updateDataModel 是更新数据模型
+ *  @return void
+ */
+- (void) receiveUpdateData: (CBPBaseActionDataModel *)updateDataModel;
+
 @end
 
 @implementation CBPBaseAction

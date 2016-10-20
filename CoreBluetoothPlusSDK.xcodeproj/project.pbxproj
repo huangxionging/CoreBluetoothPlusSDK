@@ -44,6 +44,12 @@
 		F24189B51D912512002E2914 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F241899F1D912512002E2914 /* UIScrollView+MJRefresh.m */; };
 		F24189B61D912512002E2914 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F24189A11D912512002E2914 /* UIView+MJExtension.m */; };
 		F24E97BE1D86B178001AB1FB /* CBPBinStringManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */; };
+		F25599121DB860390057E2D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F25599111DB860390057E2D3 /* main.m */; };
+		F25599151DB860390057E2D3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F25599141DB860390057E2D3 /* AppDelegate.m */; };
+		F25599181DB860390057E2D3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F25599171DB860390057E2D3 /* ViewController.m */; };
+		F255991B1DB860390057E2D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F25599191DB860390057E2D3 /* Main.storyboard */; };
+		F255991D1DB860390057E2D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F255991C1DB860390057E2D3 /* Assets.xcassets */; };
+		F25599201DB860390057E2D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F255991E1DB860390057E2D3 /* LaunchScreen.storyboard */; };
 		F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */; };
 		F261537E1D7D259E008230B4 /* parameter_result.plist in Resources */ = {isa = PBXBuildFile; fileRef = F261537D1D7D259E008230B4 /* parameter_result.plist */; };
 		F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153831D7E66D8008230B4 /* CBPStepTableViewCell.m */; };
@@ -170,6 +176,16 @@
 		F24189A11D912512002E2914 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		F24E97BC1D86B178001AB1FB /* CBPBinStringManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPBinStringManager.h; sourceTree = "<group>"; };
 		F24E97BD1D86B178001AB1FB /* CBPBinStringManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CBPBinStringManager.mm; sourceTree = "<group>"; };
+		F255990E1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreBluetoothPlusSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F25599111DB860390057E2D3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F25599131DB860390057E2D3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F25599141DB860390057E2D3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F25599161DB860390057E2D3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		F25599171DB860390057E2D3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F255991A1DB860390057E2D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F255991C1DB860390057E2D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F255991F1DB860390057E2D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F25599211DB860390057E2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F261537A1D797F05008230B4 /* SynchronizeStepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizeStepTableViewController.h; sourceTree = "<group>"; };
 		F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizeStepTableViewController.m; sourceTree = "<group>"; };
 		F261537D1D7D259E008230B4 /* parameter_result.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parameter_result.plist; sourceTree = "<group>"; };
@@ -263,6 +279,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F255990B1DB860390057E2D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F27637101D61A45F006597AC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,10 +407,35 @@
 			path = Header;
 			sourceTree = "<group>";
 		};
+		F255990F1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo */ = {
+			isa = PBXGroup;
+			children = (
+				F25599131DB860390057E2D3 /* AppDelegate.h */,
+				F25599141DB860390057E2D3 /* AppDelegate.m */,
+				F25599161DB860390057E2D3 /* ViewController.h */,
+				F25599171DB860390057E2D3 /* ViewController.m */,
+				F25599191DB860390057E2D3 /* Main.storyboard */,
+				F255991C1DB860390057E2D3 /* Assets.xcassets */,
+				F255991E1DB860390057E2D3 /* LaunchScreen.storyboard */,
+				F25599211DB860390057E2D3 /* Info.plist */,
+				F25599101DB860390057E2D3 /* Supporting Files */,
+			);
+			path = CoreBluetoothPlusSDKDemo;
+			sourceTree = "<group>";
+		};
+		F25599101DB860390057E2D3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F25599111DB860390057E2D3 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		F276370A1D61A45F006597AC = {
 			isa = PBXGroup;
 			children = (
 				F27637151D61A45F006597AC /* CoreBluetoothPlusSDK */,
+				F255990F1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo */,
 				F27637141D61A45F006597AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -396,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				F27637131D61A45F006597AC /* CoreBluetoothPlusSDK.app */,
+				F255990E1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -687,6 +736,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F255990D1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F25599241DB860390057E2D3 /* Build configuration list for PBXNativeTarget "CoreBluetoothPlusSDKDemo" */;
+			buildPhases = (
+				F255990A1DB860390057E2D3 /* Sources */,
+				F255990B1DB860390057E2D3 /* Frameworks */,
+				F255990C1DB860390057E2D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreBluetoothPlusSDKDemo;
+			productName = CoreBluetoothPlusSDKDemo;
+			productReference = F255990E1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		F27637121D61A45F006597AC /* CoreBluetoothPlusSDK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F276372A1D61A45F006597AC /* Build configuration list for PBXNativeTarget "CoreBluetoothPlusSDK" */;
@@ -713,6 +779,11 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = huangxiong;
 				TargetAttributes = {
+					F255990D1DB860390057E2D3 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = U9662QUFW3;
+						ProvisioningStyle = Automatic;
+					};
 					F27637121D61A45F006597AC = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = U9662QUFW3;
@@ -733,11 +804,22 @@
 			projectRoot = "";
 			targets = (
 				F27637121D61A45F006597AC /* CoreBluetoothPlusSDK */,
+				F255990D1DB860390057E2D3 /* CoreBluetoothPlusSDKDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F255990C1DB860390057E2D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F25599201DB860390057E2D3 /* LaunchScreen.storyboard in Resources */,
+				F255991D1DB860390057E2D3 /* Assets.xcassets in Resources */,
+				F255991B1DB860390057E2D3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F27637111D61A45F006597AC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -766,6 +848,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F255990A1DB860390057E2D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F25599181DB860390057E2D3 /* ViewController.m in Sources */,
+				F25599151DB860390057E2D3 /* AppDelegate.m in Sources */,
+				F25599121DB860390057E2D3 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F276370F1D61A45F006597AC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -844,6 +936,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		F25599191DB860390057E2D3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F255991A1DB860390057E2D3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F255991E1DB860390057E2D3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F255991F1DB860390057E2D3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		F276371F1D61A45F006597AC /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -863,6 +971,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F25599221DB860390057E2D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = U9662QUFW3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = CoreBluetoothPlusSDKDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.new-life.CoreBluetoothPlusSDKDemo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F25599231DB860390057E2D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = U9662QUFW3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = CoreBluetoothPlusSDKDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.new-life.CoreBluetoothPlusSDKDemo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		F27637281D61A45F006597AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -990,6 +1130,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F25599241DB860390057E2D3 /* Build configuration list for PBXNativeTarget "CoreBluetoothPlusSDKDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F25599221DB860390057E2D3 /* Debug */,
+				F25599231DB860390057E2D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		F276370E1D61A45F006597AC /* Build configuration list for PBXProject "CoreBluetoothPlusSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

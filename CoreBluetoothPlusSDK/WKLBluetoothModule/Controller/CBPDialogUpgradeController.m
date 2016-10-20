@@ -88,7 +88,9 @@
     // 设置 特征值
     action.characteristicUUIDString = [[CBPBaseWorkingManager manager].baseController.writeCharacteristicUUIDString lowercaseString];
     // 调用数据
-    [action actionData];
+    if (action) {
+        [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"actionData", nil];
+    }
     
     // 启用接收数据
     [weakSelf reciveUpdateData];
@@ -175,11 +177,12 @@
             [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"suotaWriteEnd", nil];
         } else {
             // 或者投送
-            if ([action respondsToSelector: @selector(receiveUpdateData:)]) {
+            SEL selector = NSSelectorFromString(@"receiveUpdateData:");
+            if ([action respondsToSelector: selector]) {
                 // 投送消息
                 // 关闭超时定时器
-//                [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"stopTimer", nil];
-                [action receiveUpdateData: actionDataModel];
+                [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"receiveUpdateData:", actionDataModel, nil];
+//                [action receiveUpdateData: actionDataModel];
                 
             }
         }

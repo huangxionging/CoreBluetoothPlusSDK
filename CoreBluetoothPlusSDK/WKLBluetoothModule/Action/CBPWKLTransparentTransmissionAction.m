@@ -11,13 +11,6 @@
 #import "CBPDispatchMessageManager.h"
 
 
-
-// 每个长包内容的最大长度
-static NSInteger max_content_length = 1024;
-
-// 每个短包内容的最大长度 字节
-static NSInteger max_short_content_length = 17;
-
 // 短包最大程度 20字节
 static NSInteger max_short_package_length = 20;
 

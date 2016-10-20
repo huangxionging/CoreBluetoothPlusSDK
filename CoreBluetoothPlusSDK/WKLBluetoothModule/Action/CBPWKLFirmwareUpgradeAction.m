@@ -170,9 +170,6 @@ unsigned short crc_ccitt(unsigned char *q, int len) {
             [self handleLongPackageControll: updateDataModel.actionData];
         }
     }
-    
-    
-    
 }
 
 

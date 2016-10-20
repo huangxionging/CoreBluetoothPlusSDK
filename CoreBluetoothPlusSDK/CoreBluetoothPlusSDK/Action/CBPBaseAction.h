@@ -46,13 +46,6 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
 @property (nonatomic, assign, readonly) BOOL finished;
 
 /**
- *  操作的数据
- */
-- (void) actionData;
-
-
-
-/**
  *  @author huangxiong, 2016/04/13 19:57:10
  *
  *  @brief 初始化 action 的参数和完成回调, 不同功能的 action 需要重写该方法
@@ -64,14 +57,6 @@ typedef void(^answerBlock)(CBPBaseActionDataModel *answerModel);
  *  @since 1.0
  */
 - (instancetype) initWithParameter: (id) parameter answer: (void(^)(CBPBaseActionDataModel *answerDataModel)) answerBlock finished: (void(^)(id result))finished;
-
-/**
- *  @brief  接收更新数据
- *  @param  updateDataModel 是更新数据模型
- *  @return void
- */
-- (void) receiveUpdateData: (CBPBaseActionDataModel *)updateDataModel;
-
 
 /**
  超时处理

@@ -216,8 +216,6 @@
     
     
     
-    __weak CBPBaseDevice *device = self.baseDevice;
-    
     // 发现特征回调
     [self discoverServiceCharacteristic];
     // 发现服务回调
@@ -332,11 +330,13 @@
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
         
-        if ([action respondsToSelector: @selector(receiveUpdateData:)]) {
+        SEL selector = NSSelectorFromString(@"receiveUpdateData:");
+        if ([action respondsToSelector: selector]) {
             // 投送消息
             // 关闭超时定时器
             [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"stopTimer", nil];
-            [action receiveUpdateData: actionDataModel];
+//            [action receiveUpdateData: actionDataModel];
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"receiveUpdateData:", actionDataModel, nil];
             
         }
     }];
@@ -362,13 +362,14 @@
         
         // 查询 action
         CBPBaseAction *action = [weakSelf.actionSheet objectForKey: actionDataModel.keyword];
-        
-        if ([action respondsToSelector: @selector(receiveUpdateData:)]) {
+        SEL selector = NSSelectorFromString(@"receiveUpdateData:");
+        if ([action respondsToSelector: selector]) {
             
             // 关闭超时定时器
             [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"stopTimer", nil];
             // 投送消息
-            [action receiveUpdateData: actionDataModel];
+//            [action receiveUpdateData: actionDataModel];
+            [[CBPDispatchMessageManager shareManager] dispatchTarget: action method: @"receiveUpdateData:", actionDataModel, nil];
             
         }
         

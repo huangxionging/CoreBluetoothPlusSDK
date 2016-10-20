@@ -83,7 +83,9 @@
 }
 
 - (void)timeOut {
-    
+    CBPBaseError *baseError = [CBPBaseError errorWithcode:kBaseErrorTypeTimeOut info: @"设备不支持重启"];
+    [[CBPDispatchMessageManager shareManager] dispatchTarget: self method: @"callBackFailedResult:", baseError, nil];
+    NSLog(@"超时");
 }
 
 
