@@ -173,8 +173,6 @@
         NSString *progress = [progressData objectForKey: @"progress"];
         NSLog(@"同步进度: %0.2lf%%", [progress doubleValue] * 100);
     } success:^(CBPBaseAction *action, id responseObject) {
-        
-        
         NSLog(@"心率数据数据: %@", responseObject);
         NSLog(@"心率参数%@", parameter);
         SynchronizeStepTableViewController *vc = [[SynchronizeStepTableViewController alloc] init];
@@ -185,7 +183,6 @@
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
         NSLog(@"%@", error.localizedDescription);
     }];
-
 }
 
 #pragma mark- dialog 升级
@@ -213,9 +210,6 @@
     } failure:^(CBPBaseAction *action, CBPBaseError *error) {
         NSLog(@"%@", error.localizedDescription);
     }];
-
-    
-    
 }
 - (void) quinticUpgrade {
     self.manager.upgradeControllerKey = @"com.quintic.controller";
@@ -238,7 +232,6 @@
 
 }
 - (void) upgradeFirmware {
-    
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
   

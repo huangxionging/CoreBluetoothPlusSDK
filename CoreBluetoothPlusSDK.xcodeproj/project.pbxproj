@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F204E9B81DBB06E80004E973 /* BootLoaderServiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9AD1DBB06E80004E973 /* BootLoaderServiceModel.m */; };
+		F204E9B91DBB06E80004E973 /* BootLoaderServiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9AD1DBB06E80004E973 /* BootLoaderServiceModel.m */; };
+		F204E9BA1DBB06E80004E973 /* CBPeripheralExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9AF1DBB06E80004E973 /* CBPeripheralExt.m */; };
+		F204E9BB1DBB06E80004E973 /* CBPeripheralExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9AF1DBB06E80004E973 /* CBPeripheralExt.m */; };
+		F204E9BC1DBB06E80004E973 /* CBPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B11DBB06E80004E973 /* CBPManager.m */; };
+		F204E9BD1DBB06E80004E973 /* CBPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B11DBB06E80004E973 /* CBPManager.m */; };
+		F204E9BE1DBB06E80004E973 /* OTAFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B31DBB06E80004E973 /* OTAFileParser.m */; };
+		F204E9BF1DBB06E80004E973 /* OTAFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B31DBB06E80004E973 /* OTAFileParser.m */; };
+		F204E9C01DBB06E80004E973 /* ResourceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B51DBB06E80004E973 /* ResourceHandler.m */; };
+		F204E9C11DBB06E80004E973 /* ResourceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B51DBB06E80004E973 /* ResourceHandler.m */; };
+		F204E9C21DBB06E80004E973 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B71DBB06E80004E973 /* Utilities.m */; };
+		F204E9C31DBB06E80004E973 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9B71DBB06E80004E973 /* Utilities.m */; };
+		F204E9C61DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9C51DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m */; };
+		F204E9C71DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9C51DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m */; };
+		F204E9D01DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9CF1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m */; };
+		F204E9D11DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F204E9CF1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m */; };
 		F20B56831DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */; };
 		F20B56861DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B56851DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m */; };
 		F20B57241DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F20B57231DB0828000688D4E /* CBPWKLDialogUpgradeDevice.m */; };
@@ -50,6 +66,8 @@
 		F255991B1DB860390057E2D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F25599191DB860390057E2D3 /* Main.storyboard */; };
 		F255991D1DB860390057E2D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F255991C1DB860390057E2D3 /* Assets.xcassets */; };
 		F25599201DB860390057E2D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F255991E1DB860390057E2D3 /* LaunchScreen.storyboard */; };
+		F25599F21DB8AFF50057E2D3 /* CBPCypressUpgradeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F25599F11DB8AFF50057E2D3 /* CBPCypressUpgradeController.m */; };
+		F25599F31DB8AFF50057E2D3 /* CBPCypressUpgradeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F25599F11DB8AFF50057E2D3 /* CBPCypressUpgradeController.m */; };
 		F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */; };
 		F261537E1D7D259E008230B4 /* parameter_result.plist in Resources */ = {isa = PBXBuildFile; fileRef = F261537D1D7D259E008230B4 /* parameter_result.plist */; };
 		F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26153831D7E66D8008230B4 /* CBPStepTableViewCell.m */; };
@@ -105,6 +123,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F204E9AC1DBB06E80004E973 /* BootLoaderServiceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootLoaderServiceModel.h; sourceTree = "<group>"; };
+		F204E9AD1DBB06E80004E973 /* BootLoaderServiceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BootLoaderServiceModel.m; sourceTree = "<group>"; };
+		F204E9AE1DBB06E80004E973 /* CBPeripheralExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPeripheralExt.h; sourceTree = "<group>"; };
+		F204E9AF1DBB06E80004E973 /* CBPeripheralExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPeripheralExt.m; sourceTree = "<group>"; };
+		F204E9B01DBB06E80004E973 /* CBPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPManager.h; sourceTree = "<group>"; };
+		F204E9B11DBB06E80004E973 /* CBPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPManager.m; sourceTree = "<group>"; };
+		F204E9B21DBB06E80004E973 /* OTAFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTAFileParser.h; sourceTree = "<group>"; };
+		F204E9B31DBB06E80004E973 /* OTAFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTAFileParser.m; sourceTree = "<group>"; };
+		F204E9B41DBB06E80004E973 /* ResourceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceHandler.h; sourceTree = "<group>"; };
+		F204E9B51DBB06E80004E973 /* ResourceHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResourceHandler.m; sourceTree = "<group>"; };
+		F204E9B61DBB06E80004E973 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		F204E9B71DBB06E80004E973 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		F204E9C41DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLCypressUpgradeServiceCharacteristicModel.h; sourceTree = "<group>"; };
+		F204E9C51DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLCypressUpgradeServiceCharacteristicModel.m; sourceTree = "<group>"; };
+		F204E9C81DBB08170004E973 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		F204E9C91DBB09060004E973 /* CBPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPManager.h; sourceTree = "<group>"; };
+		F204E9CE1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLCypressUpgradeServiceCharacteristicManager.h; sourceTree = "<group>"; };
+		F204E9CF1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLCypressUpgradeServiceCharacteristicManager.m; sourceTree = "<group>"; };
 		F20B56811DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLServiceCharacteristicManager.h; sourceTree = "<group>"; };
 		F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPWKLServiceCharacteristicManager.m; sourceTree = "<group>"; };
 		F20B56841DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPWKLServiceCharacteristicModel.h; sourceTree = "<group>"; };
@@ -186,6 +222,8 @@
 		F255991C1DB860390057E2D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F255991F1DB860390057E2D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F25599211DB860390057E2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F25599F01DB8AFF50057E2D3 /* CBPCypressUpgradeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPCypressUpgradeController.h; sourceTree = "<group>"; };
+		F25599F11DB8AFF50057E2D3 /* CBPCypressUpgradeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPCypressUpgradeController.m; sourceTree = "<group>"; };
 		F261537A1D797F05008230B4 /* SynchronizeStepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizeStepTableViewController.h; sourceTree = "<group>"; };
 		F261537B1D797F05008230B4 /* SynchronizeStepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizeStepTableViewController.m; sourceTree = "<group>"; };
 		F261537D1D7D259E008230B4 /* parameter_result.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parameter_result.plist; sourceTree = "<group>"; };
@@ -299,7 +337,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F20E51911DACACEA00046732 /* OTA */ = {
+		F204E9AB1DBB06E80004E973 /* CypressOTA */ = {
+			isa = PBXGroup;
+			children = (
+				F204E9AC1DBB06E80004E973 /* BootLoaderServiceModel.h */,
+				F204E9AD1DBB06E80004E973 /* BootLoaderServiceModel.m */,
+				F204E9AE1DBB06E80004E973 /* CBPeripheralExt.h */,
+				F204E9AF1DBB06E80004E973 /* CBPeripheralExt.m */,
+				F204E9B01DBB06E80004E973 /* CBPManager.h */,
+				F204E9B11DBB06E80004E973 /* CBPManager.m */,
+				F204E9B21DBB06E80004E973 /* OTAFileParser.h */,
+				F204E9B31DBB06E80004E973 /* OTAFileParser.m */,
+				F204E9B41DBB06E80004E973 /* ResourceHandler.h */,
+				F204E9B51DBB06E80004E973 /* ResourceHandler.m */,
+				F204E9B61DBB06E80004E973 /* Utilities.h */,
+				F204E9B71DBB06E80004E973 /* Utilities.m */,
+				F204E9C91DBB09060004E973 /* CBPManager.h */,
+				F204E9C81DBB08170004E973 /* Constants.h */,
+			);
+			path = CypressOTA;
+			sourceTree = "<group>";
+		};
+		F20E51911DACACEA00046732 /* QuinticOTA */ = {
 			isa = PBXGroup;
 			children = (
 				F20E51921DACACEA00046732 /* libQBlueOta.a */,
@@ -309,6 +368,7 @@
 				F20E51991DACAD1300046732 /* qBleClient.h */,
 				F20E519A1DACAD1300046732 /* qBleClient.m */,
 			);
+			name = QuinticOTA;
 			path = OTA;
 			sourceTree = "<group>";
 		};
@@ -669,6 +729,8 @@
 				F20E51A01DACBE6400046732 /* CBPQuinticUpgradeController.m */,
 				F20E51A21DACBE7C00046732 /* CBPDialogUpgradeController.h */,
 				F20E51A31DACBE7C00046732 /* CBPDialogUpgradeController.m */,
+				F25599F01DB8AFF50057E2D3 /* CBPCypressUpgradeController.h */,
+				F25599F11DB8AFF50057E2D3 /* CBPCypressUpgradeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -696,6 +758,8 @@
 				F20B56851DAF80CB00688D4E /* CBPWKLServiceCharacteristicModel.m */,
 				F20B572B1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.h */,
 				F20B572C1DB08B8000688D4E /* CBPWKLDialogUpgradeServiceCharacteristicModel.m */,
+				F204E9C41DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.h */,
+				F204E9C51DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -707,7 +771,10 @@
 				F20B56821DAF7E0B00688D4E /* CBPWKLServiceCharacteristicManager.m */,
 				F20B57281DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.h */,
 				F20B57291DB0859900688D4E /* CBPWKLDialogUpgradeServiceCharacteristicManager.m */,
-				F20E51911DACACEA00046732 /* OTA */,
+				F204E9CE1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.h */,
+				F204E9CF1DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m */,
+				F20E51911DACACEA00046732 /* QuinticOTA */,
+				F204E9AB1DBB06E80004E973 /* CypressOTA */,
 			);
 			path = UnityTool;
 			sourceTree = "<group>";
@@ -852,9 +919,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F204E9B91DBB06E80004E973 /* BootLoaderServiceModel.m in Sources */,
 				F25599181DB860390057E2D3 /* ViewController.m in Sources */,
+				F204E9C71DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m in Sources */,
+				F204E9BB1DBB06E80004E973 /* CBPeripheralExt.m in Sources */,
+				F204E9BF1DBB06E80004E973 /* OTAFileParser.m in Sources */,
+				F204E9C31DBB06E80004E973 /* Utilities.m in Sources */,
+				F204E9D11DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m in Sources */,
 				F25599151DB860390057E2D3 /* AppDelegate.m in Sources */,
+				F204E9C11DBB06E80004E973 /* ResourceHandler.m in Sources */,
+				F25599F31DB8AFF50057E2D3 /* CBPCypressUpgradeController.m in Sources */,
 				F25599121DB860390057E2D3 /* main.m in Sources */,
+				F204E9BD1DBB06E80004E973 /* CBPManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -862,8 +938,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F204E9B81DBB06E80004E973 /* BootLoaderServiceModel.m in Sources */,
 				F24189AE1D912512002E2914 /* MJRefreshGifHeader.m in Sources */,
 				F261539A1D7EB0B6008230B4 /* CBPWKLRestartAction.m in Sources */,
+				F204E9BE1DBB06E80004E973 /* OTAFileParser.m in Sources */,
 				F2C549021D644DEC00A665F3 /* CBPWKLBindDeviceAction.m in Sources */,
 				F2C548EA1D6309F200A665F3 /* CBPHexStringManager.mm in Sources */,
 				F2C549051D644DEC00A665F3 /* CBPWKLSimpleControlAction.m in Sources */,
@@ -899,6 +977,7 @@
 				F20E519B1DACAD1300046732 /* qBleClient.m in Sources */,
 				F24189B51D912512002E2914 /* UIScrollView+MJRefresh.m in Sources */,
 				F261537C1D797F05008230B4 /* SynchronizeStepTableViewController.m in Sources */,
+				F204E9C21DBB06E80004E973 /* Utilities.m in Sources */,
 				F241896C1D90DBA9002E2914 /* CBPWKLSynchronizeHeartRateAction.m in Sources */,
 				F2C548C61D62FC4000A665F3 /* CBPBaseServiceModel.m in Sources */,
 				F24189B21D912512002E2914 /* MJRefreshConst.m in Sources */,
@@ -908,13 +987,17 @@
 				F24189A31D912512002E2914 /* MJRefreshAutoFooter.m in Sources */,
 				F26153851D7E66D8008230B4 /* CBPStepTableViewCell.m in Sources */,
 				F24189A51D912512002E2914 /* MJRefreshComponent.m in Sources */,
+				F204E9BC1DBB06E80004E973 /* CBPManager.m in Sources */,
 				F24189AD1D912512002E2914 /* MJRefreshBackStateFooter.m in Sources */,
 				F24189A61D912512002E2914 /* MJRefreshFooter.m in Sources */,
 				F2C548DF1D6307DD00A665F3 /* CBPBaseError.m in Sources */,
 				F26DD4B91D75731E0043FED4 /* NSDate+CBPUtilityTool.m in Sources */,
+				F204E9C61DBB077D0004E973 /* CBPWKLCypressUpgradeServiceCharacteristicModel.m in Sources */,
 				F20E51A11DACBE6400046732 /* CBPQuinticUpgradeController.m in Sources */,
 				F241896F1D9111AC002E2914 /* CBPDeviceFuctionTableViewController.m in Sources */,
+				F204E9BA1DBB06E80004E973 /* CBPeripheralExt.m in Sources */,
 				F2B82CFE1D93C1DA0047E5DE /* CBPDispatchMessageManager.m in Sources */,
+				F204E9D01DBB2E400004E973 /* CBPWKLCypressUpgradeServiceCharacteristicManager.m in Sources */,
 				F24189AF1D912512002E2914 /* MJRefreshNormalHeader.m in Sources */,
 				F24189B41D912512002E2914 /* UIScrollView+MJExtension.m in Sources */,
 				F24189AA1D912512002E2914 /* MJRefreshAutoStateFooter.m in Sources */,
@@ -924,7 +1007,9 @@
 				F2C548C51D62FC4000A665F3 /* CBPBasePeripheralModel.m in Sources */,
 				F24189B31D912512002E2914 /* NSBundle+MJRefresh.m in Sources */,
 				F264B53F1DAB6E7F00E80B67 /* CBPWKLCypressFirmwareUpgradeAction.m in Sources */,
+				F204E9C01DBB06E80004E973 /* ResourceHandler.m in Sources */,
 				F276371B1D61A45F006597AC /* AppDelegate.m in Sources */,
+				F25599F21DB8AFF50057E2D3 /* CBPCypressUpgradeController.m in Sources */,
 				F27637181D61A45F006597AC /* main.m in Sources */,
 				F26153971D7EAA2E008230B4 /* CBPWKLFirmwareUpgradeAction.m in Sources */,
 				F24189B01D912512002E2914 /* MJRefreshStateHeader.m in Sources */,
@@ -1137,6 +1222,7 @@
 				F25599231DB860390057E2D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F276370E1D61A45F006597AC /* Build configuration list for PBXProject "CoreBluetoothPlusSDK" */ = {
 			isa = XCConfigurationList;

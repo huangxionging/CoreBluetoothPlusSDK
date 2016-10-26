@@ -272,10 +272,10 @@ typedef void(^basePeripheralBlock)(CBPBasePeripheralModel *peripheral);
     model.singalValue = RSSI.integerValue;
     _searchedPeripheralBlock(model);
     // 取信号量最大的外设, 等待设备超时, 将外设回传给设备
-//    if (RSSI.integerValue > self->_peripheralSingalValue) {
-//        self->_peripheralSingalValue = RSSI.integerValue;
-//        self.peripheral = peripheral;
-//    }
+    if (RSSI.integerValue > self->_peripheralSingalValue) {
+        self->_peripheralSingalValue = RSSI.integerValue;
+        self.peripheralModel.peripheral = peripheral;
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
