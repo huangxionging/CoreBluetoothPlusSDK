@@ -45,6 +45,8 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
  */
 @property (nonatomic, strong) NSMutableDictionary *actionDict;
 
+- (dispatch_queue_t) gloabQueue;
+
 @end
 
 #pragma mark- 实现
@@ -217,15 +219,16 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
     
     if (workingAction) {
         // 异步调用
-        dispatch_async(dispatch_get_main_queue(), ^{
+        __weak typeof(self)weakSelf = self;
+        dispatch_async(weakSelf.gloabQueue, ^{
             
             // 如果升级的控制 key 不为空, 则优先处理固件升级
-            if (self.upgradeControllerKey) {
+            if (weakSelf.upgradeControllerKey) {
                 // 处理参数和回调数据
-                [self.upgradeController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
-            } else if (self->_baseController) {
+                [weakSelf.upgradeController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
+            } else if (_baseController) {
                 // 处理参数和回调数据
-                [self->_baseController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
+                [_baseController sendAction: workingAction parameters: allParameters progress: progress success: success failure: failure];
             }
             
         });
@@ -236,6 +239,10 @@ static CBPBaseWorkingManager *baseWorkingManager = nil;
         failure(nil, error);
     }
     
+}
+
+- (dispatch_queue_t)gloabQueue {
+    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 }
 
 @end

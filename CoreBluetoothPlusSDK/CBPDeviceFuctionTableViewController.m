@@ -285,6 +285,10 @@
 
 - (void) lightLED {
     
+    [self.manager.baseController.baseClient startScanPeripheralWithOptions: nil];
+    [self.manager.baseController.baseClient setSearchedPeripheralBlock:^(CBPBasePeripheralModel *peripheral) {
+        
+    }];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithCapacity: 10];
     
     [parameter setObject: @"0x000000ff" forKey: @"led"];
