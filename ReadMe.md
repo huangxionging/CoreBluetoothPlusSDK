@@ -2,7 +2,7 @@
 #CoreBluetoothPlusSDK 开发文档
 ===========
 本文档为 `CoreBluetoothPlusSDK` 开发文档, 用于解释 SDK 架构, 以及相关通讯协议. 架构图如下, 可以打开连接, 格式为 `xmind 文件`
-[![架构导图]](./HXBluetoothSDK.xmind)
+[![架构导图]](./CoreBluetoothPlusSDK.xmind)
 
 ****** 
 |      		|  				  		|
@@ -89,7 +89,7 @@
 
 ##<a name="protocol"/> 四. 纬科联蓝牙模块通讯接口
 
-```Objective-c
+```Objective-C
 // 调用方式: "ble://接口?参数=值&参数=值"
 // 接口必须有, 参数看具体的接口
 
